@@ -1,20 +1,31 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { Fragment } from 'react';
+
+import DefaultLayout from './layout/DefaultLayout';
+import { publicScreen } from './configScreen';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+    return (
+        <>
+            {publicScreen.map((screenLayout, index) => {
+                let Layout = DefaultLayout;
+                if (screenLayout.layout) Layout = screenLayout.layout;
+                else if (screenLayout.layout === null) {
+                    Layout = Fragment;
+                }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+                var Screen = screenLayout.screen;
+                return (
+                    <View key={index}>
+                        <Layout>
+                            <Screen />
+                        </Layout>
+                    </View>
+                );
+            })}
+
+            <StatusBar style="auto" />
+        </>
+    );
+}
