@@ -9,11 +9,15 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-icons/all-files": "^4.1.0",
+    "@react-navigation/bottom-tabs": "^6.3.3",
     "expo": "~46.0.9",
     "expo-status-bar": "~1.4.0",
     "nativewind": "^2.0.7",
     "react": "18.0.0",
-    "react-native": "0.69.5"
+    "react-icons": "^4.4.0",
+    "react-native": "0.69.5",
+    "react-native-vector-icons": "^9.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
