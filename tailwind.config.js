@@ -19,6 +19,7 @@ module.exports = {
                 'lcn-green-1': '#66DA53',
                 'lcn-placeholder': '#C7C7C7',
             },
+
             dropShadow: {
                 'lcn-login': '0 0 20px rgba(71, 169, 255, 0.39)',
             },

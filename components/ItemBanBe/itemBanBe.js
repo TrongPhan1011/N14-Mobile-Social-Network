@@ -14,7 +14,7 @@ import {
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import HomeScreen from '../../screens/HomeScreen';
+import ThongBaoScreen from '../../screens/ThongBaoScreen';
 const DATA = [
     {
         id: '1',
@@ -65,7 +65,7 @@ const DATA = [
 
 const Item = ({ title, uri }) => (
     <View>
-        <TouchableHighlight activeOpacity={0.6} underlayColor="#C6E4FF" onPress={() => <HomeScreen />}>
+        <TouchableHighlight activeOpacity={0.6} underlayColor="#C6E4FF" onPress={() => <ThongBaoScreen />}>
             <View className="flex flex-row bg-white mt-2 p-2 rounded-b-2xl rounded-t-2xl">
                 <View className="flex flex-row items-center w-2/3">
                     <View>

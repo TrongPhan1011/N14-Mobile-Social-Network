@@ -1,6 +1,6 @@
 import { View, Text, SafeAreaView } from 'react-native';
 import React from 'react';
-import Headers from '../../components/Header';
+import HeaderSearch from '../../components/HeaderSearch';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import BanBe from './ContentBanBe/contentBanBe';
@@ -11,7 +11,7 @@ export default function FriendScreen() {
     return (
         <>
             <SafeAreaView />
-            <Headers />
+            <HeaderSearch />
             <Tab.Navigator
                 tabBarOptions={{
                     autoCapitalize: 'false',
