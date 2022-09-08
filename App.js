@@ -7,18 +7,53 @@ import ThongBaoScreen from './screens/ThongBaoScreen';
 import BangTinScreen from './screens/BangTinScreen';
 import FriendScreen from './screens/FriendScreen';
 import SettingScreen from './screens/SettingScreen';
+import VideoCallBenGoi from './screens/VideoCallBenGoi';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import ChiTietTinNhan from './screens/ChiTietTinNhan';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
-export default function App() {
+export default function App(Ơ) {
+    function ChatParent() {
+        return (
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="ChatScreen"
+                    component={ChatScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="ChiTietTinNhan"
+                    component={ChiTietTinNhan}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="VideoCallBenGoi"
+                    component={VideoCallBenGoi}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+            </Stack.Navigator>
+        );
+    }
     return (
         <NavigationContainer>
-            <Tab.Navigator tabBarOptions={{ activeTintColor: '#47A9FF', inactiveTintColor: 'lightgray' }}>
+            <Tab.Navigator options={{ tabBarInactiveTintColor: '#47A9FF', tabBarInactiveTintColor: 'lightgray' }}>
                 <Tab.Screen
                     name="Chat"
-                    component={ChatScreen}
+                    component={ChatParent}
                     options={{
                         headerShown: false,
                         // tabBarShowLabel: false,

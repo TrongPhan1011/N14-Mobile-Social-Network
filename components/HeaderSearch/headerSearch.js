@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, TextInput } from 'react-native';
+import { View, Text, SafeAreaView, TextInput, Platform, StatusBar } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import React from 'react';
@@ -6,7 +6,7 @@ import React from 'react';
 export default function header() {
     return (
         <>
-            <SafeAreaView>
+            <SafeAreaView style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }}>
                 <View className="h-14 flex flex-row w-full items-center">
                     <View className="ml-2">
                         <FontAwesome name="search" size={20} color="#47A9FF" />
