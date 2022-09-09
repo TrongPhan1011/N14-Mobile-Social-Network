@@ -13,7 +13,7 @@ export default function FriendScreen() {
             <SafeAreaView />
             <HeaderSearch />
             <Tab.Navigator
-                tabBarOptions={{
+                options={{
                     autoCapitalize: 'false',
                     activeTintColor: '#47A9FF',
                     inactiveTintColor: '#004078',

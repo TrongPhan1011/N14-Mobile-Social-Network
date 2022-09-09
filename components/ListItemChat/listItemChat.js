@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
     SafeAreaView,
@@ -11,7 +12,9 @@ import {
     Alert,
     TouchableHighlight,
 } from 'react-native';
+// import MainNavigator from '../../Router/Router';
 import BangTinScreen from '../../screens/BangTinScreen';
+import ItemChat from '../ItemChat';
 
 const DATA = [
     {
@@ -96,9 +99,13 @@ const DATA = [
     },
 ];
 
-const Item = ({ title, message, uri, from, gio }, { navigation }) => (
+const Item = ({ title, message, uri, from, gio, navigation }) => (
     <View>
-        <TouchableHighlight activeOpacity={0.6} underlayColor="#C6E4FF" onPress={() => <BangTinScreen />}>
+        <TouchableHighlight
+            activeOpacity={0.6}
+            underlayColor="#C6E4FF"
+            onPress={() => navigation.navigate('ChiTietTinNhan')}
+        >
             <View className=" mt-1 rounded-xl p-4 pl-6 pr-6 flex flex-row items-center">
                 <View className="overflow-hidden">
                     <Image
@@ -130,12 +137,25 @@ const Item = ({ title, message, uri, from, gio }, { navigation }) => (
 // const HomeStack = createNativeStackNavigator();
 
 export default function ListItemChat() {
+    const navigation = useNavigation();
+
     const renderItem = ({ item }) => (
-        <Item title={item.title} message={item.message} from={item.from} gio={item.gio} uri={item.uri} />
+        <Item
+            title={item.title}
+            message={item.message}
+            from={item.from}
+            gio={item.gio}
+            uri={item.uri}
+            navigation={navigation}
+        />
     );
     return (
         <SafeAreaView>
             <FlatList data={DATA} renderItem={renderItem} keyExtractor={(item) => item.id} />
+
+            {/* <ItemChat />
+            <ItemChat />
+            <ItemChat /> */}
         </SafeAreaView>
     );
 }
