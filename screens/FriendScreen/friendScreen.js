@@ -20,7 +20,7 @@ export default function FriendScreen() {
                     labelStyle: { textTransform: 'none', fontSize: 18 },
                 }}
             >
-                <Tab.Screen autoCapitalize="none" name="Bạn bè" component={BanBe} />
+                <Tab.Screen autoCapitalize="none" name="Tất cả" component={BanBe} />
                 <Tab.Screen name="Chờ xác nhận" component={ChoXacNhan} />
             </Tab.Navigator>
             {/* <View>

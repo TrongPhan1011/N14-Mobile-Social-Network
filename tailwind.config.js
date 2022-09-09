@@ -18,6 +18,7 @@ module.exports = {
                 'lcn-blue-5': '#004078',
                 'lcn-green-1': '#66DA53',
                 'lcn-placeholder': '#C7C7C7',
+                'lcn-grey-1': '#D7D7D7',
             },
 
             dropShadow: {

@@ -9,6 +9,7 @@ import FriendScreen from './screens/FriendScreen';
 import SettingScreen from './screens/SettingScreen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import ThemBanScreen from './screens/ThemBanScreen/themBanScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -36,7 +37,7 @@ export default function App() {
                 />
                 <Tab.Screen
                     name="Bảng tin"
-                    component={BangTinScreen}
+                    component={ThemBanScreen}
                     options={{
                         headerShown: false,
                         // tabBarShowLabel: false,
