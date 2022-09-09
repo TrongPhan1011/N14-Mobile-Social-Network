@@ -13,14 +13,14 @@ export default function FriendScreen() {
             <SafeAreaView />
             <HeaderSearch />
             <Tab.Navigator
-                options={{
-                    autoCapitalize: 'false',
-                    activeTintColor: '#47A9FF',
-                    inactiveTintColor: '#004078',
-                    labelStyle: { textTransform: 'none', fontSize: 18 },
+                screenOptions={{
+                    tabBarAutoCapitalize: 'false',
+                    tabBarActiveTintColor: '#47A9FF',
+                    tabBarInactiveTintColor: '#004078',
+                    tabBarLabelStyle: { textTransform: 'none', fontSize: 18 },
                 }}
             >
-                <Tab.Screen autoCapitalize="none" name="Tất cả" component={BanBe} />
+                <Tab.Screen tabBarAutoCapitalize="none" name="Tất cả" component={BanBe} />
                 <Tab.Screen name="Chờ xác nhận" component={ChoXacNhan} />
             </Tab.Navigator>
             {/* <View>

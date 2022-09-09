@@ -23,39 +23,28 @@ const Stack = createStackNavigator();
 export default function App({ navigation, route }) {
     let tabBarVisible = true;
 
-    // function ChatParent() {
-    //     return (
-    //         <Stack.Navigator>
-    //             <Stack.Screen
-    //                 name="ChatScreen"
-    //                 component={ChatScreen}
-    //                 options={{
-    //                     headerShown: false,
-    //                     tabBarShowLabel: false,
-    //                 }}
-    //             />
-    //             <Stack.Screen
-    //                 name="ChiTietTinNhan"
-    //                 component={ChiTietTinNhan}
-    //                 options={{
-    //                     headerShown: false,
-    //                     tabBarShowLabel: false,
-    //                 }}
-    //             />
-    //             <Stack.Screen
-    //                 name="VideoCall"
-    //                 component={VideoCall}
-    //                 options={{
-    //                     headerShown: false,
-    //                     tabBarShowLabel: false,
-    //                     defaultNavigationOptions: {
-    //                         tabBarVisible: false,
-    //                     },
-    //                 }}
-    //             />
-    //         </Stack.Navigator>
-    //     );
-    // }
+    function AddFriend() {
+        return (
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="Friend"
+                    component={FriendScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="ThemBanBe"
+                    component={ThemBanScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+            </Stack.Navigator>
+        );
+    }
     // return (
     //     <NavigationContainer>
     //         <Tab.Navigator options={{ tabBarInactiveTintColor: '#47A9FF', tabBarInactiveTintColor: 'lightgray' }}>
@@ -124,7 +113,7 @@ export default function App({ navigation, route }) {
                 />
                 <Tab.Screen
                     name="Friend"
-                    component={FriendScreen}
+                    component={AddFriend}
                     options={{
                         headerShown: false,
                         // tabBarShowLabel: false,
