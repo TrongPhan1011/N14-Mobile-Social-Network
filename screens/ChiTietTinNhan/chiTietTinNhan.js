@@ -15,10 +15,10 @@ export default function ChiTietTinNhan() {
                         navigation.goBack();
                     }}
                     onPressCallVideo={() => {
-                        navigation.navigate('VideoCallBenGoi');
+                        navigation.navigate('VideoCall');
                     }}
                 />
-                <View className="bg-lcn-blue-1 w-full h-4/6">
+                <View className="bg-lcn-blue-1 w-full h-5/6">
                     <ItemTinNhan from>xin chào</ItemTinNhan>
                     <ItemTinNhan>ai đó</ItemTinNhan>
                     <ItemTinNhan from>

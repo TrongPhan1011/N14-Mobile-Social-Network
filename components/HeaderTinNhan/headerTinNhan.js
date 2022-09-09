@@ -7,11 +7,11 @@ import Feather from 'react-native-vector-icons/Feather';
 export default function HeaderTinNhan({ onPressChiTiet, onPressCallVideo }) {
     return (
         <SafeAreaView style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }}>
-            <View className="w-full h-14 flex flex-row items-center bg-lcn-blue-2">
+            <View className="w-full h-14 flex flex-row items-center bg-lcn-blue-2 p-2">
                 <View>
                     <Ionicons name="arrow-back-outline" size={30} color="#47A9FF" onPress={onPressChiTiet} />
                 </View>
-                <View className="w-3/5 ml-4">
+                <View className="w-7/12 ml-4">
                     <View>
                         <Text className="font-semibold text-xl text-lcn-blue-5">Nguyễn Văn A</Text>
                         <View className="w-3 h-3 bg-lcn-green-1 rounded-full absolute left-32 bottom-2 ml-1"></View>
