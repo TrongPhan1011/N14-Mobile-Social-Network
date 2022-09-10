@@ -27,7 +27,7 @@ export default function App({ navigation, route }) {
         return (
             <Stack.Navigator>
                 <Stack.Screen
-                    name="Friend"
+                    name="F"
                     component={FriendScreen}
                     options={{
                         headerShown: false,
@@ -177,14 +177,14 @@ export default function App({ navigation, route }) {
                         tabBarShowLabel: false,
                     }}
                 />
-                <Stack.Screen
+                {/* <Stack.Screen
                     name="ThemBanBe"
                     component={ThemBanScreen}
                     options={{
                         headerShown: false,
                         tabBarShowLabel: false,
                     }}
-                />
+                /> */}
             </Stack.Navigator>
         </NavigationContainer>
     );

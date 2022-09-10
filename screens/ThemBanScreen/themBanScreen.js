@@ -6,11 +6,13 @@ import ItemBanBe from '../../components/ItemBanBe';
 export default function ThemBanScreen() {
     return (
         <>
-            <SafeAreaView>
-                <HeaderThemBan />
+            <View className="bg-white">
+                <SafeAreaView>
+                    <HeaderThemBan />
 
-                <ItemThemBan />
-            </SafeAreaView>
+                    <ItemThemBan />
+                </SafeAreaView>
+            </View>
         </>
     );
 }

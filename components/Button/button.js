@@ -6,14 +6,14 @@ export default function Button({ children, className, xoa, xacnhan, onPress, ...
     var bgXacNhan = '';
 
     if (!!xoa) {
-        bgXoa = 'bg-red-400 border border-red-500';
+        bgXoa = 'bg-red-400 border border-red-500 ';
     }
     if (!!xacnhan) {
         bgXacNhan = ' bg-lcn-blue-4 border border-blue-400';
     }
     return (
         <TouchableOpacity
-            className={' w-24  h-9 items-center justify-center rounded-2xl ' + bgXoa + bgXacNhan}
+            className={' w-28  h-9 items-center justify-center rounded-3xl ' + bgXoa + bgXacNhan}
             onPress={onPress}
         >
             {children}

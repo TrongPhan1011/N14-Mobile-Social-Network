@@ -31,8 +31,8 @@ export default function ItemThemBan() {
 
                         <Text className="ml-3 text-xl font-semibold text-lcn-blue-5 ">Nguyễn Văn A</Text>
                     </View>
-                    <View className=" flex flex-row justify-end items-center w-1/4 pr-4">
-                        <View className={'ml-16'}>
+                    <View className=" flex flex-row justify-end items-center w-1/4 ">
+                        <View>
                             <Button xacnhan onPress={() => Alert.alert('ggg')}>
                                 <Text className={'text-white'}>Kết bạn</Text>
                             </Button>
