@@ -16,12 +16,36 @@ import ThemBanScreen from './screens/ThemBanScreen/themBanScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import ChiTietTinNhan from './screens/ChiTietTinNhan';
+import ProfileScreen from './screens/ProfileScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 export default function App({ navigation, route }) {
     let tabBarVisible = true;
+
+    function AddFriend() {
+        return (
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="F"
+                    component={FriendScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="ThemBanBe"
+                    component={ThemBanScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+            </Stack.Navigator>
+        );
+    }
 
     function HomeTabBar() {
         return (
@@ -38,7 +62,7 @@ export default function App({ navigation, route }) {
                 />
                 <Tab.Screen
                     name="Friend"
-                    component={FriendScreen}
+                    component={AddFriend}
                     options={{
                         headerShown: false,
                         // tabBarShowLabel: false,
@@ -103,8 +127,8 @@ export default function App({ navigation, route }) {
                     }}
                 />
                 <Stack.Screen
-                    name="ThemBanBe"
-                    component={ThemBanScreen}
+                    name="ProfileScreen"
+                    component={ProfileScreen}
                     options={{
                         headerShown: false,
                         tabBarShowLabel: false,

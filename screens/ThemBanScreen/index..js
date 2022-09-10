@@ -1,1 +1,1 @@
-export { default } from '../ThemBanScreen/themBan';
+export { default } from './themBanScreen';
