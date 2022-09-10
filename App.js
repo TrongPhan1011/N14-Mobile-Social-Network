@@ -47,6 +47,29 @@ export default function App({ navigation, route }) {
         );
     }
 
+    function BangTin() {
+        return (
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="ProfileScreen"
+                    component={ProfileScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+                {/* <Stack.Screen
+                    name="ThemBanBe"
+                    component={ThemBanScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                /> */}
+            </Stack.Navigator>
+        );
+    }
+
     function HomeTabBar() {
         return (
             <Tab.Navigator options={{ tabBarInactiveTintColor: '#47A9FF', tabBarInactiveTintColor: 'lightgray' }}>
@@ -71,7 +94,7 @@ export default function App({ navigation, route }) {
                 />
                 <Tab.Screen
                     name="Bảng tin"
-                    component={ThemBanScreen}
+                    component={BangTinScreen}
                     options={{
                         headerShown: false,
                         // tabBarShowLabel: false,

@@ -151,11 +151,11 @@ export default function ListItemChat() {
     );
     return (
         <SafeAreaView>
-            <FlatList data={DATA} renderItem={renderItem} keyExtractor={(item) => item.id} />
+            {/* <FlatList data={DATA} renderItem={renderItem} keyExtractor={(item) => item.id} /> */}
 
-            {/* <ItemChat />
             <ItemChat />
-            <ItemChat /> */}
+            <ItemChat />
+            <ItemChat />
         </SafeAreaView>
     );
 }

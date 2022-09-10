@@ -16,11 +16,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import avatarDefault from '../../assets/avatarDefault.png';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ItemBanBe() {
+    const navigation = useNavigation();
     return (
         <View>
-            <TouchableHighlight activeOpacity={0.6} underlayColor="#C6E4FF">
+            <TouchableHighlight
+                activeOpacity={0.6}
+                underlayColor="#C6E4FF"
+                onPress={() => navigation.navigate('ProfileScreen')}
+            >
                 <View className="flex flex-row bg-white mt-2 p-2 rounded-b-2xl rounded-t-2xl">
                     <View className="flex flex-row items-center w-2/3">
                         <View>

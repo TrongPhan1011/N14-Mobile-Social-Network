@@ -1,10 +1,16 @@
 import { View, Text, Image, TouchableHighlight } from 'react-native';
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 export default function itemChat() {
+    const navigation = useNavigation();
     return (
         <View>
-            <TouchableHighlight activeOpacity={0.6} underlayColor="#C6E4FF">
+            <TouchableHighlight
+                activeOpacity={0.6}
+                underlayColor="#C6E4FF"
+                onPress={() => navigation.navigate('ChiTietTinNhan')}
+            >
                 <View className=" mt-1 rounded-xl p-4 pl-6 pr-6 flex flex-row items-center">
                     <View className="overflow-hidden">
                         <Image
