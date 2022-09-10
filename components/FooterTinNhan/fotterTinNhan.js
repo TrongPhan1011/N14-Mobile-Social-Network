@@ -5,7 +5,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function fotterTinNhan() {
     return (
-        <SafeAreaView>
+        <SafeAreaView className="">
             <View className=" flex flex-row items-center bg-white justify-center p-2">
                 <View className="">
                     <AntDesign name="pluscircle" size={30} color="#47A9FF" />
