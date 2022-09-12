@@ -13,7 +13,7 @@ export default function HeaderSearch() {
     return (
         <>
             <SafeAreaView style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }}>
-                <View className="h-14 flex flex-row w-full items-center">
+                <View className="h-14 flex flex-row w-full items-center bg-white">
                     <View className="ml-2">
                         <FontAwesome name="search" size={20} color="#47A9FF" />
                     </View>

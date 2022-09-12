@@ -13,7 +13,7 @@ export default function ProfileScreen() {
     return (
         <>
             <SafeAreaView />
-            <HeaderProfile />
+            <HeaderProfile> Nguyen Van A</HeaderProfile>
             <ChiTietProfile />
             <Tab.Navigator
                 screenOptions={{

@@ -1,4 +1,15 @@
-import { View, Text, SafeAreaView, Platform, StatusBar, ScrollView, Image, KeyboardAvoidingView } from 'react-native';
+import {
+    View,
+    Text,
+    SafeAreaView,
+    Platform,
+    StatusBar,
+    ScrollView,
+    Image,
+    KeyboardAvoidingView,
+    Keyboard,
+    Alert,
+} from 'react-native';
 import React from 'react';
 import HeaderTinNhan from '../../components/HeaderTinNhan';
 import ItemTinNhan from '../../components/ItemTinNhan';
@@ -8,7 +19,7 @@ import { useNavigation } from '@react-navigation/native';
 export default function ChiTietTinNhan() {
     const navigation = useNavigation();
     return (
-        <SafeAreaView>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View className="">
                 <HeaderTinNhan
                     onPressChiTiet={() => {
@@ -17,6 +28,7 @@ export default function ChiTietTinNhan() {
                     onPressCallVideo={() => {
                         navigation.navigate('VideoCall');
                     }}
+                    onPressOpenMenu={() => Alert.alert('dnsgj')}
                 />
                 <ScrollView className="overflow-y-auto h-[640px]">
                     <View className="h-32 w-full bg-white items-center p-2">
@@ -55,15 +67,10 @@ export default function ChiTietTinNhan() {
                         <ItemTinNhan>xin chào</ItemTinNhan>
                     </View>
                 </ScrollView>
-                <KeyboardAvoidingView
-                    behavior={Platform.OS === 'android' ? 'padding' : ''}
-                    keyboardVerticalOffset={500} //this value is depends upon your view/component height
-                >
-                    <View className="w-full">
-                        <FooterTinNhan />
-                    </View>
-                </KeyboardAvoidingView>
+                <View className="w-full">
+                    <FooterTinNhan />
+                </View>
             </View>
-        </SafeAreaView>
+        </KeyboardAvoidingView>
     );
 }

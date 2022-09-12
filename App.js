@@ -12,6 +12,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import ThemBanScreen from './screens/ThemBanScreen/themBanScreen';
+import TaoBaiViet from './screens/TaoBaiViet/taoBaiViet';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -51,21 +52,21 @@ export default function App({ navigation, route }) {
         return (
             <Stack.Navigator>
                 <Stack.Screen
-                    name="ProfileScreen"
-                    component={ProfileScreen}
+                    name="BangTinScreen"
+                    component={BangTinScreen}
                     options={{
                         headerShown: false,
                         tabBarShowLabel: false,
                     }}
                 />
-                {/* <Stack.Screen
-                    name="ThemBanBe"
-                    component={ThemBanScreen}
+                <Stack.Screen
+                    name="TaoBaiViet"
+                    component={TaoBaiViet}
                     options={{
                         headerShown: false,
                         tabBarShowLabel: false,
                     }}
-                /> */}
+                />
             </Stack.Navigator>
         );
     }
@@ -94,7 +95,7 @@ export default function App({ navigation, route }) {
                 />
                 <Tab.Screen
                     name="Bảng tin"
-                    component={BangTinScreen}
+                    component={BangTin}
                     options={{
                         headerShown: false,
                         // tabBarShowLabel: false,

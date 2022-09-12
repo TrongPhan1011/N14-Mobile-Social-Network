@@ -1,9 +1,9 @@
 import { View, Text, SafeAreaView, Platform, StatusBar } from 'react-native';
-import React from 'react';
+import React, { Children } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 
-export default function HeaderProfile() {
+export default function HeaderProfile({ children }) {
     const navigation = useNavigation();
     return (
         <SafeAreaView
@@ -22,7 +22,7 @@ export default function HeaderProfile() {
                     />
                 </View>
                 <View className="">
-                    <Text className="font-semibold text-xl text-lcn-blue-5">Nguyễn Văn A</Text>
+                    <Text className="font-semibold text-xl text-lcn-blue-5">{children}</Text>
                 </View>
                 <View className="ml-2 w-10"></View>
             </View>

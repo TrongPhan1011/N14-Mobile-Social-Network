@@ -5,7 +5,7 @@ export default function ChiTietProfile() {
     return (
         <View className=" bg-white pb-3">
             <View className=" w-full items-center">
-                <View className="w-full h-40 bg-black">
+                <View className="w-full h-40 ">
                     <Image
                         className="h-full w-full"
                         source={{
