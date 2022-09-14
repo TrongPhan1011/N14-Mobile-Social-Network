@@ -19,18 +19,20 @@ import { useNavigation } from '@react-navigation/native';
 export default function ChiTietTinNhan() {
     const navigation = useNavigation();
     return (
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <View className="">
-                <HeaderTinNhan
-                    onPressChiTiet={() => {
-                        navigation.goBack();
-                    }}
-                    onPressCallVideo={() => {
-                        navigation.navigate('VideoCall');
-                    }}
-                    onPressOpenMenu={() => Alert.alert('dnsgj')}
-                />
-                <ScrollView className="overflow-y-auto h-[640px]">
+        // <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <View className="h-full flex-1">
+            <HeaderTinNhan
+                onPressChiTiet={() => {
+                    navigation.goBack();
+                }}
+                onPressCallVideo={() => {
+                    navigation.navigate('VideoCall');
+                }}
+                onPressOpenMenu={() => Alert.alert('dnsgj')}
+            />
+            <ScrollView className="overflow-y-auto max-h-[85%]">
+                <View className="">
+                    {/* <ScrollView className="overflow-y-auto "> */}
                     <View className="h-32 w-full bg-white items-center p-2">
                         <Image
                             style={{ width: 80, height: 80, resizeMode: 'contain' }}
@@ -44,7 +46,7 @@ export default function ChiTietTinNhan() {
                             <Text className="text-lcn-blue-5 font-semibold ml-1">Nguyễn Văn A</Text>
                         </View>
                     </View>
-                    <View className="bg-white w-full ">
+                    <View className="bg-white w-full">
                         <ItemTinNhan from>xin chào</ItemTinNhan>
                         <ItemTinNhan>ai đó</ItemTinNhan>
                         <ItemTinNhan from>
@@ -66,11 +68,13 @@ export default function ChiTietTinNhan() {
                         </ItemTinNhan>
                         <ItemTinNhan>xin chào</ItemTinNhan>
                     </View>
-                </ScrollView>
-                <View className="w-full">
-                    <FooterTinNhan />
+                    {/* </ScrollView> */}
                 </View>
+            </ScrollView>
+            <View className="w-full absolute bottom-0">
+                <FooterTinNhan />
             </View>
-        </KeyboardAvoidingView>
+        </View>
+        // </KeyboardAvoidingView>
     );
 }

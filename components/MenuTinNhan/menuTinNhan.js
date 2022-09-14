@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert, Text } from 'react-native';
 import { Button, Menu, Provider } from 'react-native-paper';
 
 export default function MenuTinNhan() {

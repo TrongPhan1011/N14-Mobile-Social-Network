@@ -59,14 +59,6 @@ export default function App({ navigation, route }) {
                         tabBarShowLabel: false,
                     }}
                 />
-                <Stack.Screen
-                    name="TaoBaiViet"
-                    component={TaoBaiViet}
-                    options={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                    }}
-                />
             </Stack.Navigator>
         );
     }
@@ -153,6 +145,14 @@ export default function App({ navigation, route }) {
                 <Stack.Screen
                     name="ProfileScreen"
                     component={ProfileScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="TaoBaiViet"
+                    component={TaoBaiViet}
                     options={{
                         headerShown: false,
                         tabBarShowLabel: false,

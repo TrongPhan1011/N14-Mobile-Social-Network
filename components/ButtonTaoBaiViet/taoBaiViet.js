@@ -8,12 +8,12 @@ export default function TaoBaiViet() {
     return (
         <View className="w-full items-center bg-white p-2">
             <TouchableHighlight
-                className="rounded-2xl"
+                className="rounded-3xl"
                 onPress={() => {
                     navigation.navigate('TaoBaiViet');
                 }}
             >
-                <View className="bg-lcn-blue-4 h-10 w-80 rounded-2xl items-center justify-center flex flex-row">
+                <View className="bg-lcn-blue-4 h-12 w-80 rounded-3xl items-center justify-center flex flex-row">
                     <View className="ml-2">
                         <FontAwesome name="send" size={20} color="#ffffff" />
                     </View>

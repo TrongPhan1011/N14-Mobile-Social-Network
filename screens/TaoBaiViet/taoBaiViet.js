@@ -8,6 +8,7 @@ import {
     TextInput,
     TouchableHighlight,
     TouchableOpacity,
+    ScrollView,
 } from 'react-native';
 import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
@@ -18,6 +19,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Button from '../../components/Button/button';
 import ButtonTaoBaiViet from '../../components/ButtonTaoBaiViet';
+import FooterTaoBaiViet from '../../components/FooterTaoBaiViet';
 
 const doiTuong = ['Công khai', 'Bạn bè'];
 
@@ -38,58 +40,63 @@ const styles = StyleSheet.create({
 
 export default function TaoBaiViet() {
     return (
-        <SafeAreaView>
+        <SafeAreaView className="h-full">
             <HeaderProfile>Tạo bài viết</HeaderProfile>
-            <View className="bg-lcn-blue-3">
-                <View className=" flex flex-row p-4 items-center">
-                    <View className="rounded-full overflow-hidden">
-                        <Image
-                            className="w-12 h-12 rounded-full"
-                            source={{
-                                uri: 'https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/03/17/trend-avatar-1.jpg',
-                            }}
-                        ></Image>
+            <View className="bg-white flex-1">
+                <View className=" flex flex-row p-4 bg-lcn-blue-3 items-center">
+                    <View className="">
+                        <View className="rounded-full overflow-hidden">
+                            <Image
+                                className="w-16 h-16 rounded-full"
+                                source={{
+                                    uri: 'https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/03/17/trend-avatar-1.jpg',
+                                }}
+                            ></Image>
+                        </View>
                     </View>
-                    <View className="w-2/4">
-                        <Text className="text-lcn-blue-5 text-xl font-semibold ml-1 pl-2">Nguyễn Văn Đúng</Text>
-                    </View>
-                    <View className="w-2/4 pr-14">
-                        <SelectDropdown
-                            data={doiTuong}
-                            // defaultValueByIndex={1}
-                            // defaultValue={'Egypt'}
-                            onSelect={(selectedItem, index) => {
-                                // console.log(selectedItem, index);
-                            }}
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                                return selectedItem;
-                            }}
-                            rowTextForSelection={(item, index) => {
-                                return item;
-                            }}
-                            buttonStyle={styles.dropdown1BtnStyle}
-                            buttonTextStyle={styles.dropdown1BtnTxtStyle}
-                            renderDropdownIcon={(isOpened) => {
-                                return (
-                                    <FontAwesome
-                                        name={isOpened ? 'chevron-up' : 'chevron-down'}
-                                        color={'#444'}
-                                        size={18}
-                                    />
-                                );
-                            }}
-                            defaultValueByIndex={0}
-                            dropdownIconPosition={'right'}
-                            dropdownStyle={styles.dropdown1DropdownStyle}
-                            rowStyle={styles.dropdown1RowStyle}
-                            rowTextStyle={styles.dropdown1RowTxtStyle}
-                        />
+                    <View className="pr-14 ml-4 w-full">
+                        <View className="">
+                            <Text className="text-lcn-blue-5 text-xl font-semibold">Nguyễn Văn Đúng</Text>
+                        </View>
+                        <View className="w-1/2 mt-2 ">
+                            <SelectDropdown
+                                data={doiTuong}
+                                // defaultValueByIndex={1}
+                                // defaultValue={'Egypt'}
+                                onSelect={(selectedItem, index) => {
+                                    // console.log(selectedItem, index);
+                                }}
+                                buttonTextAfterSelection={(selectedItem, index) => {
+                                    return selectedItem;
+                                }}
+                                rowTextForSelection={(item, index) => {
+                                    return item;
+                                }}
+                                buttonStyle={styles.dropdown1BtnStyle}
+                                buttonTextStyle={styles.dropdown1BtnTxtStyle}
+                                renderDropdownIcon={(isOpened) => {
+                                    return (
+                                        <FontAwesome
+                                            name={isOpened ? 'chevron-up' : 'chevron-down'}
+                                            color={'#444'}
+                                            size={18}
+                                        />
+                                    );
+                                }}
+                                defaultValueByIndex={0}
+                                dropdownIconPosition={'right'}
+                                dropdownStyle={styles.dropdown1DropdownStyle}
+                                rowStyle={styles.dropdown1RowStyle}
+                                rowTextStyle={styles.dropdown1RowTxtStyle}
+                            />
+                        </View>
                     </View>
                 </View>
-                <View className="p-4 ">
-                    <View className="bg-white rounded-3xl">
+
+                <View className="p-4">
+                    <View className=" rounded-3xl bg-white">
                         <TextInput
-                            className="justify-start p-4 h-40"
+                            className="justify-start p-4 "
                             underlineColorAndroid="transparent"
                             placeholder="Đăng bài viết"
                             placeholderTextColor="grey"
@@ -98,24 +105,9 @@ export default function TaoBaiViet() {
                         />
                     </View>
                 </View>
-                <View className="flex flex-row justify-between pl-4 pr-4 pt-2 pb-2 items-center">
-                    <View className="ml-2">
-                        <FontAwesome name="file-image-o" size={30} color="#47A9FF" />
-                    </View>
-                    <View className="">
-                        <MaterialIcons name="tag-faces" size={35} color="#47A9FF" />
-                    </View>
-                    <Button huy>
-                        <Text className="text-white font-semibold text-lg">Hủy</Text>
-                    </Button>
-                    <TouchableOpacity className="rounded-2xl">
-                        <View className="bg-lcn-blue-4 h-10 w-44 rounded-2xl items-center justify-center flex flex-row">
-                            <View className="ml-2">
-                                <FontAwesome name="send" size={20} color="#ffffff" />
-                            </View>
-                            <Text className="text-white font-semibold text-lg pl-4">Tạo bài viết</Text>
-                        </View>
-                    </TouchableOpacity>
+
+                <View className="absolute bottom-0 w-full">
+                    <FooterTaoBaiViet />
                 </View>
             </View>
         </SafeAreaView>

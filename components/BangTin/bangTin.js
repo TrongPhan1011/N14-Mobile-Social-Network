@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, Image } from 'react-native';
 import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 
 export default function BangTin() {
     return (
@@ -18,7 +18,7 @@ export default function BangTin() {
                 <View className="w-9/12">
                     <Text className="text-lcn-blue-5 text-xl font-semibold ml-1 pl-2">Văn Đúng</Text>
                 </View>
-                <View>
+                <View className="w-3/12 pl-5">
                     <Feather name="more-vertical" size={30} color="#47A9FF" />
                 </View>
             </View>
@@ -42,7 +42,7 @@ export default function BangTin() {
                     <Text className="pl-2 ">3K</Text>
                 </View>
                 <View className="flex flex-row items-center">
-                    <FontAwesome name="commenting-o" size={30} color="#47A9FF" />
+                    <Fontisto name="comments" size={30} color="#47A9FF" />
                     <Text className="pl-2 ">Bình luận</Text>
                 </View>
             </View>
