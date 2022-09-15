@@ -21,7 +21,7 @@ export default function ItemBanBe() {
     return (
         <View>
             <TouchableHighlight activeOpacity={0.6} underlayColor="#C6E4FF">
-                <View className="flex flex-row bg-white mt-2 p-2 rounded-b-2xl rounded-t-2xl">
+                <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl">
                     <View className="flex flex-row items-center w-2/3">
                         <View>
                             <Image

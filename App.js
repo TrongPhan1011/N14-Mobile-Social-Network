@@ -1,5 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import { Text, View, SafeAreaView } from 'react-native';
+// import { StatusBar } from 'expo-status-bar';
+import { Text, View, SafeAreaView, Platform, StatusBar } from 'react-native';
 import { getFocusedRouteNameFromRoute, NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ChatScreen from './screens/ChatScreen';
@@ -16,7 +16,9 @@ import ThemBanScreen from './screens/ThemBanScreen/themBanScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import ChiTietTinNhan from './screens/ChiTietTinNhan';
-
+import TrangChuScreen from './screens/TrangChuScreen';
+import DangNhapScreen from './screens/DangNhapScreen';
+import DangKyScreen from './screens/DangKyScreen';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -45,58 +47,58 @@ export default function App({ navigation, route }) {
             </Stack.Navigator>
         );
     }
-    // return (
-    //     <NavigationContainer>
-    //         <Tab.Navigator options={{ tabBarInactiveTintColor: '#47A9FF', tabBarInactiveTintColor: 'lightgray' }}>
-    //             <Tab.Screen
-    //                 name="Chat"
-    //                 component={ChatParent}
-    //                 options={{
-    //                     headerShown: false,
-    //                     // tabBarShowLabel: false,
-    //                     tabBarHideOnKeyboard: true,
-    //                     tabBarIcon: ({ color }) => <Ionicons name="chatbox" size={30} color={color} />,
-    //                 }}
-    //             />
-    //             <Tab.Screen
-    //                 name="Friend"
-    //                 component={FriendScreen}
-    //                 options={{
-    //                     headerShown: false,
-    //                     // tabBarShowLabel: false,
-    //                     tabBarIcon: ({ color }) => <Ionicons name="person" size={30} color={color} />,
-    //                 }}
-    //             />
-    //             <Tab.Screen
-    //                 name="Bảng tin"
-    //                 component={BangTinScreen}
-    //                 options={{
-    //                     headerShown: false,
-    //                     // tabBarShowLabel: false,
-    //                     tabBarIcon: ({ color }) => <Ionicons name="newspaper" size={30} color={color} />,
-    //                 }}
-    //             />
-    //             <Tab.Screen
-    //                 name="Thông báo"
-    //                 component={ThongBaoScreen}
-    //                 options={{
-    //                     headerShown: false,
-    //                     // tabBarShowLabel: false,
-    //                     tabBarIcon: ({ color }) => <FontAwesome name="bell" size={30} color={color} />,
-    //                 }}
-    //             />
-    //             <Tab.Screen
-    //                 name="Setting"
-    //                 component={SettingScreen}
-    //                 options={{
-    //                     headerShown: false,
-    //                     // tabBarShowLabel: false,
-    //                     tabBarIcon: ({ color }) => <Ionicons name="settings" size={30} color={color} />,
-    //                 }}
-    //             />
-    //         </Tab.Navigator>
-    //     </NavigationContainer>
-    // );
+    // // return (
+    // //     <NavigationContainer>
+    // //         <Tab.Navigator options={{ tabBarInactiveTintColor: '#47A9FF', tabBarInactiveTintColor: 'lightgray' }}>
+    // //             <Tab.Screen
+    // //                 name="Chat"
+    // //                 component={ChatParent}
+    // //                 options={{
+    // //                     headerShown: false,
+    // //                     // tabBarShowLabel: false,
+    // //                     tabBarHideOnKeyboard: true,
+    // //                     tabBarIcon: ({ color }) => <Ionicons name="chatbox" size={30} color={color} />,
+    // //                 }}
+    // //             />
+    // //             <Tab.Screen
+    // //                 name="Friend"
+    // //                 component={FriendScreen}
+    // //                 options={{
+    // //                     headerShown: false,
+    // //                     // tabBarShowLabel: false,
+    // //                     tabBarIcon: ({ color }) => <Ionicons name="person" size={30} color={color} />,
+    // //                 }}
+    // //             />
+    // //             <Tab.Screen
+    // //                 name="Bảng tin"
+    // //                 component={BangTinScreen}
+    // //                 options={{
+    // //                     headerShown: false,
+    // //                     // tabBarShowLabel: false,
+    // //                     tabBarIcon: ({ color }) => <Ionicons name="newspaper" size={30} color={color} />,
+    // //                 }}
+    // //             />
+    // //             <Tab.Screen
+    // //                 name="Thông báo"
+    // //                 component={ThongBaoScreen}
+    // //                 options={{
+    // //                     headerShown: false,
+    // //                     // tabBarShowLabel: false,
+    // //                     tabBarIcon: ({ color }) => <FontAwesome name="bell" size={30} color={color} />,
+    // //                 }}
+    // //             />
+    // //             <Tab.Screen
+    // //                 name="Setting"
+    // //                 component={SettingScreen}
+    // //                 options={{
+    // //                     headerShown: false,
+    // //                     // tabBarShowLabel: false,
+    // //                     tabBarIcon: ({ color }) => <Ionicons name="settings" size={30} color={color} />,
+    // //                 }}
+    // //             />
+    // //         </Tab.Navigator>
+    // //     </NavigationContainer>
+    // // );
 
     function HomeTabBar() {
         return (
@@ -154,6 +156,30 @@ export default function App({ navigation, route }) {
         <NavigationContainer>
             <Stack.Navigator>
                 <Stack.Screen
+                    name="TrangChuScreen"
+                    component={TrangChuScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="DangNhapScreen"
+                    component={DangNhapScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="DangKyScreen"
+                    component={DangKyScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+                <Stack.Screen
                     name="HomeTabBar"
                     component={HomeTabBar}
                     options={{
@@ -178,14 +204,19 @@ export default function App({ navigation, route }) {
                     }}
                 />
                 {/* <Stack.Screen
-                    name="ThemBanBe"
-                    component={ThemBanScreen}
-                    options={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                    }}
-                /> */}
+        name="ThemBanBe"
+        component={ThemBanScreen}
+        options={{
+            headerShown: false,
+            tabBarShowLabel: false,
+        }}
+    /> */}
             </Stack.Navigator>
         </NavigationContainer>
     );
+    // return (
+    //     <View className={' h-full '}>
+    //         <DangNhapScreen />
+    //     </View>
+    // );
 }

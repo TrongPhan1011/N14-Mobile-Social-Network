@@ -28,7 +28,7 @@ export default function HeaderThemBan() {
                 <View className={'flex flex-row  p-2 border border-b-2 border-t-0  border-blue-400'}>
                     <View className={'w-4/6'}>
                         <TextInput
-                            className=" h-10 border border-blue-400 rounded-3xl"
+                            className=" h-10 border  border-blue-400 rounded-3xl"
                             placeholder="Nhập số điện thoại"
                             placeholderTextColor={'black'}
                             style={{ paddingLeft: 10 }}
