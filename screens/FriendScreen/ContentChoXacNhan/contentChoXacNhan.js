@@ -10,6 +10,12 @@ export default function ContentChoXacNhan() {
                 <ScrollView>
                     <ItemChoXacNhan />
                     <ItemChoXacNhan />
+                    <ItemChoXacNhan />
+                    <ItemChoXacNhan />
+                    <ItemChoXacNhan />
+                    <ItemChoXacNhan />
+                    <ItemChoXacNhan />
+                    <ItemChoXacNhan />
                 </ScrollView>
             </SafeAreaView>
         </View>

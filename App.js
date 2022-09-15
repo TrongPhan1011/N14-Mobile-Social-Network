@@ -12,13 +12,18 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import ThemBanScreen from './screens/ThemBanScreen/themBanScreen';
+import TaoBaiViet from './screens/TaoBaiViet/taoBaiViet';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
 import ChiTietTinNhan from './screens/ChiTietTinNhan';
+
 import TrangChuScreen from './screens/TrangChuScreen';
 import DangNhapScreen from './screens/DangNhapScreen';
 import DangKyScreen from './screens/DangKyScreen';
+
+import ProfileScreen from './screens/ProfileScreen';
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -47,6 +52,7 @@ export default function App({ navigation, route }) {
             </Stack.Navigator>
         );
     }
+
     // // return (
     // //     <NavigationContainer>
     // //         <Tab.Navigator options={{ tabBarInactiveTintColor: '#47A9FF', tabBarInactiveTintColor: 'lightgray' }}>
@@ -100,6 +106,21 @@ export default function App({ navigation, route }) {
     // //     </NavigationContainer>
     // // );
 
+    function BangTin() {
+        return (
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="BangTinScreen"
+                    component={BangTinScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+            </Stack.Navigator>
+        );
+    }
+
     function HomeTabBar() {
         return (
             <Tab.Navigator options={{ tabBarInactiveTintColor: '#47A9FF', tabBarInactiveTintColor: 'lightgray' }}>
@@ -124,7 +145,7 @@ export default function App({ navigation, route }) {
                 />
                 <Tab.Screen
                     name="Bảng tin"
-                    component={ThemBanScreen}
+                    component={BangTin}
                     options={{
                         headerShown: false,
                         // tabBarShowLabel: false,
@@ -203,6 +224,7 @@ export default function App({ navigation, route }) {
                         tabBarShowLabel: false,
                     }}
                 />
+
                 {/* <Stack.Screen
         name="ThemBanBe"
         component={ThemBanScreen}
@@ -211,6 +233,23 @@ export default function App({ navigation, route }) {
             tabBarShowLabel: false,
         }}
     /> */}
+
+                <Stack.Screen
+                    name="ProfileScreen"
+                    component={ProfileScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="TaoBaiViet"
+                    component={TaoBaiViet}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );

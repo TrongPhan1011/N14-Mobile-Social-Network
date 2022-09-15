@@ -21,7 +21,7 @@ export default function ItemTinNhan({ children, from }) {
                     }}
                 ></Image>
             </View>
-            <View className="w-min mr-2 rounded-3xl p-3 text-sm" style={{ maxWidth: 300 }}>
+            <View className="w-min rounded-3xl p-3 text-sm" style={{ maxWidth: 280 }}>
                 <Text className={bgMessage + ' break-words rounded-3xl p-3 text-sm'}>{children}</Text>
                 <Text className="text-right text-[12px] text-slate-400 pr-2">{seen}</Text>
             </View>
