@@ -3,6 +3,7 @@ import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 export default function TextInputDN({
     Icon,
+    Icon2,
     secureTextEntry,
     autoComplete,
     onChangeText,
@@ -22,7 +23,9 @@ export default function TextInputDN({
                 name={name}
                 onChangeText={onChangeText}
                 placeholder={placeholder}
+                className={'w-5/6'}
             ></TextInput>
+            <View className={'mr-8'}>{Icon2}</View>
         </View>
     );
 }
