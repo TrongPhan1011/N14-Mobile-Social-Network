@@ -12,6 +12,8 @@ import RNDateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
 import moment from 'moment';
 export default function DangKyScreen() {
+    const [hidePassMK, setHidePassMK] = useState(true);
+    const [hidePassXN, setHidePassXN] = useState(true);
     const navigation = useNavigation();
     const [checked, setChecked] = useState('nam');
     const [tick, setTick] = React.useState(false);
@@ -76,9 +78,17 @@ export default function DangKyScreen() {
                     <View className={'p-4'}>
                         <Text className={'text-lg font-semibold text-lcn-blue-5'}>Nhập mật khẩu</Text>
                         <TextInputDN
-                            secureTextEntry={true}
+                            secureTextEntry={hidePassMK ? true : false}
                             Icon={<Ionicons name="lock-closed" size={20} color="#47A9FF" />}
                             placeholder="Nhập mật khẩu"
+                            Icon2={
+                                <Ionicons
+                                    name="eye-outline"
+                                    size={20}
+                                    color="#47A9FF"
+                                    onPress={() => setHidePassMK(!hidePassMK)}
+                                />
+                            }
                         ></TextInputDN>
                     </View>
 
@@ -86,9 +96,17 @@ export default function DangKyScreen() {
                         <Text className={'text-lg font-semibold text-lcn-blue-5'}>Nhập lại mật khẩu</Text>
                         <TextInputDN
                             className={'w-full'}
-                            secureTextEntry={true}
+                            secureTextEntry={hidePassXN ? true : false}
                             Icon={<Ionicons name="lock-closed" size={20} color="#47A9FF" />}
                             placeholder="Nhập lại mật khẩu"
+                            Icon2={
+                                <Ionicons
+                                    name="eye-outline"
+                                    size={20}
+                                    color="#47A9FF"
+                                    onPress={() => setHidePassXN(!hidePassXN)}
+                                />
+                            }
                         ></TextInputDN>
                     </View>
 

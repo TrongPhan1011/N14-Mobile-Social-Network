@@ -23,6 +23,9 @@ import DangNhapScreen from './screens/DangNhapScreen';
 import DangKyScreen from './screens/DangKyScreen';
 
 import ProfileScreen from './screens/ProfileScreen';
+import QuenMatKhau from './screens/QuenMatKhauScreen/QuenMatKhau';
+import MaXacThuc from './screens/QuenMatKhauScreen/MaXacThuc';
+import CapNhatMatKhau from './screens/QuenMatKhauScreen/CapNhatMatKhau';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -187,6 +190,31 @@ export default function App({ navigation, route }) {
                 <Stack.Screen
                     name="DangNhapScreen"
                     component={DangNhapScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+
+                <Stack.Screen
+                    name="QuenMatKhau"
+                    component={QuenMatKhau}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="MaXacThuc"
+                    component={MaXacThuc}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="CapNhatMatKhau"
+                    component={CapNhatMatKhau}
                     options={{
                         headerShown: false,
                         tabBarShowLabel: false,
