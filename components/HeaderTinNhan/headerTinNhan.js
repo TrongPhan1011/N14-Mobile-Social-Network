@@ -3,15 +3,11 @@ import React, { useState } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
-import { Button, Menu, Provider } from 'react-native-paper';
+// import { MenuContext, Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 
 import MenuTinNhan from '../MenuTinNhan';
 
 export default function HeaderTinNhan({ onPressChiTiet, onPressCallVideo, onPressOpenMenu }) {
-    // const [visible, setVisible] = useState(false);
-
-    // const closeMenu = () => setVisible(false);
-    // const openMenu = (v) => setVisible(true);
     return (
         <SafeAreaView style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }}>
             <View className="w-full h-14 flex flex-row items-center bg-lcn-blue-2 p-2">
@@ -31,10 +27,10 @@ export default function HeaderTinNhan({ onPressChiTiet, onPressCallVideo, onPres
                 <View className="ml-5">
                     <FontAwesome name="video-camera" size={30} color="#47A9FF" onPress={onPressCallVideo} />
                 </View>
-                <View className="ml-3">
-                    {/* <MenuTinNhan> */}
+                <View className="ml-3 relative">
                     <Feather name="more-vertical" size={30} color="#47A9FF" onPress={onPressOpenMenu} />
-                    {/* </MenuTinNhan> */}
+
+                    {/* <MenuTinNhan /> */}
                 </View>
             </View>
         </SafeAreaView>
