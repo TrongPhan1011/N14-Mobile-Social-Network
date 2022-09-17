@@ -24,6 +24,9 @@ import DangKyScreen from './screens/DangKyScreen';
 
 import ProfileScreen from './screens/ProfileScreen';
 
+import SettingScreenTaiKhoan from './screens/SettingScreen/settingScreenTaiKhoan/settingScreenTaiKhoan';
+import UpdatePassWord from './screens/SettingScreen/updatePassWord/updatePassWord';
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -245,6 +248,22 @@ export default function App({ navigation, route }) {
                 <Stack.Screen
                     name="TaoBaiViet"
                     component={TaoBaiViet}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="SettingScreenTaiKhoan"
+                    component={SettingScreenTaiKhoan}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="UpdatePassWord"
+                    component={UpdatePassWord}
                     options={{
                         headerShown: false,
                         tabBarShowLabel: false,
