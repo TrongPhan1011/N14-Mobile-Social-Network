@@ -28,7 +28,7 @@ export default function ChiTietTinNhan() {
                 onPressCallVideo={() => {
                     navigation.navigate('VideoCall');
                 }}
-                onPressOpenMenu={() => Alert.alert('dnsgj')}
+                onPressOpenMenu={() => navigation.navigate('GroupChatScreen')}
             />
             <ScrollView className="overflow-y-auto max-h-[85%]">
                 <View className="">

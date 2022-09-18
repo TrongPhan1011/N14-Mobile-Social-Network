@@ -17,6 +17,7 @@ import TaoBaiViet from './screens/TaoBaiViet/taoBaiViet';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import ChiTietTinNhan from './screens/ChiTietTinNhan';
+import GroupChatScreen from './screens/GroupChatScreen';
 
 import TrangChuScreen from './screens/TrangChuScreen';
 import DangNhapScreen from './screens/DangNhapScreen';
@@ -250,6 +251,14 @@ export default function App({ navigation, route }) {
                 <Stack.Screen
                     name="VideoCall"
                     component={VideoCall}
+                    options={{
+                        headerShown: false,
+                        tabBarShowLabel: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="GroupChatScreen"
+                    component={GroupChatScreen}
                     options={{
                         headerShown: false,
                         tabBarShowLabel: false,
