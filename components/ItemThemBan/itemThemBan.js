@@ -34,7 +34,7 @@ export default function ItemThemBan() {
                     <View className=" flex flex-row justify-end items-center w-1/4 ">
                         <View>
                             <Button xacnhan onPress={() => Alert.alert('ggg')}>
-                                <Text className={'text-white'}>Kết bạn</Text>
+                                <Text className={'text-white text-base'}>Kết bạn</Text>
                             </Button>
                         </View>
                     </View>

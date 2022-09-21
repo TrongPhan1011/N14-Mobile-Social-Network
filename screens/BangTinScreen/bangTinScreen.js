@@ -10,7 +10,7 @@ export default function BangTinScreen() {
         <View className="">
             <HeaderSearch />
             <TaoBaiViet />
-            <ScrollView>
+            <ScrollView className="max-h-[80%]">
                 <BangTin />
                 <BangTin />
                 <BangTin />

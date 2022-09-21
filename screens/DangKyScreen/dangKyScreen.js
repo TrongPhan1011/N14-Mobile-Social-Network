@@ -114,6 +114,8 @@ export default function DangKyScreen() {
                         <Text className={'text-lg font-semibold text-lcn-blue-5'}>Ngày sinh</Text>
                         <TextInputDN
                             className={'w-full'}
+                            editable={true}
+                            placeholderTextColor={'#000000'}
                             // secureTextEntry={true}
                             Icon={<Ionicons name="calendar" size={20} color="#47A9FF" onPress={showDatepicker} />}
                             onChangeText={(date) => setDate(date)}

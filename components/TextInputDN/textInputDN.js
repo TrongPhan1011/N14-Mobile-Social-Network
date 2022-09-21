@@ -11,6 +11,8 @@ export default function TextInputDN({
     type,
     placeholder,
     name,
+    editable,
+    placeholderTextColor,
 }) {
     return (
         <View className="rounded-3xl w-full h-12  flex flex-row border border-lcn-blue-4 items-center p-2 ">
@@ -22,7 +24,9 @@ export default function TextInputDN({
                 value={value}
                 name={name}
                 onChangeText={onChangeText}
+                editable={editable}
                 placeholder={placeholder}
+                placeholderTextColor={placeholderTextColor}
                 className={'w-5/6'}
             ></TextInput>
             <View className={'mr-8'}>{Icon2}</View>

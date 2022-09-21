@@ -10,6 +10,7 @@ import SettingScreen from './screens/SettingScreen';
 import VideoCall from './screens/VideoCall';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import ThemBanScreen from './screens/ThemBanScreen/themBanScreen';
 import TaoBaiViet from './screens/TaoBaiViet/taoBaiViet';
@@ -60,59 +61,6 @@ export default function App({ navigation, route }) {
         );
     }
 
-    // // return (
-    // //     <NavigationContainer>
-    // //         <Tab.Navigator options={{ tabBarInactiveTintColor: '#47A9FF', tabBarInactiveTintColor: 'lightgray' }}>
-    // //             <Tab.Screen
-    // //                 name="Chat"
-    // //                 component={ChatParent}
-    // //                 options={{
-    // //                     headerShown: false,
-    // //                     // tabBarShowLabel: false,
-    // //                     tabBarHideOnKeyboard: true,
-    // //                     tabBarIcon: ({ color }) => <Ionicons name="chatbox" size={30} color={color} />,
-    // //                 }}
-    // //             />
-    // //             <Tab.Screen
-    // //                 name="Friend"
-    // //                 component={FriendScreen}
-    // //                 options={{
-    // //                     headerShown: false,
-    // //                     // tabBarShowLabel: false,
-    // //                     tabBarIcon: ({ color }) => <Ionicons name="person" size={30} color={color} />,
-    // //                 }}
-    // //             />
-    // //             <Tab.Screen
-    // //                 name="Bảng tin"
-    // //                 component={BangTinScreen}
-    // //                 options={{
-    // //                     headerShown: false,
-    // //                     // tabBarShowLabel: false,
-    // //                     tabBarIcon: ({ color }) => <Ionicons name="newspaper" size={30} color={color} />,
-    // //                 }}
-    // //             />
-    // //             <Tab.Screen
-    // //                 name="Thông báo"
-    // //                 component={ThongBaoScreen}
-    // //                 options={{
-    // //                     headerShown: false,
-    // //                     // tabBarShowLabel: false,
-    // //                     tabBarIcon: ({ color }) => <FontAwesome name="bell" size={30} color={color} />,
-    // //                 }}
-    // //             />
-    // //             <Tab.Screen
-    // //                 name="Setting"
-    // //                 component={SettingScreen}
-    // //                 options={{
-    // //                     headerShown: false,
-    // //                     // tabBarShowLabel: false,
-    // //                     tabBarIcon: ({ color }) => <Ionicons name="settings" size={30} color={color} />,
-    // //                 }}
-    // //             />
-    // //         </Tab.Navigator>
-    // //     </NavigationContainer>
-    // // );
-
     function BangTin() {
         return (
             <Stack.Navigator>
@@ -132,22 +80,25 @@ export default function App({ navigation, route }) {
         return (
             <Tab.Navigator options={{ tabBarInactiveTintColor: '#47A9FF', tabBarInactiveTintColor: 'lightgray' }}>
                 <Tab.Screen
-                    name="ChatScreen"
+                    name="Tin nhắn"
                     component={ChatScreen}
                     options={{
                         headerShown: false,
                         // tabBarShowLabel: false,
                         tabBarHideOnKeyboard: true,
-                        tabBarIcon: ({ color }) => <Ionicons name="chatbox" size={30} color={color} />,
+                        tabBarIcon: ({ color }) => (
+                            <Ionicons name="ios-chatbubble-ellipses-outline" size={30} color={color} />
+                        ),
                     }}
                 />
                 <Tab.Screen
-                    name="Friend"
+                    name="Bạn bè"
                     component={AddFriend}
                     options={{
                         headerShown: false,
                         // tabBarShowLabel: false,
-                        tabBarIcon: ({ color }) => <Ionicons name="person" size={30} color={color} />,
+                        tabBarHideOnKeyboard: true,
+                        tabBarIcon: ({ color }) => <AntDesign name="user" size={30} color={color} />,
                     }}
                 />
                 <Tab.Screen
@@ -155,8 +106,9 @@ export default function App({ navigation, route }) {
                     component={BangTin}
                     options={{
                         headerShown: false,
+                        tabBarHideOnKeyboard: true,
                         // tabBarShowLabel: false,
-                        tabBarIcon: ({ color }) => <Ionicons name="newspaper" size={30} color={color} />,
+                        tabBarIcon: ({ color }) => <Ionicons name="ios-newspaper-outline" size={30} color={color} />,
                     }}
                 />
                 <Tab.Screen
@@ -164,17 +116,19 @@ export default function App({ navigation, route }) {
                     component={ThongBaoScreen}
                     options={{
                         headerShown: false,
+                        tabBarHideOnKeyboard: true,
                         // tabBarShowLabel: false,
-                        tabBarIcon: ({ color }) => <FontAwesome name="bell" size={30} color={color} />,
+                        tabBarIcon: ({ color }) => <FontAwesome name="bell-o" size={30} color={color} />,
                     }}
                 />
                 <Tab.Screen
-                    name="Setting"
+                    name="Cài đặt"
                     component={SettingScreen}
                     options={{
                         headerShown: false,
+                        tabBarHideOnKeyboard: true,
                         // tabBarShowLabel: false,
-                        tabBarIcon: ({ color }) => <Ionicons name="settings" size={30} color={color} />,
+                        tabBarIcon: ({ color }) => <Ionicons name="settings-outline" size={30} color={color} />,
                     }}
                 />
             </Tab.Navigator>

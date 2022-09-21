@@ -18,7 +18,7 @@ export default function FooterTaoBaiViet() {
                 <Text className="text-white font-semibold text-lg">Hủy</Text>
             </Button>
             <TouchableOpacity className="rounded-3xl">
-                <View className="bg-lcn-blue-4 h-10 w-44 rounded-xl items-center justify-center flex flex-row">
+                <View className="bg-lcn-blue-4 h-10 w-44 rounded-3xl items-center justify-center flex flex-row">
                     <View className="ml-2">
                         <FontAwesome name="send" size={20} color="#ffffff" />
                     </View>

@@ -25,7 +25,7 @@ export default function HeaderThemBan() {
                     </View>
                     <View className={'w-1/4'}></View>
                 </View>
-                <View className={'flex flex-row  p-2 border border-b-2 border-t-0  border-blue-400'}>
+                <View className={'flex flex-row  p-2 border border-b-2 border-t-0  border-lcn-blue-2'}>
                     <View className={'w-4/6'}>
                         <TextInput
                             className=" h-10 border  border-blue-400 rounded-3xl"
