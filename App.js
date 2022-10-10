@@ -35,7 +35,7 @@ import UpdatePassWord from './screens/SettingScreen/updatePassWord/updatePassWor
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-export default function App({ navigation, route }) {
+export default function App({ navigation }) {
     let tabBarVisible = true;
 
     function AddFriend() {
@@ -263,6 +263,7 @@ export default function App({ navigation, route }) {
             </Stack.Navigator>
         </NavigationContainer>
     );
+    s;
     // return (
     //     <View className={' h-full '}>
     //         <DangNhapScreen />

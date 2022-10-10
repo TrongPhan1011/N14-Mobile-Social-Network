@@ -1,14 +1,20 @@
-import { loginSuccess, loginErorr } from '~/redux/Slice/authSlice';
-import * as httpRequest from '~/utils/httpRequest';
+import { loginSuccess, loginErorr } from '../redux/Slice/authSlice';
+import * as httpRequest from '../utils/httpRequest';
 
-export const loginUser = async (user, dispatch, navigate) => {
+export const loginUser = async (user, dispatch, navigation) => {
     try {
-        //  const res = await httpRequest.get('auth/',  user);
+        const dataUser = await httpRequest.post('auth/login', user);
 
-        dispatch(loginSuccess(user)); // lưu lại user
+        if (!!dataUser) {
+            dispatch(loginSuccess(dataUser)); // lưu lại user
+            const dataUserLogin = await httpRequest.get('user/account/' + dataUser._id);
+            dispatch(userLogin(dataUserLogin));
+            navigation.navigate('HomeTabBar');
 
-        // return res;
+            return true;
+        } else return false;
     } catch (error) {
         dispatch(loginErorr());
+        return false;
     }
 };
