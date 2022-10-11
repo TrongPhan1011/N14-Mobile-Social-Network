@@ -2,6 +2,9 @@
 import { Text, View, SafeAreaView, Platform, StatusBar } from 'react-native';
 import { getFocusedRouteNameFromRoute, NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+
 import ChatScreen from './screens/ChatScreen';
 import ThongBaoScreen from './screens/ThongBaoScreen';
 import BangTinScreen from './screens/BangTinScreen';
@@ -32,10 +35,9 @@ import CapNhatMatKhau from './screens/QuenMatKhauScreen/CapNhatMatKhau';
 import SettingScreenTaiKhoan from './screens/SettingScreen/settingScreenTaiKhoan/settingScreenTaiKhoan';
 import UpdatePassWord from './screens/SettingScreen/updatePassWord/updatePassWord';
 
-const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
-
-export default function App({ navigation }) {
+export default function App() {
+    const Tab = createBottomTabNavigator();
+    const Stack = createStackNavigator();
     let tabBarVisible = true;
 
     function AddFriend() {
@@ -134,139 +136,127 @@ export default function App({ navigation }) {
             </Tab.Navigator>
         );
     }
+
     return (
-        <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen
-                    name="TrangChuScreen"
-                    component={TrangChuScreen}
-                    options={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                    }}
-                />
-                <Stack.Screen
-                    name="DangNhapScreen"
-                    component={DangNhapScreen}
-                    options={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                    }}
-                />
+        <Provider store={store}>
+            <NavigationContainer>
+                <Stack.Navigator>
+                    <Stack.Screen
+                        name="TrangChuScreen"
+                        component={TrangChuScreen}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="DangNhapScreen"
+                        component={DangNhapScreen}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
 
-                <Stack.Screen
-                    name="QuenMatKhau"
-                    component={QuenMatKhau}
-                    options={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                    }}
-                />
-                <Stack.Screen
-                    name="MaXacThuc"
-                    component={MaXacThuc}
-                    options={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                    }}
-                />
-                <Stack.Screen
-                    name="CapNhatMatKhau"
-                    component={CapNhatMatKhau}
-                    options={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                    }}
-                />
-                <Stack.Screen
-                    name="DangKyScreen"
-                    component={DangKyScreen}
-                    options={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                    }}
-                />
-                <Stack.Screen
-                    name="HomeTabBar"
-                    component={HomeTabBar}
-                    options={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                    }}
-                />
-                <Stack.Screen
-                    name="ChiTietTinNhan"
-                    component={ChiTietTinNhan}
-                    options={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                    }}
-                />
-                <Stack.Screen
-                    name="VideoCall"
-                    component={VideoCall}
-                    options={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                    }}
-                />
-                <Stack.Screen
-                    name="GroupChatScreen"
-                    component={GroupChatScreen}
-                    options={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                    }}
-                />
+                    <Stack.Screen
+                        name="QuenMatKhau"
+                        component={QuenMatKhau}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="MaXacThuc"
+                        component={MaXacThuc}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="CapNhatMatKhau"
+                        component={CapNhatMatKhau}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="DangKyScreen"
+                        component={DangKyScreen}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="HomeTabBar"
+                        component={HomeTabBar}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="ChiTietTinNhan"
+                        component={ChiTietTinNhan}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="VideoCall"
+                        component={VideoCall}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="GroupChatScreen"
+                        component={GroupChatScreen}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
 
-                {/* <Stack.Screen
-        name="ThemBanBe"
-        component={ThemBanScreen}
-        options={{
-            headerShown: false,
-            tabBarShowLabel: false,
-        }}
-    /> */}
-
-                <Stack.Screen
-                    name="ProfileScreen"
-                    component={ProfileScreen}
-                    options={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                    }}
-                />
-                <Stack.Screen
-                    name="TaoBaiViet"
-                    component={TaoBaiViet}
-                    options={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                    }}
-                />
-                <Stack.Screen
-                    name="SettingScreenTaiKhoan"
-                    component={SettingScreenTaiKhoan}
-                    options={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                    }}
-                />
-                <Stack.Screen
-                    name="UpdatePassWord"
-                    component={UpdatePassWord}
-                    options={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                    }}
-                />
-            </Stack.Navigator>
-        </NavigationContainer>
+                    <Stack.Screen
+                        name="ProfileScreen"
+                        component={ProfileScreen}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="TaoBaiViet"
+                        component={TaoBaiViet}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="SettingScreenTaiKhoan"
+                        component={SettingScreenTaiKhoan}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="UpdatePassWord"
+                        component={UpdatePassWord}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </Provider>
     );
-    s;
-    // return (
-    //     <View className={' h-full '}>
-    //         <DangNhapScreen />
-    //     </View>
-    // );
 }

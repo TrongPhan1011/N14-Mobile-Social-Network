@@ -1,35 +1,15 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
 
 import authSlice from './Slice/authSlice';
 import signInSlice from './Slice/signInSlice';
 import sidebarChatSlice from './Slice/sidebarChatSlice';
 
-const persistConfig = {
-    key: 'root',
-    version: 1,
-    storage,
-};
-
-const rootReducer = combineReducers({
+const combine = combineReducers({
     auth: authSlice,
     signIn: signInSlice,
+    sidebarChatSlice,
 });
-
-const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-    reducer: {
-        persistedReducer,
-        sidebarChatSlice,
-    },
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-            serializableCheck: {
-                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-            },
-        }),
+    reducer: combine,
 });
-
-export let persistor = persistStore(store);

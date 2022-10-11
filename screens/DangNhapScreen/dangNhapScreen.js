@@ -1,75 +1,98 @@
-import { View, Text, SafeAreaView, StatusBar, Image, TextInput, ScrollView } from 'react-native';
-import React from 'react';
-import logo from '../../assets/logo.png';
+import { View, Text, SafeAreaView, StatusBar, Image, TextInput, ScrollView, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect } from 'react';
+import { useState, useRef } from 'react';
+import { loginSuccess, loginErorr } from '../../redux/Slice/authSlice';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import logo from '../../assets/logo.png';
 import TextInputDN from '../../components/TextInputDN';
 import Button from '../../components/Button/button';
-import { useNavigation } from '@react-navigation/native';
-import { useState, useRef } from 'react';
 import { loginUser } from '../../services/authService';
+import { connect, useDispatch } from 'react-redux';
 
-import { useDispatch } from 'react-redux';
-
-export default function DangNhapScreen() {
-    const dispatch = useDispatch();
+function DangNhapScreen({ loginSuccess }) {
     const navigation = useNavigation();
     const [hidePass, setHidePass] = useState(true);
 
-    // const [validEmail, setValidEmail] = useState('opacity-0');
-    // const [validPassword, setValidPassword] = useState('opacity-0');
-    // const [failLogin, setFailLogin] = useState('hidden');
+    const [validEmail, setValidEmail] = useState('opacity-0');
+    const [validPassword, setValidPassword] = useState('opacity-0');
+    const [failLogin, setFailLogin] = useState('hidden');
+    try {
+        const dispatch = useDispatch();
+    } catch (error) {
+        console.log(error);
+    }
+
+    const [data, setData] = useState(null);
+
+    // useEffect(()=>{
+    //     const getDataLogin = ()=>{
+    //         var user = { userName: 'test@gmail.com', password: '123456' };
+    //     }
+    // },[data])
 
     // const emailRef = useRef();
     // const passwordRef = useRef();
-    // const handleLogin = () => {
-    //     var valueEmail = checkValidEmail();
-    //     var valuePassword = checkValidPassword();
+    const handleLogin = async () => {
+        // var valueEmail = checkValidEmail();
+        // var valuePassword = checkValidPassword();
+        // if (!!valueEmail && !!validPassword) {
 
-    //     if (!!valueEmail && !!validPassword) {
-    //         var user = { userName: valueEmail, password: valuePassword };
-    //         // đăng nhập thành công -->
-    //         var login = loginUser(user, dispatch, navigation);
-    //         if (!!login) {
-    //             setFailLogin('');
-    //         }
-    //     } else return false;
-    // };
+        //     // đăng nhập thành công -->
+        var user = { userName: 'test@gmail.com', password: '123456' };
+        var login = await loginUser(user);
+        console.log(login);
+        if (!!login) {
+            console.log(login);
+            navigation.navigate('HomeTabBar');
+        }
+        // if (!!login) {
+        //     setFailLogin('');
+        // }
+        // } else return false;
+        // Alert.alert(emailRef);
+    };
 
-    // const checkValidEmail = () => {
-    //     var valueEmail = emailRef.current.value.trim();
-    //     if (valueEmail.length === 0 || !valueEmail.match(/^[a-zA-Z._0-9]+@[a-z]+\.[a-z]+$/)) {
-    //         setValidEmail('opacity-1');
-    //         return '';
-    //     } else {
-    //         setValidEmail('opacity-0');
-    //         return valueEmail;
-    //     }
-    // };
-    // const checkValidPassword = () => {
-    //     var valuePassword = passwordRef.current.value.trim();
-    //     if (valuePassword.length === 0 || !valuePassword.match(/^[a-zA-Z0-9\.@ ]{6,}$/)) {
-    //         setValidPassword('opacity-1');
-    //         return '';
-    //     } else {
-    //         setValidPassword('opacity-0');
-    //         return valuePassword;
-    //     }
-    // };
+    const checkValidEmail = () => {
+        var valueEmail = emailRef.current.value.trim();
+        if (valueEmail.length === 0 || !valueEmail.match(/^[a-zA-Z._0-9]+@[a-z]+\.[a-z]+$/)) {
+            setValidEmail('opacity-1');
+            return '';
+        } else {
+            setValidEmail('opacity-0');
+            return valueEmail;
+        }
+    };
+    const checkValidPassword = () => {
+        var valuePassword = passwordRef.current.value.trim();
+        if (valuePassword.length === 0 || !valuePassword.match(/^[a-zA-Z0-9\.@ ]{6,}$/)) {
+            setValidPassword('opacity-1');
+            return '';
+        } else {
+            setValidPassword('opacity-0');
+            return valuePassword;
+        }
+    };
 
     return (
-        <SafeAreaView style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }}>
-            <ScrollView>
-                <View className={'bg-white h-full'}>
-                    <View className=" p-2 w-1/4">
-                        <Ionicons
-                            name="arrow-back"
-                            size={30}
-                            color="#47A9FF"
-                            onPress={() => {
-                                navigation.goBack();
-                            }}
-                        />
-                    </View>
+        <SafeAreaView
+            style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }}
+            className="bg-white"
+        >
+            <View className={'bg-white h-full flex justify-between'}>
+                <View className=" p-2 w-1/4">
+                    <Ionicons
+                        name="arrow-back"
+                        size={30}
+                        color="#47A9FF"
+                        onPress={() => {
+                            navigation.goBack();
+                        }}
+                    />
+                </View>
+                <View>
                     <View className={'h-15 w-full flex justify-center items-center'}>
                         <Image source={logo} />
                     </View>
@@ -113,28 +136,34 @@ export default function DangNhapScreen() {
                             Quên mật khẩu?
                         </Text>
                     </View>
-                    <View className={'p-3 items-center justify-center'}>
-                        <Button
-                            classNames={'w-64 h-14 bg-lcn-blue-4 rounded-[50px] border border-white '}
-                            // onPress={handleLogin}
-                        >
-                            <Text className={'text-white font-semibold text-2xl'}>Đăng nhập</Text>
-                        </Button>
-                    </View>
-
-                    <View className={' flex flex-row p-5 items-center justify-center'}>
-                        <Text className={'text-lcn-blue-5 font-semibold text-base'}>Bạn chưa có tài khoản ? </Text>
-                        <Text
-                            className={'text-lcn-blue-4 font-semibold text-base'}
-                            onPress={() => {
-                                navigation.navigate('DangKyScreen');
-                            }}
-                        >
-                            Đăng ký ngay
-                        </Text>
-                    </View>
                 </View>
-            </ScrollView>
+                <View className={'p-3 items-center justify-center'}>
+                    <Button
+                        classNames={'w-64 h-14 bg-lcn-blue-4 rounded-[50px] border border-white '}
+                        onPress={handleLogin}
+                    >
+                        <Text className={'text-white font-semibold text-2xl'}>Đăng nhập</Text>
+                    </Button>
+                </View>
+
+                <View className={' flex flex-row p-5 items-center justify-center'}>
+                    <Text className={'text-lcn-blue-5 font-semibold text-base'}>Bạn chưa có tài khoản ? </Text>
+                    <Text
+                        className={'text-lcn-blue-4 font-semibold text-base'}
+                        onPress={() => {
+                            navigation.navigate('DangKyScreen');
+                        }}
+                    >
+                        Đăng ký ngay
+                    </Text>
+                </View>
+            </View>
         </SafeAreaView>
     );
 }
+
+const mapDispatchToProps = {
+    loginSuccess,
+};
+
+export default connect(null, mapDispatchToProps)(DangNhapScreen);
