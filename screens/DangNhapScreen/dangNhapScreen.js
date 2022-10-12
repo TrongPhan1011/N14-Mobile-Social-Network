@@ -10,20 +10,18 @@ import logo from '../../assets/logo.png';
 import TextInputDN from '../../components/TextInputDN';
 import Button from '../../components/Button/button';
 import { loginUser } from '../../services/authService';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 
-function DangNhapScreen({ loginSuccess }) {
+function DangNhapScreen() {
     const navigation = useNavigation();
     const [hidePass, setHidePass] = useState(true);
 
     const [validEmail, setValidEmail] = useState('opacity-0');
     const [validPassword, setValidPassword] = useState('opacity-0');
     const [failLogin, setFailLogin] = useState('hidden');
-    try {
-        const dispatch = useDispatch();
-    } catch (error) {
-        console.log(error);
-    }
+
+    const dispatch = useDispatch();
+    const userSelector = useSelector((state) => state.auth.currentUser);
 
     const [data, setData] = useState(null);
 
@@ -43,11 +41,13 @@ function DangNhapScreen({ loginSuccess }) {
         //     // đăng nhập thành công -->
         var user = { userName: 'test@gmail.com', password: '123456' };
         var login = await loginUser(user);
-        console.log(login);
-        if (!!login) {
-            console.log(login);
-            navigation.navigate('HomeTabBar');
-        }
+
+        console.log({ userSelector });
+
+        // if (!!login) {
+        //     console.log(login);
+        //     navigation.navigate('HomeTabBar');
+        // }
         // if (!!login) {
         //     setFailLogin('');
         // }
@@ -162,8 +162,4 @@ function DangNhapScreen({ loginSuccess }) {
     );
 }
 
-const mapDispatchToProps = {
-    loginSuccess,
-};
-
-export default connect(null, mapDispatchToProps)(DangNhapScreen);
+export default DangNhapScreen;
