@@ -1,5 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
+import { logOutSuccess } from '../../redux/Slice/authSlice';
+import { userLogin } from '../../redux/Slice/signInSlice';
 import {
     SafeAreaView,
     View,
@@ -13,6 +15,13 @@ import {
     TouchableHighlight,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
+const handleLogOut = async () => {
+    await logout(dispatch, currAccount.accessToken, axiosJWT);
+    dispatch(logOutSuccess());
+    dispatch(userLogin(null));
+    // navigate(config.routeConfig.signIn);
+};
 
 export default function ItemSetting() {
     const navigation = useNavigation();
@@ -87,7 +96,7 @@ export default function ItemSetting() {
                     className="rounded-3xl ml-3 mr-3"
                     activeOpacity={0.6}
                     underlayColor="#C6E4FF"
-                    onPress={() => navigation.navigate('TrangChuScreen')}
+                    onPress={handleLogOut}
                 >
                     <View className="rounded-3xl p-3 flex-row items-center bg-lcn-blue-1">
                         <View>
