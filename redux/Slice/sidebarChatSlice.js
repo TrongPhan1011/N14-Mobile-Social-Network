@@ -6,6 +6,7 @@ const sidebarChatSlice = createSlice({
         groupChatId: null,
         unseenChat: 0,
         error: false,
+        idGroupChatSelect: null,
     },
     reducers: {
         addGroupChatId: (state, action) => {
@@ -19,9 +20,12 @@ const sidebarChatSlice = createSlice({
             // state.unseenChat = action.payload;
             console.log(state);
         },
+        selectGroup: (state, action) => {
+            state.idGroupChatSelect = action.payload;
+        },
     },
 });
 
-export const { addGroupChatId, loginErorr, addCountUnseenChat } = sidebarChatSlice.actions;
+export const { addGroupChatId, loginErorr, addCountUnseenChat, selectGroup } = sidebarChatSlice.actions;
 
 export default sidebarChatSlice.reducer;

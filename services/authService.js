@@ -7,7 +7,7 @@ export const loginUser = async (user, dispatch) => {
     try {
         const dataUser = await httpRequest.post('auth/login', user);
         // const dataUser = await httpRequest.get('user/account/633cf90658fad91fe0d4b439');
-        console.log(dataUser);
+        //console.log(dataUser);
         if (!!dataUser) {
             dispatch(loginSuccess(dataUser));
             const dataUserLogin = await httpRequest.get('user/account/' + dataUser._id);

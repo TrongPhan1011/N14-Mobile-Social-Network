@@ -7,7 +7,7 @@ import sidebarChatSlice from './Slice/sidebarChatSlice';
 const combine = combineReducers({
     auth: authSlice,
     signIn: signInSlice,
-    sidebarChatSlice,
+    sidebarChatSlice: sidebarChatSlice,
 });
 
 export const store = configureStore({
