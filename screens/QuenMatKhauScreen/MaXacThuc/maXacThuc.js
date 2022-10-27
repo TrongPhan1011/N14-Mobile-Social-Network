@@ -3,6 +3,7 @@ import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from '../../../components/Button/button';
 import { useNavigation } from '@react-navigation/native';
+import TextInputDN from '../../../components/TextInputDN';
 export default function MaXacThuc() {
     const navigation = useNavigation();
     return (
@@ -29,41 +30,14 @@ export default function MaXacThuc() {
                         <View>
                             <Ionicons name="mail-outline" size={30} color="#47A9FF" />
                         </View>
-                        <Text className={'text-lg font-semibold text-lcn-blue-5'}>Mã xác thực đã được gửi đến số</Text>
+                        <Text className={'text-lg font-semibold text-lcn-blue-5'}>
+                            Mã xác thực đã được gửi đến Gmail
+                        </Text>
                         <Text className={'text-base'}>09******78</Text>
                     </View>
                     <View className="text-center items-center justify-center flex flex-row">
-                        <View className={'p-2'}>
-                            <TextInput
-                                className={
-                                    'w-8 border border-b-2 border-t-0 border-r-0 border-l-0  border-blue-400 text-2xl text-center'
-                                }
-                                maxLength={1}
-                            />
-                        </View>
-                        <View className={'p-2'}>
-                            <TextInput
-                                className={
-                                    'w-8 border border-b-2 border-t-0 border-r-0 border-l-0  border-blue-400 text-2xl justify-center items-center text-center'
-                                }
-                                maxLength={1}
-                            />
-                        </View>
-                        <View className={'p-2'}>
-                            <TextInput
-                                className={
-                                    'w-8 border border-b-2 border-t-0 border-r-0 border-l-0  border-blue-400 text-2xl justify-center items-center text-center'
-                                }
-                                maxLength={1}
-                            />
-                        </View>
-                        <View className={'p-2'}>
-                            <TextInput
-                                className={
-                                    'w-8 border border-b-2 border-t-0 border-r-0 border-l-0  border-blue-400 text-2xl justify-center items-center text-center'
-                                }
-                                maxLength={1}
-                            />
+                        <View className={'p-2 items-center justify-center'}>
+                            <TextInputDN maxLength={6}></TextInputDN>
                         </View>
                     </View>
                     <View className={'p-3 items-center justify-center'}>

@@ -34,6 +34,7 @@ import CapNhatMatKhau from './screens/QuenMatKhauScreen/CapNhatMatKhau';
 
 import SettingScreenTaiKhoan from './screens/SettingScreen/settingScreenTaiKhoan/settingScreenTaiKhoan';
 import UpdatePassWord from './screens/SettingScreen/updatePassWord/updatePassWord';
+import Otp from './screens/Otp';
 
 export default function App() {
     const Tab = createBottomTabNavigator();
@@ -169,6 +170,14 @@ export default function App() {
                     <Stack.Screen
                         name="MaXacThuc"
                         component={MaXacThuc}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="Otp"
+                        component={Otp}
                         options={{
                             headerShown: false,
                             tabBarShowLabel: false,

@@ -23,7 +23,12 @@ function DangNhapScreen() {
     const [failLogin, setFailLogin] = useState('hidden');
 
     const dispatch = useDispatch();
-    const userSelector = useSelector((state) => state.auth.currentUser);
+    const userSelector = useSelector((state) => state.auth);
+    useEffect(() => {
+        if (userSelector.currentUser !== null && !!userSelector.currentUser.accessToken) {
+            navigation.navigate('HomeTabBar');
+        }
+    }, []);
 
     const [data, setData] = useState(null);
 
@@ -34,23 +39,19 @@ function DangNhapScreen() {
     // },[data])
 
     const handleLogin = async () => {
-        var valueEmail = checkValidEmail();
-        var valuePassword = checkValidPassword();
+        var valueEmail = checkValidEmail(emailValue);
+        var valuePassword = checkValidPassword(passwordValue);
         setFailLogin('opacity-0');
 
-        if (!!valueEmail && !!valuePassword) {
+        if (!!validEmail && !!validPassword) {
             // đăng nhập thành công -->
-
-            var user = { userName: emailValue, password: passwordValue };
+            // console.log({ userSelector });
+            var user = { userName: valueEmail, password: valuePassword };
 
             var login = await loginUser(user, dispatch);
 
-            console.log(login);
-
-            console.log({ userSelector });
-
             if (login) {
-                console.log(login);
+                //s console.log(login);
                 navigation.navigate('HomeTabBar');
             }
             if (!login) {
@@ -60,22 +61,23 @@ function DangNhapScreen() {
         // // Alert.alert(emailRef);
     };
 
-    const checkValidEmail = () => {
-        var valueEmail = emailValue.trim();
-        setValidEmail('opacity-0');
-        console.log(valueEmail);
+    const checkValidEmail = (dataEmail) => {
+        var valueEmail = dataEmail.trim();
+
         if (valueEmail.length === 0 || !valueEmail.match(/^[a-zA-Z._0-9]+@[a-z]+\.[a-z]+$/)) {
             setValidEmail('opacity-1');
             return '';
         } else {
             setValidEmail('opacity-0');
-            return valueEmail;
+
+            return dataEmail;
         }
     };
-    const checkValidPassword = () => {
-        var valuePassword = passwordValue.trim();
+    const checkValidPassword = (dataPassword) => {
+        var valuePassword = dataPassword.trim();
+
         setValidPassword('opacity-0');
-        console.log(valuePassword);
+
         if (valuePassword.length === 0 || !valuePassword.match(/^[a-zA-Z0-9\.@ ]{6,}$/)) {
             setValidPassword('opacity-1');
             return '';
@@ -119,8 +121,11 @@ function DangNhapScreen() {
                             <TextInputDN
                                 Icon={<Ionicons name="mail" size={20} color="#47A9FF" />}
                                 placeholder="Nhập email"
-                                onChangeText={(emailValue) => setEmailValue(emailValue)}
-                                onChange={checkValidEmail}
+                                onChangeText={(emailValue) => {
+                                    checkValidEmail(emailValue);
+                                    setEmailValue(emailValue);
+                                }}
+
                                 // ref={emailRef}
                             ></TextInputDN>
                             <View>
@@ -135,16 +140,31 @@ function DangNhapScreen() {
                                 secureTextEntry={hidePass ? true : false}
                                 Icon={<Ionicons name="lock-closed" size={20} color="#47A9FF" />}
                                 placeholder="Nhập mật khẩu"
-                                onChangeText={(passwordValue) => setPasswordValue(passwordValue)}
-                                onChange={checkValidPassword}
+                                onChangeText={(passwordValue) => {
+                                    checkValidPassword(passwordValue);
+                                    setPasswordValue(passwordValue);
+                                }}
                                 // ref={passwordRef}
                                 Icon2={
-                                    <Ionicons
-                                        name="eye-outline"
-                                        size={20}
-                                        color="#47A9FF"
-                                        onPress={() => setHidePass(!hidePass)}
-                                    />
+                                    hidePass ? (
+                                        <Ionicons
+                                            name="eye"
+                                            size={20}
+                                            color="#47A9FF"
+                                            onPress={() => {
+                                                setHidePass(!hidePass);
+                                            }}
+                                        />
+                                    ) : (
+                                        <Ionicons
+                                            name="eye-off"
+                                            size={20}
+                                            color="#47A9FF"
+                                            onPress={() => {
+                                                setHidePass(!hidePass);
+                                            }}
+                                        />
+                                    )
                                 }
                             ></TextInputDN>
                             <View>
