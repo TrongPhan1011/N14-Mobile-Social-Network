@@ -1,14 +1,16 @@
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
-import { getRefreshToken } from '~/services/authService';
+import { getRefreshToken } from '../services/authService';
 
-import { loginSuccess } from '~/redux/Slice/authSlice';
+import { loginSuccess } from '../redux/Slice/authSlice';
+import { BASE_URL } from './env';
 
 export const getAxiosJWT = (dispatch, currAccount) => {
     var axiosJWT = axios.create({
-        baseURL: process.env.REACT_APP_BASE_URL,
+        baseURL: BASE_URL,
     });
     var token = currAccount.accessToken;
+    //console.log('token new' + token);
     axiosJWT.interceptors.request.use(
         async (config) => {
             var currDate = new Date();
