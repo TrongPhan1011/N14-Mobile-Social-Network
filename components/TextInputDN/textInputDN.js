@@ -14,6 +14,10 @@ export default function TextInputDN({
     editable,
     placeholderTextColor,
     ref,
+    maxLength,
+    onPress,
+    onChange,
+    pointerEvents,
 }) {
     return (
         <View className="rounded-3xl w-full h-12  flex flex-row border border-lcn-blue-4 items-center p-2 ">
@@ -30,6 +34,10 @@ export default function TextInputDN({
                 placeholderTextColor={placeholderTextColor}
                 className={'w-5/6'}
                 ref={ref}
+                maxLength={maxLength}
+                onPress={onPress}
+                onChange={onChange}
+                pointerEvents={pointerEvents}
             ></TextInput>
             <View className={'mr-8'}>{Icon2}</View>
         </View>
