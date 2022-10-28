@@ -28,3 +28,16 @@ export const getChatById = async (idGroup, accessToken, axiosJWT) => {
         return null;
     }
 };
+
+export const addMessageToChat = async (idGroup, message, accessToken, axiosJWT) => {
+    try {
+        const res = await axiosJWT.put('/chat/add_mess/' + idGroup, {
+            body: { message },
+            headers: { token: `baerer ${accessToken}` },
+        });
+
+        return res.data;
+    } catch (error) {
+        return null;
+    }
+};
