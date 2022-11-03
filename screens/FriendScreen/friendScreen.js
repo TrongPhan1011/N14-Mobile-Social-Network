@@ -5,8 +5,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import BanBe from './ContentBanBe/contentBanBe';
 import ChoXacNhan from './ContentChoXacNhan/contentChoXacNhan';
+import { useLocation } from 'react-router-dom';
+import { useMemo } from 'react';
 
 const Tab = createMaterialTopTabNavigator();
+
 export default function FriendScreen() {
     return (
         <>

@@ -5,10 +5,62 @@ import TextInputDN from '../../../components/TextInputDN';
 import Button from '../../../components/Button/button';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updatePassword } from '../../../services/authService';
 export default function CapNhatMatKhau() {
     const navigation = useNavigation();
     const [hidePassMK, setHidePassMK] = useState(true);
     const [hidePassXN, setHidePassXN] = useState(true);
+    const dispatch = useDispatch();
+    const [validpassword, setValidPassword] = useState('opacity-0');
+    const [validconfirmPassword, setvalidConfirmPassword] = useState('opacity-0');
+    const [failUpdate, setFailUpdate] = useState('hidden');
+    const [passwordValue, setPasswordValue] = useState('');
+    const [confirmPaswordValue, setConfirmPaswordValue] = useState('');
+    var currentSignUpAccount = useSelector((state) => state.signUp.userSignUp);
+
+    const checkValidPassword = (dataPassword) => {
+        var valuePassword = dataPassword.trim();
+        setValidPassword('opacity-0');
+        // console.log(valuePassword);
+        if (valuePassword.length === 0 || !valuePassword.match(/^[a-zA-Z0-9\.@ ]{6,}$/)) {
+            setValidPassword('opacity-1');
+            return '';
+        } else {
+            setValidPassword('opacity-0');
+            return valuePassword;
+        }
+    };
+    const checkConfirmPassword = (dataConfirmPassword) => {
+        var valueConfirmPassword = dataConfirmPassword.trim();
+        setvalidConfirmPassword('opacity-0');
+        // console.log(valueConfirmPassword);
+
+        if (valueConfirmPassword.length === 0 || valueConfirmPassword !== passwordValue.trim()) {
+            setvalidConfirmPassword('opacity-1');
+            return '';
+        } else {
+            setvalidConfirmPassword('opacity-0');
+            return valueConfirmPassword;
+        }
+    };
+
+    const handleSuaMatKhau = async () => {
+        var valuePassword = checkConfirmPassword(confirmPaswordValue);
+        if (!!validpassword && !!validconfirmPassword) {
+            if (!!valuePassword) {
+                var user = { userName: currentSignUpAccount.userName, password: valuePassword };
+                var update = await updatePassword(user, dispatch);
+                if (update) {
+                    navigation.navigate('DangNhapScreen');
+                }
+                if (update === false) {
+                    setFailUpdate('');
+                }
+            } else return false;
+        }
+    };
+
     const showPassword = () => {
         secureTextEntry = 'false';
     };
@@ -40,15 +92,37 @@ export default function CapNhatMatKhau() {
                             secureTextEntry={hidePassMK ? true : false}
                             Icon={<Ionicons name="lock-closed" size={20} color="#47A9FF" />}
                             placeholder="Nhập mật khẩu mới"
+                            onChangeText={(passwordValue) => {
+                                setPasswordValue(passwordValue);
+                                checkValidPassword(passwordValue);
+                            }}
                             Icon2={
-                                <Ionicons
-                                    name="eye-outline"
-                                    size={20}
-                                    color="#47A9FF"
-                                    onPress={() => setHidePassMK(!hidePassMK)}
-                                />
+                                hidePassMK ? (
+                                    <Ionicons
+                                        name="eye"
+                                        size={20}
+                                        color="#47A9FF"
+                                        onPress={() => {
+                                            setHidePassMK(!hidePassMK);
+                                        }}
+                                    />
+                                ) : (
+                                    <Ionicons
+                                        name="eye-off"
+                                        size={20}
+                                        color="#47A9FF"
+                                        onPress={() => {
+                                            setHidePassMK(!hidePassMK);
+                                        }}
+                                    />
+                                )
                             }
                         ></TextInputDN>
+                        <View>
+                            <Text className={'absolute z-10 text-red-500 text-sm  w-full ' + validpassword}>
+                                Mật khẩu phải có ít nhất 6 kí tự
+                            </Text>
+                        </View>
                     </View>
                     <View className={'p-4'}>
                         <Text className={'text-lg font-semibold text-lcn-blue-5'}>Xác nhận lại mật khẩu</Text>
@@ -57,22 +131,42 @@ export default function CapNhatMatKhau() {
                             secureTextEntry={hidePassXN ? true : false}
                             Icon={<Ionicons name="lock-closed" size={20} color="#47A9FF" />}
                             placeholder="Xác nhận lại mật khẩu"
+                            onChangeText={(confirmPaswordValue) => {
+                                setConfirmPaswordValue(confirmPaswordValue);
+                                checkConfirmPassword(confirmPaswordValue);
+                            }}
                             Icon2={
-                                <Ionicons
-                                    name="eye-outline"
-                                    size={20}
-                                    color="#47A9FF"
-                                    onPress={() => setHidePassXN(!hidePassXN)}
-                                />
+                                hidePassXN ? (
+                                    <Ionicons
+                                        name="eye"
+                                        size={20}
+                                        color="#47A9FF"
+                                        onPress={() => {
+                                            setHidePassXN(!hidePassXN);
+                                        }}
+                                    />
+                                ) : (
+                                    <Ionicons
+                                        name="eye-off"
+                                        size={20}
+                                        color="#47A9FF"
+                                        onPress={() => {
+                                            setHidePassXN(!hidePassXN);
+                                        }}
+                                    />
+                                )
                             }
                         ></TextInputDN>
+                        <View>
+                            <Text className={'absolute z-10 text-red-500 text-sm  w-full ' + validconfirmPassword}>
+                                Mật khẩu phải có ít nhất 6 kí tự
+                            </Text>
+                        </View>
                     </View>
                     <View className={'p-3 items-center justify-center'}>
                         <Button
                             classNames={'w-64 h-14 bg-lcn-blue-4 rounded-[50px] border border-white '}
-                            onPress={() => {
-                                Alert.alert('Cập nhật thành công'), navigation.navigate('DangNhapScreen');
-                            }}
+                            onPress={handleSuaMatKhau}
                         >
                             <Text className={'text-white font-semibold text-2xl'}>Cập nhật</Text>
                         </Button>

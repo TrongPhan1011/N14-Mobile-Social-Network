@@ -29,7 +29,7 @@ import DangKyScreen from './screens/DangKyScreen';
 
 import ProfileScreen from './screens/ProfileScreen';
 import QuenMatKhau from './screens/QuenMatKhauScreen/QuenMatKhau';
-import MaXacThuc from './screens/QuenMatKhauScreen/MaXacThuc';
+
 import CapNhatMatKhau from './screens/QuenMatKhauScreen/CapNhatMatKhau';
 
 import SettingScreenTaiKhoan from './screens/SettingScreen/settingScreenTaiKhoan/settingScreenTaiKhoan';
@@ -167,14 +167,7 @@ export default function App() {
                             tabBarShowLabel: false,
                         }}
                     />
-                    <Stack.Screen
-                        name="MaXacThuc"
-                        component={MaXacThuc}
-                        options={{
-                            headerShown: false,
-                            tabBarShowLabel: false,
-                        }}
-                    />
+
                     <Stack.Screen
                         name="Otp"
                         component={Otp}

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { loginErorr, loginSuccess, logOutSuccess } from '../redux/Slice/authSlice';
 import { userLogin } from '../redux/Slice/signInSlice';
 import * as httpRequest from '../utils/httpRequest';
+
 import { userSignUp, userPassword, userName } from '../redux/Slice/signUpSlice';
 
 export const loginUser = async (user, dispatch) => {
@@ -56,17 +57,59 @@ export const sendOTP = async (user, dispatch) => {
     }
 };
 
-export const register = async (user, dispatch) => {
+export const verifyOtp = async (user) => {
     try {
-        console.log(user);
-        const res = await httpRequest.post('auth/register', user);
-        dispatch(userSignUp(user));
-
-        // dispatch(userName(user.userName));
-        // dispatch(userPassword(user.password)); // xoa signIn
-
+        const res = await httpRequest.get('otp/verify', {
+            params: {
+                email: user.userName,
+                otp: user.otp,
+            },
+        });
+        // navigate(config.routeConfig.suaMatKhau);
         return res;
     } catch (error) {
         return null;
+    }
+};
+
+export const register = async (user, dispatch) => {
+    try {
+        console.log(user);
+        const res = await httpRequest.post('auth/register/', user);
+        dispatch(userSignUp(null)); // xoa signIn
+
+        if (!!res) {
+            return { userName: user.email, password: user.password };
+        }
+        // navigate(config.routeConfig.signIn);
+        // return res;
+    } catch (error) {
+        return null;
+    }
+};
+export const getAuthByMail = async (email) => {
+    try {
+        const res = await httpRequest.get('auth/getauthbymail', {
+            params: {
+                email: email,
+            },
+        });
+        return res;
+    } catch (error) {
+        return null;
+    }
+};
+export const updatePassword = async (user, dispatch) => {
+    try {
+        const dataUser = await httpRequest.put('auth/update', user);
+
+        if (!!dataUser) {
+            dispatch(userSignUp(null)); // lưu lại user trong redux
+            // navigate(config.routeConfig.signIn);
+            return true;
+        } else return false;
+    } catch (error) {
+        dispatch(loginErorr());
+        return false;
     }
 };
