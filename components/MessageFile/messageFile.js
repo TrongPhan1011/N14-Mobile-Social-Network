@@ -9,7 +9,7 @@ export default function MessageFile({ data }) {
     var renderOneFile = (firstFile) => {
         if (firstFile.fileType === 'image') {
             return (
-                <View className="overflow-hidden">
+                <View className="overflow-hidden rounded-2xl">
                     <Image
                         style={{ width: 250, height: 250, resizeMode: 'contain' }}
                         className=""
@@ -21,7 +21,7 @@ export default function MessageFile({ data }) {
             );
         } else if (firstFile.fileType === 'video') {
             return (
-                <View className="">
+                <View className="rounded-2xl">
                     <Video
                         ref={video}
                         source={{
@@ -71,9 +71,9 @@ export default function MessageFile({ data }) {
         const compManyIMG = files.map((file, index) => {
             if (file.fileType === 'image') {
                 return (
-                    <View key={file.title + index} className="p-0.5 overflow-hidden">
+                    <View key={file.title + index} className="p-0.5 overflow-hidden rounded-2xl">
                         <Image
-                            style={{ width: 120, height: 120, resizeMode: 'contain' }}
+                            style={{ width: 120, height: 120 }}
                             className=""
                             source={{
                                 uri: `${file?.path}`,
@@ -83,7 +83,7 @@ export default function MessageFile({ data }) {
                 );
             } else if (file.fileType === 'video') {
                 return (
-                    <View>
+                    <View className="rounded-2xl">
                         <Video
                             ref={video}
                             source={{

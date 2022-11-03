@@ -130,7 +130,7 @@ function DangNhapScreen() {
                             ></TextInputDN>
                             <View>
                                 <Text className={'absolute z-10 text-red-500 text-sm  w-full ' + validEmail}>
-                                    Email không đúng định dạng
+                                    Email không hợp lệ!
                                 </Text>
                             </View>
                         </View>

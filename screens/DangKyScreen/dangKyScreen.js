@@ -18,7 +18,7 @@ import Button from '../../components/Button/button';
 import { connect, useDispatch, useSelector } from 'react-redux';
 
 import { RadioButton } from 'react-native-paper';
-import { sendOTP } from '../../services/authService';
+import { sendOTP, getAuthByMail } from '../../services/authService';
 import { useNavigation } from '@react-navigation/native';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 
@@ -136,6 +136,14 @@ function DangKyScreen() {
             return valueConfirmPassword;
         }
     };
+    const checkExistEmail = async (dataEmail) => {
+        var valueEmail = dataEmail.trim();
+
+        var userGeted = await getAuthByMail(valueEmail);
+        if (!!userGeted) {
+            setFailLogin('');
+        } else setFailLogin('hidden');
+    };
     // var birthday = date;
     // const a = new Date().getFullYear() - birthday.getFullYear();
     // console.log(a);
@@ -182,8 +190,8 @@ function DangKyScreen() {
                 setValidDate('opacity-0');
                 if (tick) {
                     var user = {
-                        userName: valueName,
-                        email: valueEmail,
+                        name: valueName,
+                        userName: valueEmail,
                         password: valuePassword,
                         birthday: date.toString(),
                         gender: checked,
@@ -192,15 +200,12 @@ function DangKyScreen() {
                     // đăng nhập thành công -->
                     var register = await sendOTP(user, dispatch);
                     if (!register) {
-                        Alert.alert('Email đã được dùng');
+                        setFailLogin('');
                     }
                     // console.log(register);
                     if (register) {
                         //  console.log(currentSignUpAccount);
                         navigation.navigate('Otp');
-                    }
-                    if (register === false) {
-                        setFailLogin('');
                     }
                 } else {
                     Alert.alert('Đồng ý với điều khoản của chương trình');
@@ -255,11 +260,15 @@ function DangKyScreen() {
                             onChangeText={(emailValue) => {
                                 setEmailValue(emailValue);
                                 checkValidEmail(emailValue);
+                                checkExistEmail(emailValue);
                             }}
                         ></TextInputDN>
                         <View>
                             <Text className={'absolute z-10 text-red-500 text-sm  w-full ' + validEmail}>
-                                Email không đúng định dạng
+                                Email không đúng định dạng "abc@gmai.com"
+                            </Text>
+                            <Text className={'absolute z-10 text-red-500 text-sm  w-full ' + failLogin}>
+                                Email đã được sử dụng!
                             </Text>
                         </View>
                     </View>

@@ -5,19 +5,20 @@ import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import TextInputDN from '../../components/TextInputDN';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser, register } from '../../services/authService';
-import { useState } from 'react';
+import { loginUser, register, verifyOtp } from '../../services/authService';
+import { useState, useEffect } from 'react';
 import { userSignUp } from '../../redux/Slice/signUpSlice';
 function Otp() {
     const navigation = useNavigation();
+
     const dispatch = useDispatch();
     const [otp, setOtp] = useState('');
     const [validOTP, setValidOTP] = useState('opacity-0');
-    const currentSignUpAccount = useSelector((state) => state.signUp.userSignUp);
+    var currentSignUpAccount = useSelector((state) => state.signUp.userSignUp);
     const userSelector = useSelector((state) => state.auth);
 
     const checkValidOTP = (dataOTP) => {
-        var valueOTP = dataOTP.trim();
+        const valueOTP = dataOTP.trim();
 
         if (valueOTP.length === 0 || !valueOTP.match(/^[0-9]{6}$/)) {
             setValidOTP('opacity-1');
@@ -30,13 +31,13 @@ function Otp() {
     const checkEmail = async () => {
         const checkMail = await User.findOne({ email: req.body.email });
         if (checkEmail) {
-            Alert.alert('Mail đã đươc');
+            Alert.alert('Mail đã đươc dùng!');
         }
     };
 
+    console.log(currentSignUpAccount);
     const handleRegister = async () => {
         var otpValue = checkValidOTP(otp);
-        console.log(currentSignUpAccount);
 
         // var user = { userName: currentSignUpAccount.email, password: currentSignUpAccount.password };
         // // console.log(test.);
@@ -48,8 +49,8 @@ function Otp() {
         // }
 
         var dangKy = {
-            userName: currentSignUpAccount.userName,
-            email: currentSignUpAccount.email,
+            userName: currentSignUpAccount.name,
+            email: currentSignUpAccount.userName,
             password: currentSignUpAccount.password,
             birthday: currentSignUpAccount.birthday,
             gender: currentSignUpAccount.gender,
@@ -57,11 +58,37 @@ function Otp() {
         };
 
         var registerHandle = await register(dangKy, dispatch);
-
-        if (registerHandle) {
-            navigation.navigate('DangNhapScreen');
+        console.log(registerHandle);
+        if (!!registerHandle) {
+            await loginUser(registerHandle, dispatch);
+            navigation.navigate('HomeTabBar');
         } else {
             Alert.alert('Mã OTP không đúng');
+        }
+    };
+
+    const handleVerify = async () => {
+        var otpValue = checkValidOTP(otp);
+        var user = {
+            userName: currentSignUpAccount.userName,
+            otp: otpValue,
+        };
+        // console.log(user);
+        var thongBao = await verifyOtp(user);
+        if (thongBao) {
+            navigation.navigate('CapNhatMatKhau');
+        } else if (!thongBao) {
+            Alert.alert('Mã OTP không đúng');
+        }
+        console.log(thongBao);
+    };
+    const handleConfirmOtp = () => {
+        if (!!currentSignUpAccount.gender) {
+            handleRegister();
+        } else {
+            console.log('lllll');
+
+            handleVerify();
         }
     };
     return (
@@ -114,7 +141,7 @@ function Otp() {
                     <View className={'p-5 items-center justify-center'}>
                         <Button
                             classNames={'w-64 h-14 bg-lcn-blue-4 rounded-[50px] border border-white '}
-                            onPress={handleRegister}
+                            onPress={handleConfirmOtp}
                         >
                             <Text className={'text-white font-semibold text-2xl'}>Xác nhận</Text>
                         </Button>
