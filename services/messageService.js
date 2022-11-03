@@ -37,3 +37,15 @@ export const addUserSeenToMess = async (idMess, data, accessToken, axiosJWT) => 
         console.log('Người dùng không tồn tại!');
     }
 };
+
+export const addMess = async (data, accessToken, axiosJWT) => {
+    try {
+        const res = await axiosJWT.post(`/message/`, data, {
+            headers: { token: `baerer ${accessToken}` },
+        });
+
+        return res.data;
+    } catch (error) {
+        console.log('Luu tin nhan khong thanh cong');
+    }
+};

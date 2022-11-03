@@ -4,8 +4,9 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMessageById } from '../../services/messageService';
 import { addUserSeenToMess } from '../../services/messageService';
-import { formatTime } from '../../lib/formatString';
+import { formatTimeAuto, getLastName } from '../../lib/formatString';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
+import socket from '../../utils/getSocketIO';
 import { selectGroup } from '../../redux/Slice/sidebarChatSlice';
 
 export default memo(function itemChat({ groupChat, userLoginData }) {
@@ -16,8 +17,8 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
     const currAuth = useSelector((state) => state.auth.currentUser);
     const idGroupChatSelect = useSelector((state) => state.sidebarChatSlice.idGroupChatSelect);
     var accessToken = currAuth.accessToken;
+    const curSignIn = useSelector((state) => state.signIn.userLogin);
     var AxiosJWT = getAxiosJWT(dispatch, currAuth);
-
     var arrIdMessage = groupChat.message;
 
     useEffect(() => {
@@ -31,6 +32,8 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
         };
         getMessageLast();
     }, []);
+
+    //console.log(messageLast);
 
     const checkSeen = (arrSeen, userId) => {
         if (!!arrSeen) {
@@ -49,17 +52,19 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
     const getInforMessageLast = () => {
         var titleMess = '',
             messCreatedAt = '',
-            fullNameAuthor = '',
-            arrAuthorName = [];
+            lastNameAuthor = 'Bạn';
         if (!!messageLast) {
-            titleMess = messageLast.title || '';
-            messCreatedAt = formatTime(messageLast.createdAt, 'hh:mm') || '';
-            fullNameAuthor = messageLast.authorID.fullName || '';
-
-            arrAuthorName = fullNameAuthor.split(' ');
+            titleMess = messageLast.title || 'Đã gửi file';
+            messCreatedAt = formatTimeAuto(messageLast.createdAt) || '';
+            var fullNameAuthor = messageLast.authorID.fullName || '';
+            if (messageLast.authorID.id === curSignIn.id) {
+                lastNameAuthor = 'Bạn';
+            } else {
+                lastNameAuthor = getLastName(fullNameAuthor);
+            }
         }
 
-        var arrUserSeen = messageLast.seen;
+        var arrUserSeen = messageLast?.seen;
         var seen = checkSeen(arrUserSeen, userLoginData.id);
         //css đã xem
         if (seen) {
@@ -68,7 +73,7 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
         }
 
         return {
-            authorName: arrAuthorName[arrAuthorName.length - 1] || '',
+            authorName: lastNameAuthor || '',
             title: titleMess,
             messCreatedAt,
         };
@@ -86,12 +91,12 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
             seenAt: currentDate,
         };
 
-        var seen = checkSeen(messageLast.seen, userClickSeen.id);
+        var seen = checkSeen(messageLast?.seen, userClickSeen.id);
         if (!seen) {
-            putUserSeen(messageLast.id, userClickSeen);
+            putUserSeen(messageLast?.id, userClickSeen);
         }
         //add id cua group chat duoc chon vao store
-        if (!!groupChat) dispatch(selectGroup(groupChat.id));
+        if (!!groupChat) dispatch(selectGroup(groupChat));
         navigation.navigate('ChiTietTinNhan');
     };
     return (

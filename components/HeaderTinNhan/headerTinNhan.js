@@ -9,15 +9,18 @@ import MenuTinNhan from '../MenuTinNhan';
 
 export default function HeaderTinNhan({ onPressChiTiet, onPressCallVideo, onPressOpenMenu, name }) {
     return (
-        <SafeAreaView style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }}>
+        <SafeAreaView
+            style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }}
+            className="bg-lcn-blue-2"
+        >
             <View className="w-full h-14 flex flex-row items-center bg-lcn-blue-2 p-2">
                 <View>
                     <Ionicons name="arrow-back-outline" size={30} color="#47A9FF" onPress={onPressChiTiet} />
                 </View>
                 <View className="w-7/12 ml-4">
-                    <View>
-                        <Text className="font-semibold text-xl text-lcn-blue-5">{name}</Text>
-                        <View className="w-3 h-3 bg-lcn-green-1 rounded-full absolute left-32 bottom-2 ml-5"></View>
+                    <View className="flex flex-row">
+                        <Text className="font-semibold text-xl text-lcn-blue-5 ">{name}</Text>
+                        <View className="w-3 h-3 bg-lcn-green-1 rounded-full ml-2 items-center mt-2"></View>
                     </View>
                     <Text className="text-sm text-gray-700">Online</Text>
                 </View>

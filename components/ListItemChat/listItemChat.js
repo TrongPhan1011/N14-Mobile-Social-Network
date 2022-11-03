@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userLogin } from '../../redux/Slice/signInSlice';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import { getChatByIdMember } from '../../services/chatService';
+import socket from '../../utils/getSocketIO';
 import ItemChat from '../ItemChat';
 
 export default memo(function ListItemChat() {
@@ -37,10 +38,17 @@ export default memo(function ListItemChat() {
         fetchChat();
     }, []);
 
+    const handdleConnectSocket = (item) => {
+        socket.emit('sendMessage', { receiverId: item.id, contentMessage: null });
+    };
+
     const handleRenderChat = () => {
-        if (chatResult.length > 0)
-            return chatResult.map((item) => <ItemChat key={item.id} groupChat={item} userLoginData={userLoginData} />);
-        else return <></>;
+        if (chatResult.length > 0) {
+            return chatResult.map((item) => {
+                handdleConnectSocket(item);
+                return <ItemChat key={item.id} groupChat={item} userLoginData={userLoginData} />;
+            });
+        } else return <></>;
     };
 
     return (

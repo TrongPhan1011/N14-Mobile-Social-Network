@@ -88,7 +88,7 @@ function DangNhapScreen() {
     };
 
     return (
-        <ScrollView>
+        <ScrollView className="bg-white">
             <SafeAreaView
                 style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }}
                 className="bg-white"
@@ -130,7 +130,7 @@ function DangNhapScreen() {
                             ></TextInputDN>
                             <View>
                                 <Text className={'absolute z-10 text-red-500 text-sm  w-full ' + validEmail}>
-                                    Email không đúng
+                                    Email không đúng định dạng
                                 </Text>
                             </View>
                         </View>
@@ -168,9 +168,9 @@ function DangNhapScreen() {
                                 }
                             ></TextInputDN>
                             <View>
-                                <Text className={'absolute z-10 text-red-500 text-sm w-full pt-0 ' + validPassword}>
+                                {/* <Text className={'absolute z-10 text-red-500 text-sm w-full pt-0 ' + validPassword}>
                                     Password không đúng
-                                </Text>
+                                </Text> */}
                             </View>
                         </View>
 

@@ -10,7 +10,7 @@ import {
     Keyboard,
     Alert,
 } from 'react-native';
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, memo, useRef } from 'react';
 import HeaderTinNhan from '../../components/HeaderTinNhan';
 import ItemTinNhan from '../../components/ItemTinNhan';
 import FooterTinNhan from '../../components/FooterTinNhan';
@@ -20,67 +20,87 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import ItemAddMember from '../../components/ItemAddMember/itemAddMember';
 import { getMessageByIdChat } from '../../services/messageService';
+import socket from '../../utils/getSocketIO';
 import { getChatById } from '../../services/chatService';
 
 export default memo(function ChiTietTinNhan() {
     const dispatch = useDispatch();
-    const idGroupChatSelect = useSelector((state) => state.sidebarChatSlice.idGroupChatSelect);
+    const groupChatSelect = useSelector((state) => state.sidebarChatSlice.groupChatSelect);
     const currAuth = useSelector((state) => state.auth.currentUser);
+    const currSignIn = useSelector((state) => state.signIn.userLogin);
     var accessToken = currAuth.accessToken;
     var AxiosJWT = getAxiosJWT(dispatch, currAuth);
     const [chatResult, setChatResult] = useState([]);
-    const [limitMessage, setLimitMessage] = useState(10);
+    const [limitMessage, setLimitMessage] = useState(20);
     const [arrMessage, setArrMessage] = useState([]);
+    const [arrivalMessage, setArrivalMessage] = useState(null);
+    const bottomRef = useRef();
+
+    useEffect(() => {
+        socket.on('getMessage', (data) => {
+            if (!!data) {
+                var getNewMess = {
+                    id: data.id,
+                    title: data.title,
+                    authorID: data.authorID,
+                    seen: data.seen,
+                    type_mess: data.type,
+                    idChat: data.idChat,
+                    createdAt: data.createdAt,
+                    updatedAt: data.updatedAt,
+                };
+                setArrivalMessage(getNewMess);
+            }
+        });
+    }, []);
 
     useEffect(() => {
         const fetchChat = async () => {
-            const arrChat = await getChatById(idGroupChatSelect, accessToken, AxiosJWT);
+            const arrChat = await getChatById(groupChatSelect?.id, accessToken, AxiosJWT);
 
             setChatResult(arrChat);
         };
         fetchChat();
-
-        // if (!!arrMessageId.length > 0) {
-        //     arrMessageId.map((id) => {
-        //         const getMessage = async () => {
-        //             const arr = await getMessageById(id, accessToken, AxiosJWT);
-
-        //             setArrMessage(arr);
-        //         };
-        //         getMessage();
-        //     });
-        // }
         const getListMessage = async () => {
-            const listMess = await getMessageByIdChat(idGroupChatSelect, limitMessage, accessToken, AxiosJWT);
+            const listMess = await getMessageByIdChat(groupChatSelect?.id, limitMessage, accessToken, AxiosJWT);
             setArrMessage(listMess);
         };
         getListMessage();
-    }, [idGroupChatSelect]);
+    }, [groupChatSelect]);
 
-    // var arrMessageId = [];
+    // useEffect(() => {
+    //     const scrollToBottom = () => {
+    //         if (arrMessage.length > 0) {
+    //             bottomRef.current?.scrollToBottom({ behavior: 'smooth' });
+    //         }
+    //     };
+    //     scrollToBottom();
+    // }, [arrMessage]);
 
-    // if (!!chatResult.message) {
-    //     arrMessageId = chatResult.message;
-    // }
+    //console.log(arrivalMessage);
 
-    // if (arrMessageId.length > 0) {
-    //     console.log(arrMessageId);
-    // }
-
-    //console.log(arrMessage);
+    useEffect(() => {
+        arrivalMessage &&
+            groupChatSelect?.member.includes(arrivalMessage.authorID.id) &&
+            setArrMessage((prev) => [...prev, arrivalMessage]);
+    }, [groupChatSelect, arrivalMessage]);
 
     const handleChiTietTinNhan = () => {
         if (arrMessage.length > 0) {
-            return arrMessage.map((item) => {
-                if (item.authorID.id === currAuth._id) {
+            return arrMessage.map((item, index) => {
+                // var isLastMess = false;
+                // var indexLast = arrMessage.length - 1;
+                // if (index === indexLast) isLastMess = true;
+
+                if (item.authorID.id === currSignIn.id) {
                     return (
-                        <ItemTinNhan from="me" key={item.id} messageData={item} type={messageType.ALL}>
+                        <ItemTinNhan from="me" key={index + item.authorID.id} messageData={item}>
                             {item.title}
                         </ItemTinNhan>
                     );
                 } else
                     return (
-                        <ItemTinNhan key={item.id} messageData={item} type={messageType.ALL}>
+                        <ItemTinNhan key={index + item.authorID.id} messageData={item}>
                             {item.title}
                         </ItemTinNhan>
                     );
@@ -90,8 +110,7 @@ export default memo(function ChiTietTinNhan() {
 
     const navigation = useNavigation();
     return (
-        // <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <View className="h-full flex-1">
+        <View className="w-full h-full flex-1">
             <HeaderTinNhan
                 onPressChiTiet={() => {
                     navigation.goBack();
@@ -102,10 +121,15 @@ export default memo(function ChiTietTinNhan() {
                 onPressOpenMenu={() => navigation.navigate('GroupChatScreen')}
                 name={chatResult.name}
             />
-            <ScrollView className="overflow-y-auto max-h-[83%] bg-white">
+
+            <ScrollView
+                className="overflow-y-auto max-h-[83%] bg-white"
+                ref={bottomRef}
+                onContentSizeChange={() => bottomRef.current.scrollToEnd({ animated: true })}
+            >
                 <View className="">
                     {/* <ScrollView className="overflow-y-auto "> */}
-                    <View className="h-32 w-full bg-white items-center p-2">
+                    <View className="h-32 w-full items-center p-2">
                         <Image
                             style={{ width: 80, height: 80, resizeMode: 'contain' }}
                             className="rounded-full"
@@ -118,37 +142,7 @@ export default memo(function ChiTietTinNhan() {
                             <Text className="text-lcn-blue-5 font-semibold ml-1">{chatResult.name}</Text>
                         </View>
                     </View>
-                    <View className="bg-white w-full">
-                        {/* <ItemTinNhan from type={messageType.ALL}>
-                            xin chào
-                        </ItemTinNhan>
-                        <ItemTinNhan type={messageType.GROUPCHAT}>ai đó</ItemTinNhan>
-                        <ItemTinNhan from type={messageType.GROUPCHAT}>
-                            ydhhdh dhhhh đhhdhdhdh đhdhdhhdh dhdhdhdhhdh dhdhdhdhhdh đjđ dhdhdhdh hdhdhdhd hdhđhhd
-                            hdhđhhd hdhđhhd fjfffhhf hffhhffh fhfhfhh hfhfjgjghgh hfhf
-                        </ItemTinNhan>
-                        <ItemTinNhan type={messageType.ALL}>bye</ItemTinNhan>
-                        <ItemTinNhan from>
-                            ydhhdh dhhhh đhhdhdhdh đhdhdhhdh dhdhdhdhhdh dhdhdhdhhdh đjđ dhdhdhdh hdhdhdhd hdhđhhd
-                            hdhđhhd hdhđhhd fjfffhhf hffhhffh fhfhfhh hfhfjgjghgh hfhf
-                        </ItemTinNhan>
-                        <ItemTinNhan from>
-                            ydhhdh dhhhh đhhdhdhdh đhdhdhhdh dhdhdhdhhdh dhdhdhdhhdh đjđ dhdhdhdh hdhdhdhd hdhđhhd
-                            hdhđhhd hdhđhhd fjfffhhf hffhhffh fhfhfhh hfhfjgjghgh hfhf
-                        </ItemTinNhan>
-                        <ItemAddMember>
-                            <Text> đã rời nhóm</Text>
-                        </ItemAddMember>
-                        <ItemTinNhan from>
-                            ydhhdh dhhhh đhhdhdhdh đhdhdhhdh dhdhdhdhhdh dhdhdhdhhdh đjđ dhdhdhdh hdhdhdhd hdhđhhd
-                            hdhđhhd hdhđhhd fjfffhhf hffhhffh fhfhfhh hfhfjgjghgh hfhf
-                        </ItemTinNhan>
-                        <ItemAddMember>
-                            <Text> đã tham gia nhóm</Text>
-                        </ItemAddMember>
-                        <ItemTinNhan>xin chào</ItemTinNhan> */}
-                        {handleChiTietTinNhan()}
-                    </View>
+                    <View className=" w-full">{handleChiTietTinNhan()}</View>
                     {/* </ScrollView> */}
                 </View>
             </ScrollView>
@@ -156,6 +150,5 @@ export default memo(function ChiTietTinNhan() {
                 <FooterTinNhan />
             </View>
         </View>
-        // </KeyboardAvoidingView>
     );
 });

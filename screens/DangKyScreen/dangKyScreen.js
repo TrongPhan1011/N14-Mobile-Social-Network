@@ -192,7 +192,7 @@ function DangKyScreen() {
                     // đăng nhập thành công -->
                     var register = await sendOTP(user, dispatch);
                     if (!register) {
-                        Alert.alert('Gmail đã được dùng');
+                        Alert.alert('Email đã được dùng');
                     }
                     // console.log(register);
                     if (register) {
@@ -250,7 +250,7 @@ function DangKyScreen() {
                     <View className={'p-4'}>
                         <Text className={'text-lg font-semibold text-lcn-blue-5'}>Email</Text>
                         <TextInputDN
-                            Icon={<Ionicons name="call" size={20} color="#47A9FF" />}
+                            Icon={<Ionicons name="mail" size={20} color="#47A9FF" />}
                             placeholder="Nhập email"
                             onChangeText={(emailValue) => {
                                 setEmailValue(emailValue);
