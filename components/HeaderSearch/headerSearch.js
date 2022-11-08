@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, TextInput, Platform, StatusBar } from 'react-native';
+import { View, Text, SafeAreaView, TextInput, Platform, StatusBar, Pressable } from 'react-native';
 
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -20,17 +20,19 @@ export default function HeaderSearch() {
                     <View className="ml-2">
                         <FontAwesome name="search" size={20} color="#47A9FF" />
                     </View>
+
                     <TextInput
                         className="w-5/6 ml-2"
                         placeholder="Tìm kiếm"
                         placeholderTextColor={'#47A9FF'}
                     ></TextInput>
+
                     <View className="right-0">
                         <Feather
                             name="plus"
                             size={20}
                             color="#47A9FF"
-                            onPress={() => navigation.navigate('ThemBanBe')}
+                            onPress={() => navigation.navigate('ThemMoiChat')}
                         />
                     </View>
                 </View>

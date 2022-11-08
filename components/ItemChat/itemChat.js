@@ -15,11 +15,15 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
     const dispatch = useDispatch();
     const [messageLast, setMessageLast] = useState('');
     const currAuth = useSelector((state) => state.auth.currentUser);
-    const idGroupChatSelect = useSelector((state) => state.sidebarChatSlice.idGroupChatSelect);
+    const groupChatSelect = useSelector((state) => state.sidebarChatSlice.groupChatSelect);
     var accessToken = currAuth.accessToken;
     const curSignIn = useSelector((state) => state.signIn.userLogin);
+    const [itemDataChat, setItemDataChat] = useState();
+    const [seenState, setSeenState] = useState(false);
     var AxiosJWT = getAxiosJWT(dispatch, currAuth);
     var arrIdMessage = groupChat.message;
+    var bgSeen = 'bg-lcn-blue-4';
+    var textSeen = 'text-gray-900';
 
     useEffect(() => {
         const getMessageLast = async () => {
@@ -33,6 +37,80 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
         getMessageLast();
     }, []);
 
+    useEffect(() => {
+        var getClassSeen = () => {
+            var arrUserSeen = messageLast?.seen;
+
+            var seen = checkSeen(arrUserSeen, userLoginData.id);
+
+            if (!seen && curSignIn.id !== messageLast.authorID.id && messageLast.idChat === groupChatSelect?.id) {
+                setSeenState({
+                    textName: ' font-semibold ',
+                    textChatTitle: ' text-gray-900 ',
+                    circleSeen: '',
+                });
+            } else {
+                setSeenState({
+                    textName: ' font-medium ',
+                    textChatTitle: ' text-gray-500 ',
+                    circleSeen: ' hidden ',
+                });
+            }
+        };
+        const getInforMessageLast = () => {
+            var titleMess = '',
+                messCreatedAt = '',
+                lastNameAuthor = 'Bạn';
+            if (!!messageLast && messageLast.idChat === groupChatSelect?.id) {
+                titleMess = messageLast.title || 'Đã gửi file';
+                messCreatedAt = formatTimeAuto(messageLast.createdAt) || '';
+                var fullNameAuthor = messageLast.authorID.fullName || '';
+                if (messageLast.authorID.id === curSignIn.id) {
+                    lastNameAuthor = 'Bạn';
+                } else {
+                    lastNameAuthor = getLastName(fullNameAuthor);
+                }
+                getClassSeen();
+            }
+            // var arrUserSeen = messageLast?.seen;
+            // var seen = checkSeen(arrUserSeen, userLoginData.id);
+            //css đã xem
+            // if (seen) {
+            //     setSeenState({
+            //         bgSeen: 'hidden',
+            //         textSeen: 'text-gray-900',
+            //     });
+            // }
+
+            return {
+                authorName: lastNameAuthor || '',
+                title: titleMess,
+                messCreatedAt,
+            };
+        };
+        var itemData = getInforMessageLast();
+        setItemDataChat(itemData);
+    }, [messageLast]);
+
+    useEffect(() => {
+        socket.on('getMessage', (data) => {
+            if (!!data) {
+                var getNewMess = {
+                    id: data.id,
+                    title: data.title,
+                    authorID: data.authorID,
+                    seen: data.seen,
+                    type_mess: data.type,
+                    idChat: data.idChat,
+                    createdAt: data.createdAt,
+                    updatedAt: data.updatedAt,
+                    file: data.file,
+                };
+                setMessageLast(getNewMess);
+            }
+        });
+    }, [socket]);
+
     //console.log(messageLast);
 
     const checkSeen = (arrSeen, userId) => {
@@ -45,40 +123,6 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
         }
         return false;
     };
-
-    var bgSeen = 'bg-lcn-blue-4';
-    var textSeen = 'text-gray-900';
-
-    const getInforMessageLast = () => {
-        var titleMess = '',
-            messCreatedAt = '',
-            lastNameAuthor = 'Bạn';
-        if (!!messageLast) {
-            titleMess = messageLast.title || 'Đã gửi file';
-            messCreatedAt = formatTimeAuto(messageLast.createdAt) || '';
-            var fullNameAuthor = messageLast.authorID.fullName || '';
-            if (messageLast.authorID.id === curSignIn.id) {
-                lastNameAuthor = 'Bạn';
-            } else {
-                lastNameAuthor = getLastName(fullNameAuthor);
-            }
-        }
-
-        var arrUserSeen = messageLast?.seen;
-        var seen = checkSeen(arrUserSeen, userLoginData.id);
-        //css đã xem
-        if (seen) {
-            bgSeen = 'hidden';
-            textSeen = 'text-gray-700';
-        }
-
-        return {
-            authorName: lastNameAuthor || '',
-            title: titleMess,
-            messCreatedAt,
-        };
-    };
-    var itemDataChat = getInforMessageLast();
 
     const putUserSeen = async (idMess, dataSeen) => {
         await addUserSeenToMess(idMess, dataSeen, accessToken, AxiosJWT);
@@ -118,15 +162,21 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
                             <View className="ml-4 w-4/6">
                                 <Text className="font-semibold text-xl text-lcn-blue-5">{groupChat.name}</Text>
                                 <View className="flex flex-row">
-                                    <Text className={'text-sm ' + textSeen}>{itemDataChat.authorName}:</Text>
-                                    <Text className={'text-sm ml-1 ' + textSeen}>{itemDataChat.title}</Text>
+                                    <Text className={'text-sm ' + seenState.textChatTitle}>
+                                        {itemDataChat.authorName}:
+                                    </Text>
+                                    <Text className={'text-sm ml-1 ' + seenState.textChatTitle}>
+                                        {itemDataChat.title}
+                                    </Text>
                                 </View>
                             </View>
                             <View className="">
                                 <Text></Text>
                                 <View>
-                                    <View className={'w-4 h-4 rounded-full ml-5 ' + bgSeen}></View>
-                                    <Text className={'text-sm ' + textSeen}> {itemDataChat.messCreatedAt}</Text>
+                                    <View className={'w-4 h-4 rounded-full ml-5 ' + seenState?.circleSeen}></View>
+                                    <Text className={'text-sm ' + seenState?.textChatTitle}>
+                                        {itemDataChat.messCreatedAt}
+                                    </Text>
                                 </View>
                             </View>
                         </View>
