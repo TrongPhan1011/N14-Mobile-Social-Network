@@ -1,7 +1,7 @@
 import { View, Text, Image, TouchableWithoutFeedback, Alert } from 'react-native';
 import { messageType } from '../../constants';
 import Feather from 'react-native-vector-icons/Feather';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { formatTimeAuto, getLastName } from '../../lib/formatString';
 import MessageModal from '../MessageModal';
 import MessageFile from '../MessageFile/messageFile';

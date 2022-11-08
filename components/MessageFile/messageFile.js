@@ -1,15 +1,23 @@
-import { View, Text, Image, Button, TouchableOpacity } from 'react-native';
+import { View, Text, Image, Button, TouchableOpacity, Pressable, Alert } from 'react-native';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Video, AVPlaybackStatus } from 'expo-av';
+import { addArrayImage } from '../../redux/Slice/sidebarChatSlice';
 
 export default function MessageFile({ data }) {
+    const dispatch = useDispatch();
+    const arrayImage = useSelector((state) => state.sidebarChatSlice.arrayImage);
+    const navigation = useNavigation();
     const video = React.useRef(null);
     const [status, setStatus] = React.useState({});
+    var arrUrlImg = [];
     var renderOneFile = (firstFile) => {
         if (firstFile.fileType === 'image') {
+            arrUrlImg.push(firstFile?.path);
             return (
-                <View className="overflow-hidden rounded-2xl">
+                <Pressable className="overflow-hidden rounded-2xl" onPress={handleChiTietHinhAnh}>
                     <Image
                         style={{ width: 250, height: 250, resizeMode: 'contain' }}
                         className=""
@@ -17,7 +25,7 @@ export default function MessageFile({ data }) {
                             uri: `${firstFile?.path}`,
                         }}
                     ></Image>
-                </View>
+                </Pressable>
             );
         } else if (firstFile.fileType === 'video') {
             return (
@@ -70,8 +78,13 @@ export default function MessageFile({ data }) {
     var renderManyFile = (files) => {
         const compManyIMG = files.map((file, index) => {
             if (file.fileType === 'image') {
+                arrUrlImg.push(file?.path);
                 return (
-                    <View key={file.title + index} className="p-0.5 overflow-hidden rounded-2xl">
+                    <Pressable
+                        key={file.title + index}
+                        className="p-0.5 overflow-hidden rounded-2xl"
+                        onPress={handleChiTietHinhAnh}
+                    >
                         <Image
                             style={{ width: 120, height: 120 }}
                             className=""
@@ -79,15 +92,15 @@ export default function MessageFile({ data }) {
                                 uri: `${file?.path}`,
                             }}
                         ></Image>
-                    </View>
+                    </Pressable>
                 );
             } else if (file.fileType === 'video') {
                 return (
-                    <View className="rounded-2xl">
+                    <View className="rounded-2xl" key={file.title + index}>
                         <Video
                             ref={video}
                             source={{
-                                uri: `${firstFile?.path}`,
+                                uri: `${file?.path}`,
                             }}
                             style={{ width: '100%', aspectRatio: 16 / 9 }}
                             useNativeControls
@@ -95,6 +108,7 @@ export default function MessageFile({ data }) {
                             isLooping={true}
                             usePoster={true}
                             posterStyle={{ resizeMode: 'cover' }}
+                            key={file.title + index}
                             onPlaybackStatusUpdate={(status) => setStatus(() => status)}
                         />
                     </View>
@@ -111,6 +125,11 @@ export default function MessageFile({ data }) {
             var firstFile = files[0];
             return <>{renderOneFile(firstFile)}</>;
         } else return <>{renderManyFile(files)}</>;
+    };
+    const handleChiTietHinhAnh = () => {
+        //console.log(arrUrlImg);
+        dispatch(addArrayImage(arrUrlImg));
+        navigation.navigate('ChiTietHinhAnh');
     };
 
     return <>{handleRenderFile()}</>;

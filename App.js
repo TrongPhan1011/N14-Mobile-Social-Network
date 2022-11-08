@@ -34,6 +34,13 @@ import CapNhatMatKhau from './screens/QuenMatKhauScreen/CapNhatMatKhau';
 
 import SettingScreenTaiKhoan from './screens/SettingScreen/settingScreenTaiKhoan/settingScreenTaiKhoan';
 import UpdatePassWord from './screens/SettingScreen/updatePassWord/updatePassWord';
+import ChiTietHinhAnh from './components/ChiTietHinhAnh/chiTietHinhAnh';
+import QuanLyNhom from './screens/QuanLyNhom/quanLyNhom';
+import ThemMoiChat from './screens/ThemMoiChat/themMoiChat';
+import SearchAddChat from './screens/SearchAddChat';
+import ThemThanhVien from './screens/ThemThanhVien';
+import XemThanhVien from './screens/XemThanhVien';
+import QuanTriGroup from './screens/QuanTriGroup';
 import Otp from './screens/Otp';
 
 export default function App() {
@@ -252,6 +259,62 @@ export default function App() {
                     <Stack.Screen
                         name="UpdatePassWord"
                         component={UpdatePassWord}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="ChiTietHinhAnh"
+                        component={ChiTietHinhAnh}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="QuanLyNhom"
+                        component={QuanLyNhom}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="ThemMoiChat"
+                        component={ThemMoiChat}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="SearchAddChat"
+                        component={SearchAddChat}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="ThemThanhVien"
+                        component={ThemThanhVien}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="XemThanhVien"
+                        component={XemThanhVien}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="QuanTriGroup"
+                        component={QuanTriGroup}
                         options={{
                             headerShown: false,
                             tabBarShowLabel: false,

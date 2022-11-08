@@ -12,7 +12,7 @@ import { getUserById } from '../../services/userService';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import { findFriend } from '../../redux/Slice/friendSlice';
-
+import Button from '../../components/Button/button';
 const Tab = createMaterialTopTabNavigator();
 function ProfileScreen({ route }) {
     const userId = route.params.userId;
@@ -60,6 +60,11 @@ function ProfileScreen({ route }) {
             <SafeAreaView />
             <HeaderProfile userName={userProfile?.fullName} />
             <ChiTietProfile avatar={profile?.urlAvartar} userName={userProfile?.fullName} />
+            <View className={'mr-16'}>
+                <Button xacnhan onPress={() => Alert.alert('ggg')}>
+                    <Text className={'text-white'}>Xác nhận</Text>
+                </Button>
+            </View>
             <Tab.Navigator
                 userName={userProfile?.fullName}
                 screenOptions={{

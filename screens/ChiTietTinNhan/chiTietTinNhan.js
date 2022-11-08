@@ -9,9 +9,11 @@ import {
     KeyboardAvoidingView,
     Keyboard,
     Alert,
+    FlatList,
 } from 'react-native';
 import React, { useState, useEffect, memo, useRef } from 'react';
 import HeaderTinNhan from '../../components/HeaderTinNhan';
+import HeaderTinNhanGroup from '../../components/HeaderTinNhanGroup';
 import ItemTinNhan from '../../components/ItemTinNhan';
 import FooterTinNhan from '../../components/FooterTinNhan';
 import { useNavigation } from '@react-navigation/native';
@@ -46,6 +48,7 @@ export default memo(function ChiTietTinNhan() {
                     seen: data.seen,
                     type_mess: data.type,
                     idChat: data.idChat,
+                    file: data.file,
                     createdAt: data.createdAt,
                     updatedAt: data.updatedAt,
                 };
@@ -109,46 +112,66 @@ export default memo(function ChiTietTinNhan() {
     };
 
     const navigation = useNavigation();
+    // console.log(groupChatSelect);
     return (
-        <View className="w-full h-full flex-1">
-            <HeaderTinNhan
-                onPressChiTiet={() => {
-                    navigation.goBack();
-                }}
-                onPressCallVideo={() => {
-                    navigation.navigate('VideoCall');
-                }}
-                onPressOpenMenu={() => navigation.navigate('GroupChatScreen')}
-                name={chatResult.name}
-            />
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 90}
+            className="flex-1"
+        >
+            <View className="w-full h-full">
+                {groupChatSelect.typeChat === 'group' ? (
+                    <HeaderTinNhanGroup
+                        onPressChiTiet={() => {
+                            navigation.goBack();
+                        }}
+                        onPressCallVideo={() => {
+                            navigation.navigate('VideoCall');
+                        }}
+                        onPressOpenMenu={() => navigation.navigate('QuanLyNhom')}
+                        name={chatResult.name}
+                    />
+                ) : (
+                    <HeaderTinNhan
+                        onPressChiTiet={() => {
+                            navigation.goBack();
+                        }}
+                        onPressCallVideo={() => {
+                            navigation.navigate('VideoCall');
+                        }}
+                        onPressOpenMenu={() => navigation.navigate('QuanLyNhom')}
+                        name={chatResult.name}
+                    />
+                )}
 
-            <ScrollView
-                className="overflow-y-auto max-h-[83%] bg-white"
-                ref={bottomRef}
-                onContentSizeChange={() => bottomRef.current.scrollToEnd({ animated: true })}
-            >
-                <View className="">
-                    {/* <ScrollView className="overflow-y-auto "> */}
-                    <View className="h-32 w-full items-center p-2">
-                        <Image
-                            style={{ width: 80, height: 80, resizeMode: 'contain' }}
-                            className="rounded-full"
-                            source={{
-                                uri: `${chatResult.avatar}`,
-                            }}
-                        ></Image>
-                        <View className="flex flex-row mt-2 items-center pt-2">
-                            <Text className="font-semibold ">Bạn đã kết nối với</Text>
-                            <Text className="text-lcn-blue-5 font-semibold ml-1">{chatResult.name}</Text>
+                <ScrollView
+                    className="overflow-y-auto max-h-[83%] bg-white"
+                    ref={bottomRef}
+                    onContentSizeChange={() => bottomRef.current.scrollToEnd({ animated: true })}
+                >
+                    <View className="">
+                        {/* <ScrollView className="overflow-y-auto "> */}
+                        <View className="h-32 w-full items-center p-2">
+                            <Image
+                                style={{ width: 80, height: 80, resizeMode: 'contain' }}
+                                className="rounded-full"
+                                source={{
+                                    uri: `${chatResult.avatar}`,
+                                }}
+                            ></Image>
+                            <View className="flex flex-row mt-2 items-center pt-2">
+                                <Text className="font-semibold ">Bạn đã kết nối với</Text>
+                                <Text className="text-lcn-blue-5 font-semibold ml-1">{chatResult.name}</Text>
+                            </View>
                         </View>
+                        <View className=" w-full">{handleChiTietTinNhan()}</View>
+                        {/* </ScrollView> */}
                     </View>
-                    <View className=" w-full">{handleChiTietTinNhan()}</View>
-                    {/* </ScrollView> */}
+                </ScrollView>
+                <View className="w-full absolute bottom-0">
+                    <FooterTinNhan />
                 </View>
-            </ScrollView>
-            <View className="w-full absolute bottom-0">
-                <FooterTinNhan />
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
 });

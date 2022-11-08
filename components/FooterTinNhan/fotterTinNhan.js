@@ -6,8 +6,14 @@ import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import { addMess } from '../../services/messageService';
 import socket from '../../utils/getSocketIO';
 import { useDispatch, useSelector } from 'react-redux';
-import { uploadFileImg } from '../../services/fileService';
+import { uploadFileImg, uploadFileBase64 } from '../../services/fileService';
 import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import Auth from '@aws-amplify/auth';
+import Amplify from '@aws-amplify/core';
+import Storage from '@aws-amplify/storage';
+//import { Item } from 'react-native-paper/lib/typescript/components/List/List';
+//import * as Clipboard from 'expo-clipboard';
 
 export default memo(function fotterTinNhan({ type }) {
     const dispatch = useDispatch();
@@ -19,7 +25,9 @@ export default memo(function fotterTinNhan({ type }) {
     const [currMessage, setCurrMessage] = useState('');
     const [messageSend, setMessageSend] = useState();
     const [image, setImage] = useState(null);
+    const [percentage, setPercentage] = useState(0);
     const [listFileIMG, setListFileIMG] = useState([]);
+    var arrImg = [];
 
     //const txtSendRef = useRef();
 
@@ -32,17 +40,17 @@ export default memo(function fotterTinNhan({ type }) {
         }
     }, [messageSend]);
 
-    // useEffect(() => {
-    //     (async () => {
-    //         if (Constants.platform.ios) {
-    //             const cameraRollStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    //             const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
-    //             if (cameraRollStatus.status !== 'granted' || cameraStatus.status !== 'granted') {
-    //                 alert('Sorry, we need these permissions to make this work!');
-    //             }
-    //         }
-    //     })();
-    // }, []);
+    useEffect(() => {
+        (async () => {
+            if (Constants.platform.ios) {
+                const cameraRollStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
+                if (cameraRollStatus.status !== 'granted' || cameraStatus.status !== 'granted') {
+                    alert('Sorry, we need these permissions to make this work!');
+                }
+            }
+        })();
+    }, []);
 
     const saveMess = async (newMessSave, newMess) => {
         if (!!newMessSave) {
@@ -99,6 +107,7 @@ export default memo(function fotterTinNhan({ type }) {
             type_mess: newMess.type,
             idChat: newMess.idChat,
             status: 1,
+            file: newMess.file,
         };
 
         return { newMess, newMessSave };
@@ -118,27 +127,145 @@ export default memo(function fotterTinNhan({ type }) {
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             //allowsEditing: true,
             allowsMultipleSelection: true,
-            base64: true,
+            //base64: true,
             aspect: [4, 3],
             quality: 1,
         });
 
         //console.log(result);
+        // setListFileIMG((prev) => [...prev, ...result]);
+        if (!!result.selected) arrImg.push(...result.selected);
+        else arrImg.push(result);
+        //console.log(arrImg);
 
         if (!result.cancelled) {
             try {
-                const formDataIMG = new FormData();
-                formDataIMG.append('images', result);
-                var a = await uploadFileImg(formDataIMG);
-                //setImage(result.uri);
-                //setListFileIMG(formDataIMG);
-                //handlePreviewIMG(result);
-                //console.log(listFileIMG.length);
-                //if (!!listFileIMG && listFileIMG.length > 0) saveIMG();
+                //for (result of arrImg) uploadImage(result);
+                //for (var i = 0; i < arrImg.length; i++)
+                uploadImage();
+                // arrImg.map((item, index) => {
+                //     uploadImage(item[index]);
+                // });
+                // var typeFile = '';
+                // if (result.type === 'image' || result.type === 'jpeg') typeFile = 'image/jpeg';
+                // else if (result.type === 'video') typeFile = 'video/mp4';
+                // else typeFile = 'doc';
+                // var photo = {
+                //     uri: result.uri,
+                //     type: typeFile,
+                //     name: 'file',
+                // };
+                // const formDataIMG = new FormData();
+                // formDataIMG.append('images', photo);
+                // var arrURLImg = await uploadFileImg(formDataIMG);
+                // var newMessIMG = getNewMess('', 'img/video', arrURLImg);
+                // await saveMess(newMessIMG.newMessSave, newMessIMG.newMess);
             } catch (error) {
                 console.log(error);
             }
         }
+    };
+    const uploadImage = async () => {
+        if (arrImg.length === 1) {
+            var typeFile = '';
+            if (arrImg[0].type === 'image' || arrImg[0].type === 'jpeg') typeFile = 'image/jpeg';
+            else if (arrImg[0].type === 'video') typeFile = 'video/mp4';
+            else typeFile = 'doc';
+            var photo = {
+                uri: arrImg[0].uri,
+                type: typeFile,
+                name: 'file',
+            };
+            const formDataIMG = new FormData();
+
+            formDataIMG.append('images', photo);
+            //console.log(formDataIMG);
+            var arrURLImg = await uploadFileImg(formDataIMG);
+            var newMessIMG = getNewMess('', 'img/video', arrURLImg);
+            await saveMess(newMessIMG.newMessSave, newMessIMG.newMess);
+            //formDataIMG.delete();
+        } else {
+            const formDataIMGGroup = new FormData();
+            for (var i = 0; i < arrImg.length; i++) {
+                var typeFile = '';
+                if (arrImg[i].type === 'image' || arrImg[i].type === 'jpeg') typeFile = 'image/jpeg';
+                else if (arrImg[i].type === 'video') typeFile = 'video/mp4';
+                else typeFile = 'doc';
+                var photo = {
+                    uri: arrImg[i].uri,
+                    type: typeFile,
+                    name: 'file',
+                };
+
+                formDataIMGGroup.append('images', photo);
+            }
+            //console.log(formDataIMGGroup);
+            var arrURLImgGroup = await uploadFileImg(formDataIMGGroup);
+            var newMessIMGroup = getNewMess('', 'img/video', arrURLImgGroup);
+            await saveMess(newMessIMGroup.newMessSave, newMessIMGroup.newMess);
+            //arrImg = [];
+            //formDataIMG.delete();
+        }
+    };
+    const handleImagePicked = async (pickerResult) => {
+        try {
+            if (pickerResult.cancelled) {
+                alert('Upload cancelled');
+                return;
+            } else {
+                setPercentage(0);
+                const img = await fetchImageFromUri(pickerResult.uri);
+                console.log(img);
+                const uploadUrl = await uploadImage('demo.jpg', img);
+                downloadImage(uploadUrl);
+            }
+        } catch (e) {
+            console.log(e);
+            alert('Upload failed');
+        }
+    };
+
+    // const uploadImage = async (filename, img) => {
+    //     Auth.currentCredentials();
+    //     try {
+    //         const response = await Storage.put(filename, img, {
+    //             level: 'public',
+    //             contentType: 'image/jpeg',
+    //             progressCallback(progress) {
+    //                 setLoading(progress);
+    //             },
+    //         });
+    //         return response.key;
+    //     } catch (error) {
+    //         console.log(error);
+    //         return error.response;
+    //     }
+    // };
+
+    const setLoading = (progress) => {
+        const calculated = parseInt((progress.loaded / progress.total) * 100);
+        updatePercentage(calculated); // due to s3 put function scoped
+    };
+
+    const updatePercentage = (number) => {
+        setPercentage(number);
+    };
+
+    const downloadImage = (uri) => {
+        Storage.get(uri)
+            .then((result) => setImage(result))
+            .catch((err) => console.log(err));
+    };
+
+    const fetchImageFromUri = async (uri) => {
+        const response = await fetch(uri);
+        const blob = await response.blob();
+        return blob;
+    };
+
+    const copyToClipboard = () => {
+        Clipboard.setString(image);
+        alert('Copied image URL to clipboard');
     };
 
     // const takePhoto = async () => {
@@ -177,6 +304,7 @@ export default memo(function fotterTinNhan({ type }) {
 
     return (
         <SafeAreaView className="">
+            {/* {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />} */}
             <View className=" flex flex-row items-center bg-white justify-center p-2 border border-slate-100 border-t">
                 <View className="">
                     <AntDesign name="pluscircle" size={30} color="#47A9FF" />
