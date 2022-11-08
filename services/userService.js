@@ -36,3 +36,14 @@ export const getWaitingFriend = async (idUser, accessToken, axiosJWT) => {
         console.log(error);
     }
 };
+export const getUserById = async (idUser, accessToken, axiosJWT) => {
+    try {
+        const res = await axiosJWT.get(`user/id/${idUser}`, {
+            headers: { token: `baerer ${accessToken}` },
+        });
+
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};

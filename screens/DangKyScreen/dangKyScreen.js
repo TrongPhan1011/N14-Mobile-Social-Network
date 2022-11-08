@@ -172,7 +172,8 @@ function DangKyScreen() {
     //         return true;
     //     }
     // };
-
+    const birthday =
+        date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString() + '-' + date.getDate().toString();
     const handleRegister = async () => {
         var valueEmail = checkValidEmail(emailValue);
         var valuePassword = checkValidPassword(passwordValue);
@@ -193,7 +194,7 @@ function DangKyScreen() {
                         name: valueName,
                         userName: valueEmail,
                         password: valuePassword,
-                        birthday: date.toString(),
+                        birthday: birthday,
                         gender: checked,
                     };
 
@@ -366,13 +367,7 @@ function DangKyScreen() {
 
                                 //ycheckDate(date);
                             }}
-                            value={
-                                date.getDate().toString() +
-                                '/' +
-                                (date.getMonth() + 1).toString() +
-                                '/' +
-                                date.getFullYear().toString()
-                            }
+                            value={birthday}
                         ></TextInputDN>
                         <View>
                             <Text className={'absolute z-10 text-red-500 text-sm  w-full ' + validDate}>
