@@ -13,7 +13,7 @@ export default function ThongTinChung({}) {
     }
 
     return (
-        <ScrollView>
+        <ScrollView className={'h-full bg-white'}>
             <View className="flex flex-row items-center w-full pl-4 pr-4 pt-2">
                 <View className="w-10 items-center">
                     <FontAwesome5 name="school" size={20} color="#47A9FF" />

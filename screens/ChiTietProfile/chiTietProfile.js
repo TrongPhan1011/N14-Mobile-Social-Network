@@ -1,11 +1,27 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Pressable } from 'react-native';
 import React from 'react';
+import { addArrayImage } from '../../redux/Slice/sidebarChatSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ChiTietProfile({ avatar, coverPhoto, userName }) {
+    const dispatch = useDispatch();
+    const arrayImage = useSelector((state) => state.sidebarChatSlice.arrayImage);
+    const navigation = useNavigation();
+    var arrUrlImg = [];
+
+    const handleChiTietHinhAnh = () => {
+        arrUrlImg.push(avatar);
+        console.log(arrUrlImg);
+        dispatch(addArrayImage(arrUrlImg));
+
+        navigation.navigate('ChiTietHinhAnh');
+    };
+
     return (
         <View className=" bg-white pb-3">
             <View className=" w-full items-center">
-                <View className="w-full h-40 ">
+                <View className="w-full h-40  ">
                     <Image
                         className="h-full w-full"
                         source={{
@@ -14,12 +30,14 @@ export default function ChiTietProfile({ avatar, coverPhoto, userName }) {
                     ></Image>
                 </View>
                 <View className="overflow-hidden absolute top-24 rounded-full">
-                    <Image
-                        className="h-32 w-32  "
-                        source={{
-                            uri: `${avatar}`,
-                        }}
-                    ></Image>
+                    <Pressable onPress={handleChiTietHinhAnh}>
+                        <Image
+                            className="h-32 w-32  "
+                            source={{
+                                uri: `${avatar}`,
+                            }}
+                        ></Image>
+                    </Pressable>
                 </View>
             </View>
             <View className="pt-20 w-full items-center">

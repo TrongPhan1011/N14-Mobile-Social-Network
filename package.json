@@ -10,6 +10,7 @@
         "web": "expo start --web"
     },
     "dependencies": {
+        "@dudigital/react-native-zoomable-view": "^1.1.4",
         "@react-icons/all-files": "^4.1.0",
         "@react-native-async-storage/async-storage": "^1.17.10",
         "@react-native-community/checkbox": "^0.5.12",
@@ -39,7 +40,9 @@
         "react-native-datepicker": "^1.7.2",
         "react-native-gesture-handler": "~2.5.0",
         "react-native-image-picker": "^4.10.0",
+        "react-native-image-zoom-viewer": "^3.0.1",
         "react-native-linear-gradient": "^2.6.2",
+        "react-native-modal": "^13.0.1",
         "react-native-pager-view": "5.4.24",
         "react-native-paper": "^4.12.4",
         "react-native-popup-menu": "^0.16.1",
@@ -48,6 +51,7 @@
         "react-native-select-dropdown": "^2.0.4",
         "react-native-simple-radio-button": "^2.7.4",
         "react-native-svg": "12.3.0",
+        "react-native-swiper": "^1.6.0",
         "react-native-tab-view": "^3.1.1",
         "react-native-vector-icons": "^9.2.0",
         "react-native-video": "^5.2.1",

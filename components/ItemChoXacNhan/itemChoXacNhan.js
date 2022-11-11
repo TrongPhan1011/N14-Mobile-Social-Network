@@ -44,6 +44,37 @@ function ItemChoXacNhan({ friendName, friendId, avt }) {
     const handleTuchoi = async () => {
         await declineFriend(curUser.id, friendId, accessToken, axiosJWT);
     };
+    const handleXacNhan = () => {
+        if (dongY) {
+            handleDongY();
+            return (
+                <View className=" flex flex-row items-end  justify-start ml-3 mb-1 ">
+                    <Button
+                        classNames={
+                            ' w-40 text-gray-500 border-gray-500 m-0 rounded-2xl border h-7 bg-white flex items-center justify-center'
+                        }
+                        disabled
+                    >
+                        <Text>Đã đồng ý</Text>
+                    </Button>
+                </View>
+            );
+        } else {
+            handleTuchoi();
+            return (
+                <View className=" flex flex-row items-end  justify-start ml-3 mb-1 ">
+                    <Button
+                        classNames={
+                            ' w-40 text-gray-500 border-gray-500 m-0 rounded-2xl border h-7 bg-white flex items-center justify-center'
+                        }
+                        disabled
+                    >
+                        <Text>Đã xóa yêu cầu</Text>
+                    </Button>
+                </View>
+            );
+        }
+    };
 
     return (
         <View>
@@ -62,19 +93,34 @@ function ItemChoXacNhan({ friendName, friendId, avt }) {
                         <Text className="ml-3 mb-2 text-lg font-semibold text-lcn-blue-5 justify-start items-start mt-0">
                             {friendName}
                         </Text>
-
-                        <View className=" flex flex-row items-end  justify-start ml-3 mb-1 ">
-                            <View className={'mr-16'}>
-                                <Button xacnhan onPress={() => Alert.alert('ggg')}>
-                                    <Text className={'text-white'}>Xác nhận</Text>
-                                </Button>
+                        {xacNhan ? (
+                            <View className=" flex flex-row items-center justify-start ml-2 mb-1 ">
+                                <View className={'mr-16'}>
+                                    <Button
+                                        xacnhan
+                                        onPress={() => {
+                                            setXacNhan(false);
+                                            setDongY(true);
+                                        }}
+                                    >
+                                        <Text className={'text-white'}>Đồng ý</Text>
+                                    </Button>
+                                </View>
+                                <View>
+                                    <Button
+                                        xoa
+                                        onPress={() => {
+                                            setXacNhan(false);
+                                            setDongY(false);
+                                        }}
+                                    >
+                                        <Text className={'text-white'}>Xóa</Text>
+                                    </Button>
+                                </View>
                             </View>
-                            <View>
-                                <Button xoa onPress={() => Alert.alert('oo')}>
-                                    <Text className={'text-white'}>Xóa</Text>
-                                </Button>
-                            </View>
-                        </View>
+                        ) : (
+                            handleXacNhan()
+                        )}
                     </View>
                 </View>
             </TouchableHighlight>

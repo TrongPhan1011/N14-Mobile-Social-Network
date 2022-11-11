@@ -68,7 +68,7 @@ export default function ContentBanBe({ type }) {
     };
 
     return (
-        <View className="bg-white">
+        <View className="bg-white h-full">
             <SafeAreaView>
                 <ScrollView>{handleRenderItem()}</ScrollView>
             </SafeAreaView>

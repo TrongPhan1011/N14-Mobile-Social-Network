@@ -47,3 +47,38 @@ export const getUserById = async (idUser, accessToken, axiosJWT) => {
         console.log(error);
     }
 };
+
+export const acceptFriend = async (idUser, idFriend, accessToken, axiosJWT) => {
+    try {
+        const res = await axiosJWT.put(
+            'user/acceptfriend/',
+            {
+                idFriend: idFriend,
+                idUser: idUser,
+            },
+            {
+                headers: { token: `baerer ${accessToken}` },
+            },
+        );
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const declineFriend = async (idUser, idFriend, accessToken, axiosJWT) => {
+    try {
+        const res = await axiosJWT.put(
+            'user/deletefriend/',
+            {
+                idFriend: idFriend,
+                idUser: idUser,
+            },
+            {
+                headers: { token: `baerer ${accessToken}` },
+            },
+        );
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};

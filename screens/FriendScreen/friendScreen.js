@@ -26,6 +26,7 @@ export default function FriendScreen() {
                 <Tab.Screen tabBarAutoCapitalize="none" name="Tất cả" component={BanBe} />
                 <Tab.Screen name="Chờ xác nhận" component={ChoXacNhan} />
             </Tab.Navigator>
+
             {/* <View>
                 <Text className="pt-80 text-center">FriendScreen</Text>
                 <Text className="pt-10 text-center">FriendScreen</Text>

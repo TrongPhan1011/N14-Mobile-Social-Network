@@ -12,6 +12,7 @@ import { getUserById } from '../../services/userService';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import { findFriend } from '../../redux/Slice/friendSlice';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from '../../components/Button/button';
 const Tab = createMaterialTopTabNavigator();
 function ProfileScreen({ route }) {
@@ -57,14 +58,25 @@ function ProfileScreen({ route }) {
 
     return (
         <>
-            <SafeAreaView />
-            <HeaderProfile userName={userProfile?.fullName} />
-            <ChiTietProfile avatar={profile?.urlAvartar} userName={userProfile?.fullName} />
-            <View className={'mr-16'}>
-                <Button xacnhan onPress={() => Alert.alert('ggg')}>
-                    <Text className={'text-white'}>Xác nhận</Text>
-                </Button>
-            </View>
+            <SafeAreaView className="bg-white">
+                <HeaderProfile userName={userProfile?.fullName} />
+                <ChiTietProfile avatar={profile?.urlAvartar} userName={userProfile?.fullName} />
+                <View className=" flex flex-row items-end  justify-between ml-10 mr-10 mb-1 ">
+                    <Button
+                        classNames={'flex flex-row w-25 h-10 bg-lcn-blue-2 rounded-[50px] border border-lcn-blue-4 '}
+                    >
+                        <Ionicons name="person-add-outline" size={20} color="#47A9FF"></Ionicons>
+                        <Text className={'text-lcn-blue-4 font-semibold text-sm ml-2'}>Bạn bè</Text>
+                    </Button>
+                    <Button
+                        classNames={'flex flex-row w-25 h-10 rounded-[50px] border border-lcn-green-1'}
+                        className={'bg-lcn-blue-2'}
+                    >
+                        <Ionicons name="chatbubble-outline" size={20} color="#66DA53"></Ionicons>
+                        <Text className={'text-lcn-green-1 font-semibold text-sm ml-2'}>Nhắn tin</Text>
+                    </Button>
+                </View>
+            </SafeAreaView>
             <Tab.Navigator
                 userName={userProfile?.fullName}
                 screenOptions={{
