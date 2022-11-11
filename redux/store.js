@@ -12,6 +12,7 @@ const combine = combineReducers({
 
     sidebarChatSlice,
     signUp: signUpSlice,
+
     friendSlice: friendSlice,
 });
 

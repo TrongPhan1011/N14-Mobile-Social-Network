@@ -20,7 +20,7 @@ import { useState, memo } from 'react';
 import { acceptFriend, declineFriend } from '../../services/userService';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
-import { avtDefault } from '../../assets/avatarDefault.png';
+import avtDefault from '../../assets/avatarDefault.png';
 function ItemChoXacNhan({ friendName, friendId, avt }) {
     const dispatch = useDispatch();
 
@@ -33,8 +33,10 @@ function ItemChoXacNhan({ friendName, friendId, avt }) {
     var curSignIn = useSelector((state) => state.signIn);
     var curUser = curSignIn.userLogin;
     var img = avtDefault;
-    if (!!avt) {
-        img = avt;
+    if (avt) {
+        img = {
+            uri: `${avt}`,
+        };
     }
     const handleDongY = async () => {
         await acceptFriend(curUser.id, friendId, accessToken, axiosJWT);
@@ -52,9 +54,7 @@ function ItemChoXacNhan({ friendName, friendId, avt }) {
                             <Image
                                 style={{ height: 60, width: 60, resizeMode: 'contain' }}
                                 className="rounded-full ml-4"
-                                source={{
-                                    uri: `${img}`,
-                                }}
+                                source={img}
                             ></Image>
                         </View>
                     </View>

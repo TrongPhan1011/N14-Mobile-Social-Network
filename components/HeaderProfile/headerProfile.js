@@ -3,7 +3,7 @@ import React, { Children } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 
-export default function HeaderProfile({ children }) {
+export default function HeaderProfile({ userName }) {
     const navigation = useNavigation();
     return (
         <SafeAreaView
@@ -22,7 +22,7 @@ export default function HeaderProfile({ children }) {
                     />
                 </View>
                 <View className="">
-                    <Text className="font-semibold text-xl text-lcn-blue-5">{children}</Text>
+                    <Text className="font-semibold text-xl text-lcn-blue-5">{userName}</Text>
                 </View>
                 <View className="ml-2 w-10"></View>
             </View>
