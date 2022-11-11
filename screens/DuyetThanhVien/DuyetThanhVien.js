@@ -11,9 +11,9 @@ import { Checkbox } from 'react-native-paper';
 import avatarDefault from '../../assets/avatarDefault.png';
 import { groupChatSelect, selectGroup } from '../../redux/Slice/sidebarChatSlice';
 import { useNavigation } from '@react-navigation/native';
-import { addMemberToChat } from '../../services/chatService';
+import { requestMemberToChat, getMemberRequest } from '../../services/chatService';
 
-const ThemThanhVien = () => {
+const DuyetThanhVien = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const currAuth = useSelector((state) => state.auth.currentUser);
@@ -27,9 +27,8 @@ const ThemThanhVien = () => {
 
     useEffect(() => {
         const getListFriend = async () => {
-            const friendByStatus = await getAllFriend(curSignIn.id, accessToken, axiosJWT);
-            let arrMember = friendByStatus[0].friend.filter((item) => !item.listGroup.includes(groupChatSelect?.id));
-            setListMember(arrMember);
+            const memberRequest = await getMemberRequest(groupChatSelect.id, accessToken, axiosJWT);
+            setListMember(memberRequest);
         };
 
         getListFriend();
@@ -38,32 +37,38 @@ const ThemThanhVien = () => {
     const getAllChecked = (item, index) => {
         //setTick(!tick);
         const temp = [...listMember];
-        if (temp[index]._id === item._id) {
+        if (temp[index].id === item.id) {
             temp[index].isChecked = !item.isChecked;
         }
         //console.log(item);
-        if (item.isChecked) setListChecked((prev) => [...prev, item._id]);
+        if (item.isChecked) setListChecked((prev) => [...prev, item.id]);
         else {
-            var arrRemove = listChecked.filter((e) => e !== item._id);
+            var arrRemove = listChecked.filter((e) => e !== item.id);
             setListChecked(arrRemove);
         }
         setListMember(temp);
+        //console.log(temp);
     };
 
     const handleAddMember = async () => {
         //console.log(listChecked);
         if (!!listChecked && listChecked.length > 0) {
-            var dataNewChat = await addMemberToChat(groupChatSelect?.id, listChecked, accessToken, axiosJWT);
+            var dataNewChat = await requestMemberToChat(
+                groupChatSelect.id,
+                listChecked,
+                "'accept'",
+                accessToken,
+                axiosJWT,
+            );
 
             if (dataNewChat) {
                 dispatch(selectGroup(dataNewChat));
                 setListChecked([]);
                 setListMember([]);
-                if (dataNewChat.status === 1) Alert.alert('Thêm thành viên thành công');
-                else Alert.alert('Thành viên đang chờ duyệt');
+                Alert.alert('Duyệt thành viên thành công');
                 navigation.navigate('ChiTietTinNhan');
             }
-        } else Alert.alert('Vui lòng chọn người cần thêm');
+        } else Alert.alert('Vui lòng chọn người cần duyệt');
     };
 
     //console.log(listChecked);
@@ -101,11 +106,12 @@ const ThemThanhVien = () => {
                     // />
                     <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl" key={item._id}>
                         <TouchableHighlight
+                            key={item._id}
                             activeOpacity={0.6}
                             underlayColor="#C6E4FF"
                             onPress={() => getAllChecked(item, index)}
                         >
-                            <View className="flex flex-row bg-white  p-2 ">
+                            <View className="flex flex-row bg-white  p-2 " key={item._id}>
                                 <View className="flex flex-row items-center w-10/12">
                                     <View>
                                         <Image
@@ -177,10 +183,10 @@ const ThemThanhVien = () => {
 
     return (
         <View className="bg-white h-full">
-            <HeaderQlGroup btnName="Thêm" onPress={handleAddMember}>
-                Thêm thành viên
+            <HeaderQlGroup btnName="Duyệt" onPress={handleAddMember}>
+                Duyệt thành viên
             </HeaderQlGroup>
-            <View className="flex flex-row ml-6 mr-6">
+            {/* <View className="flex flex-row ml-6 mr-6">
                 <View className=" w-full h-10 flex flex-row items-center bg-white rounded-3xl m-2 pl-2 pr-2 border border-lcn-blue-4">
                     <View className="ml-2">
                         <FontAwesome name="search" size={20} color="#47A9FF" />
@@ -191,10 +197,10 @@ const ThemThanhVien = () => {
                         placeholderTextColor={'#47A9FF'}
                     ></TextInput>
                 </View>
-            </View>
+            </View> */}
             <ScrollView>{renderBanBe()}</ScrollView>
         </View>
     );
 };
 
-export default memo(ThemThanhVien);
+export default memo(DuyetThanhVien);

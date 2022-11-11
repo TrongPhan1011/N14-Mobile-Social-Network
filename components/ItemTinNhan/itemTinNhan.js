@@ -14,11 +14,13 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
     var bgMessage = ' bg-slate-100 ';
     var bgFile = '';
     var flexRowReverse = '';
+    var avatarHidden = '';
     if (!!from) {
         bgMessage = ' bg-lcn-blue-4 text-white ';
         flexRowReverse = 'flex-row-reverse';
         seen = 'Đã gửi';
         textColorSend = ' text-white ';
+        avatarHidden = ' hidden ';
     } else {
         seen = 'Đã xem';
         nameSend = getLastName(messageData.authorID.fullName);
@@ -64,7 +66,7 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
                 <View className="rounded-full overflow-hidden flex justify-center items-center p-1 mb-5">
                     <Image
                         style={{ width: 25, height: 25, resizeMode: 'contain' }}
-                        className="rounded-full"
+                        className={'rounded-full' + avatarHidden}
                         source={{
                             uri: `${messageData.authorID.profile.urlAvartar}`,
                         }}

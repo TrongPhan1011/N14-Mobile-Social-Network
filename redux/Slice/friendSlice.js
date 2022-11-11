@@ -5,6 +5,7 @@ const friendSlice = createSlice({
         user: null,
         friend: null,
         error: false,
+        member: [],
     },
     reducers: {
         findSuccess: (state, action) => {
@@ -16,8 +17,11 @@ const friendSlice = createSlice({
         findError: (state) => {
             state.error = true;
         },
+        addMemberGroup: (state, action) => {
+            state.member = action.payload;
+        },
     },
 });
 
-export const { findSuccess, findError, findFriend } = friendSlice.actions;
+export const { findSuccess, findError, findFriend, addMemberGroup } = friendSlice.actions;
 export default friendSlice.reducer;

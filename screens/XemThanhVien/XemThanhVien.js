@@ -5,6 +5,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import ItemXemBanBeGroup from '../../components/ItemXemBanBeGroup';
 //import { getAllFriend } from '../../services/userService';
+import { inCludesString } from '../../lib/regexString';
 import { getMemberOfChat } from '../../services/chatService';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -18,11 +19,12 @@ const XemThanhVien = () => {
     var accessToken = currAuth.accessToken;
     const curSignIn = useSelector((state) => state.signIn.userLogin);
     var axiosJWT = getAxiosJWT(dispatch, currAuth);
+    const [searchValue, setSearchValue] = useState('');
     const [listMember, setListMember] = useState([]);
 
     useEffect(() => {
         const getListMember = async () => {
-            const memberGroup = await getMemberOfChat(groupChatSelect.id, accessToken, axiosJWT);
+            const memberGroup = await getMemberOfChat(groupChatSelect?.id, accessToken, axiosJWT);
             setListMember(memberGroup);
         };
 
@@ -34,14 +36,44 @@ const XemThanhVien = () => {
     };
 
     const renderBanBe = () => {
-        return listMember.map((item) => {
+        let arrAdmin = listMember.filter((member) => {
+            if (groupChatSelect.adminChat.includes(member.id) && inCludesString(searchValue, member.fullName)) {
+                member.isAdmin = true;
+                return true;
+            }
+            return false;
+        });
+        let arrMember = listMember.filter((member) => {
+            if (!groupChatSelect.adminChat.includes(member.id) && inCludesString(searchValue, member.fullName))
+                return true;
+            else return false;
+        });
+        let arrMemberFilter = [...arrAdmin, ...arrMember];
+        return arrMemberFilter.map((item) => {
             return (
-                <ItemXemBanBeGroup key={item.id} userId={item.id} name={item.fullName} avt={item.profile.urlAvartar} />
+                <View key={item.id}>
+                    {item.isAdmin ? (
+                        <ItemXemBanBeGroup
+                            key={item.id}
+                            userId={item.id}
+                            name={item.fullName}
+                            avt={item.profile.urlAvartar}
+                            quanTriGroup
+                        />
+                    ) : (
+                        <ItemXemBanBeGroup
+                            key={item.id}
+                            userId={item.id}
+                            name={item.fullName}
+                            avt={item.profile.urlAvartar}
+                        />
+                    )}
+                </View>
             );
         });
     };
     return (
-        <View className="bg-white">
+        <View className="bg-white h-full">
             <HeaderQLGroup btnName="Thêm" onPress={handleAdd}>
                 Xem thành viên
             </HeaderQLGroup>

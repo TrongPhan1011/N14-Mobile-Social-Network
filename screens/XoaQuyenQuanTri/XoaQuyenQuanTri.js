@@ -89,15 +89,15 @@ const ThemThanhVien = () => {
             return (
                 <View key={item._id}>
                     {item.isAdmin ? (
-                        <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl" key={item._id}>
+                        <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl" key={item._id + index}>
                             <TouchableHighlight
                                 activeOpacity={0.6}
                                 underlayColor="#C6E4FF"
-                                key={item._id}
+                                key={item._id + index}
                                 onPress={() => getAllChecked(item, index)}
                             >
-                                <View className="flex flex-row bg-white  p-2 " key={item._id}>
-                                    <View className="flex flex-row items-center w-10/12" key={item._id}>
+                                <View className="flex flex-row bg-white  p-2 " key={item._id + index}>
+                                    <View className="flex flex-row items-center w-10/12" key={item._id + index}>
                                         <View key={item._id}>
                                             <Image
                                                 style={{ height: 40, width: 40, resizeMode: 'contain' }}
@@ -115,6 +115,17 @@ const ThemThanhVien = () => {
                                                 Quản trị viên
                                             </Text>
                                         </View>
+                                    </View>
+                                    <View
+                                        className={' flex flex-row justify-end items-center w-2/12 pr-4'}
+                                        key={item._id}
+                                    >
+                                        <Checkbox
+                                            status={item.isChecked ? 'checked' : 'unchecked'}
+                                            onPress={() => getAllChecked(item, index)}
+                                            key={item._id}
+                                            testID={item.id}
+                                        />
                                     </View>
                                 </View>
                             </TouchableHighlight>
@@ -147,17 +158,6 @@ const ThemThanhVien = () => {
                                             </Text>
                                         </View>
                                     </View>
-                                    <View
-                                        className={' flex flex-row justify-end items-center w-2/12 pr-4'}
-                                        key={item._id}
-                                    >
-                                        <Checkbox
-                                            status={item.isChecked ? 'checked' : 'unchecked'}
-                                            onPress={() => getAllChecked(item, index)}
-                                            key={item._id}
-                                            testID={item.id}
-                                        />
-                                    </View>
                                 </View>
                             </TouchableHighlight>
                         </View>
@@ -168,8 +168,8 @@ const ThemThanhVien = () => {
     };
     return (
         <View className="bg-white">
-            <HeaderQlGroup btnName="Thêm" onPress={handleAddAdmin}>
-                Thêm quyền quản trị
+            <HeaderQlGroup btnName="Xóa" onPress={handleAddAdmin} remove>
+                Xóa quyền quản trị
             </HeaderQlGroup>
             <View className="flex flex-row ml-6 pr-6">
                 {/* <View className=" w-full h-10 flex flex-row items-center bg-white rounded-3xl m-2 pl-2 pr-2 border border-lcn-blue-4">
