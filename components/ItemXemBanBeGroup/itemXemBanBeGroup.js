@@ -19,8 +19,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import avatarDefault from '../../assets/avatarDefault.png';
 import { useNavigation } from '@react-navigation/native';
 
-export default function ItemXemBanBeGroup({ userId, name, avt, onPress }) {
+export default function ItemXemBanBeGroup({ userId, name, avt, onPress, quanTriGroup }) {
     //const [tick, setTick] = useState(false);
+    var hiddenQT = ' hidden ';
+    var textQT = 'Thành viên';
+    if (!!quanTriGroup) {
+        hiddenQT = '';
+        textQT = 'Quản trị viên';
+    }
     const navigation = useNavigation();
     return (
         <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl">
@@ -39,7 +45,7 @@ export default function ItemXemBanBeGroup({ userId, name, avt, onPress }) {
 
                         <View className="flex flex-col">
                             <Text className="ml-3 text-lg font-semibold text-lcn-blue-5">{name}</Text>
-                            <Text className="ml-3 text-gray-700">Thành viên</Text>
+                            <Text className={'ml-3 text-gray-700'}>{textQT}</Text>
                         </View>
                     </View>
                 </View>

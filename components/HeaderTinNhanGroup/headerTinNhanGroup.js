@@ -20,7 +20,7 @@ export default function HeaderTinNhan({ onPressChiTiet, onPressCallVideo, onPres
                 <View className="w-6/12 ml-4">
                     <View className="flex flex-row">
                         <Text className="font-semibold text-xl text-lcn-blue-5 ">{name}</Text>
-                        <View className="w-3 h-3 bg-lcn-green-1 rounded-full ml-2 items-center mt-2"></View>
+                        <View className="w-3 h-3 bg-lcn-green-1 rounded-full ml-2 items-center mt-2 hidden"></View>
                     </View>
                     <Text className="text-sm text-gray-700">Online</Text>
                 </View>

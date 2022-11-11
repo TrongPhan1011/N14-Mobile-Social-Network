@@ -41,6 +41,9 @@ import SearchAddChat from './screens/SearchAddChat';
 import ThemThanhVien from './screens/ThemThanhVien';
 import XemThanhVien from './screens/XemThanhVien';
 import QuanTriGroup from './screens/QuanTriGroup';
+import XoaThanhVien from './screens/XoaThanhVien';
+import DuyetThanhVien from './screens/DuyetThanhVien';
+import XoaQuyenQuanTri from './screens/XoaQuyenQuanTri';
 import Otp from './screens/Otp';
 
 export default function App() {
@@ -315,6 +318,30 @@ export default function App() {
                     <Stack.Screen
                         name="QuanTriGroup"
                         component={QuanTriGroup}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="XoaThanhVien"
+                        component={XoaThanhVien}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="DuyetThanhVien"
+                        component={DuyetThanhVien}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="XoaQuyenQuanTri"
+                        component={XoaQuyenQuanTri}
                         options={{
                             headerShown: false,
                             tabBarShowLabel: false,

@@ -6,6 +6,7 @@ import { getMessageById } from '../../services/messageService';
 import { addUserSeenToMess } from '../../services/messageService';
 import { formatTimeAuto, getLastName } from '../../lib/formatString';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
+import avatarDefault from '../../assets/avatarDefault.png';
 import socket from '../../utils/getSocketIO';
 import { selectGroup } from '../../redux/Slice/sidebarChatSlice';
 
@@ -15,7 +16,6 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
     const dispatch = useDispatch();
     const [messageLast, setMessageLast] = useState('');
     const currAuth = useSelector((state) => state.auth.currentUser);
-    const groupChatSelect = useSelector((state) => state.sidebarChatSlice.groupChatSelect);
     var accessToken = currAuth.accessToken;
     const curSignIn = useSelector((state) => state.signIn.userLogin);
     const [itemDataChat, setItemDataChat] = useState();
@@ -43,7 +43,7 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
 
             var seen = checkSeen(arrUserSeen, userLoginData.id);
 
-            if (!seen && curSignIn.id !== messageLast.authorID.id && messageLast.idChat === groupChatSelect?.id) {
+            if (!seen && curSignIn.id !== messageLast.authorID.id && messageLast.idChat === groupChat?.id) {
                 setSeenState({
                     textName: ' font-semibold ',
                     textChatTitle: ' text-gray-900 ',
@@ -61,7 +61,7 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
             var titleMess = '',
                 messCreatedAt = '',
                 lastNameAuthor = 'Bạn';
-            if (!!messageLast && messageLast.idChat === groupChatSelect?.id) {
+            if (!!messageLast && messageLast.idChat === groupChat?.id) {
                 titleMess = messageLast.title || 'Đã gửi file';
                 messCreatedAt = formatTimeAuto(messageLast.createdAt) || '';
                 var fullNameAuthor = messageLast.authorID.fullName || '';
@@ -106,7 +106,7 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
                     updatedAt: data.updatedAt,
                     file: data.file,
                 };
-                setMessageLast(getNewMess);
+                if (getNewMess.idChat === groupChat.id) setMessageLast(getNewMess);
             }
         });
     }, [socket]);
@@ -124,6 +124,11 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
         return false;
     };
 
+    var img = avatarDefault;
+    if (!!groupChat.avatar) {
+        img = { uri: `${groupChat.avatar}` };
+    }
+
     const putUserSeen = async (idMess, dataSeen) => {
         await addUserSeenToMess(idMess, dataSeen, accessToken, AxiosJWT);
     };
@@ -140,6 +145,7 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
             putUserSeen(messageLast?.id, userClickSeen);
         }
         //add id cua group chat duoc chon vao store
+        //console.log(groupChat);
         if (!!groupChat) dispatch(selectGroup(groupChat));
         navigation.navigate('ChiTietTinNhan');
     };
@@ -153,9 +159,7 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
                                 <Image
                                     style={{ width: 60, height: 60, resizeMode: 'contain' }}
                                     className="rounded-full"
-                                    source={{
-                                        uri: `${groupChat.avatar}`,
-                                    }}
+                                    source={img}
                                 ></Image>
                                 <View className="w-3 h-3 bg-lcn-green-1 rounded-full absolute right-1 bottom-0 "></View>
                             </View>

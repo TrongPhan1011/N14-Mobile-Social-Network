@@ -23,6 +23,7 @@ import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import ItemAddMember from '../../components/ItemAddMember/itemAddMember';
 import { getMessageByIdChat } from '../../services/messageService';
 import socket from '../../utils/getSocketIO';
+import avatarDefault from '../../assets/avatarDefault.png';
 import { getChatById } from '../../services/chatService';
 
 export default memo(function ChiTietTinNhan() {
@@ -112,6 +113,11 @@ export default memo(function ChiTietTinNhan() {
     };
 
     const navigation = useNavigation();
+
+    var img = avatarDefault;
+    if (!!chatResult.avatar) {
+        img = { uri: `${chatResult.avatar}` };
+    }
     // console.log(groupChatSelect);
     return (
         <KeyboardAvoidingView
@@ -155,9 +161,7 @@ export default memo(function ChiTietTinNhan() {
                             <Image
                                 style={{ width: 80, height: 80, resizeMode: 'contain' }}
                                 className="rounded-full"
-                                source={{
-                                    uri: `${chatResult.avatar}`,
-                                }}
+                                source={img}
                             ></Image>
                             <View className="flex flex-row mt-2 items-center pt-2">
                                 <Text className="font-semibold ">Bạn đã kết nối với</Text>

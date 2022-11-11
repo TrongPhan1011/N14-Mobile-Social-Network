@@ -12,9 +12,9 @@ import { Button } from 'react-native-paper';
 import avatarDefault from '../../assets/avatarDefault.png';
 import { groupChatSelect, selectGroup } from '../../redux/Slice/sidebarChatSlice';
 import { useNavigation } from '@react-navigation/native';
-import { addMemberToChat, getMemberOfChat, addAdminToChat } from '../../services/chatService';
+import { removeMemberToChat, getMemberOfChat } from '../../services/chatService';
 
-const ThemThanhVien = () => {
+const XoaThanhVien = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const currAuth = useSelector((state) => state.auth.currentUser);
@@ -22,9 +22,12 @@ const ThemThanhVien = () => {
     var accessToken = currAuth.accessToken;
     const curSignIn = useSelector((state) => state.signIn.userLogin);
     var axiosJWT = getAxiosJWT(dispatch, currAuth);
+    const [listFriend, setListFriend] = useState([]);
     const [listMember, setListMember] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     const [listChecked, setListChecked] = useState([]);
+    const [valueTick, setValueTick] = useState('');
+    const [tick, setTick] = useState(false);
     var arrMemberFilter = [];
 
     useEffect(() => {
@@ -34,22 +37,21 @@ const ThemThanhVien = () => {
         };
 
         getListMember();
-    }, [groupChatSelect]);
-
-    const handleAddAdmin = async () => {
-        ///console.log(listChecked);
-
+    }, [curSignIn]);
+    //for (let i = 0; i < listMember.length; i++) listMember[i].isChecked = false;
+    const handleRemoveMember = async () => {
+        //console.log(listChecked);
         if (!!listChecked && listChecked.length > 0) {
-            var dataNewChat = await addAdminToChat(groupChatSelect?.id, listChecked, accessToken, axiosJWT);
-            //console.log(dataNewChat);
+            var dataNewChat = await removeMemberToChat(groupChatSelect?.id, listChecked, accessToken, axiosJWT);
+
             if (dataNewChat) {
                 dispatch(selectGroup(dataNewChat));
                 setListChecked([]);
                 setListMember([]);
-                Alert.alert('Thêm Admin thành công');
+                Alert.alert('Xóa thành viên thành công');
                 navigation.navigate('ChiTietTinNhan');
             }
-        } else Alert.alert('Vui lòng chọn người cần thêm');
+        } else Alert.alert('Vui lòng chọn người cần xóa');
     };
 
     const getAllChecked = (item, index) => {
@@ -66,6 +68,7 @@ const ThemThanhVien = () => {
         setListMember(temp);
     };
 
+    //console.log(listChecked);
     const renderBanBe = () => {
         let arrAdmin = listMember.filter((member) => {
             if (groupChatSelect.adminChat.includes(member.id) && inCludesString(searchValue, member.fullName)) {
@@ -80,14 +83,24 @@ const ThemThanhVien = () => {
             else return false;
         });
         arrMemberFilter = [...arrAdmin, ...arrMember];
-        //listMember.isChecked = false;
+
         return arrMemberFilter.map((item, index) => {
             var img = avatarDefault;
             if (!!item.profile.urlAvartar) {
                 img = { uri: `${item.profile.urlAvartar}` };
             }
+
             return (
-                <View key={item._id}>
+                // <ItemBanBeGroup
+                //     key={item._id}
+                //     userId={item._id}
+                //     name={item.fullName}
+                //     avt={img}
+                //     waiting
+                //     friend
+                //     listChecked={listChecked}
+                // />
+                <View>
                     {item.isAdmin ? (
                         <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl" key={item._id}>
                             <TouchableHighlight
@@ -115,6 +128,17 @@ const ThemThanhVien = () => {
                                                 Quản trị viên
                                             </Text>
                                         </View>
+                                    </View>
+                                    <View
+                                        className={' flex flex-row justify-end items-center w-2/12 pr-4'}
+                                        key={item._id}
+                                    >
+                                        <Checkbox
+                                            status={item.isChecked ? 'checked' : 'unchecked'}
+                                            onPress={() => getAllChecked(item, index)}
+                                            key={item._id}
+                                            testID={item.id}
+                                        />
                                     </View>
                                 </View>
                             </TouchableHighlight>
@@ -152,8 +176,20 @@ const ThemThanhVien = () => {
                                         key={item._id}
                                     >
                                         <Checkbox
+                                            //status={tick ? 'checked' : 'unchecked'}
                                             status={item.isChecked ? 'checked' : 'unchecked'}
+                                            value={item.id}
                                             onPress={() => getAllChecked(item, index)}
+                                            //     () => {
+                                            //     setTick(!tick);
+                                            //     if (!tick) setListChecked((prev) => [...prev, item._id]);
+                                            //     else {
+                                            //         var arrRemove = listChecked.filter((item) => {
+                                            //             !item?.includes(item);
+                                            //         });
+                                            //         setListChecked(arrRemove);
+                                            //     }
+                                            // }}
                                             key={item._id}
                                             testID={item.id}
                                         />
@@ -166,13 +202,14 @@ const ThemThanhVien = () => {
             );
         });
     };
+
     return (
-        <View className="bg-white">
-            <HeaderQlGroup btnName="Thêm" onPress={handleAddAdmin}>
-                Thêm quyền quản trị
+        <View className="bg-white h-full">
+            <HeaderQlGroup btnName="Xóa" onPress={handleRemoveMember} remove>
+                Xóa thành viên
             </HeaderQlGroup>
-            <View className="flex flex-row ml-6 pr-6">
-                {/* <View className=" w-full h-10 flex flex-row items-center bg-white rounded-3xl m-2 pl-2 pr-2 border border-lcn-blue-4">
+            {/* <View className="flex flex-row ml-6 mr-6">
+                <View className=" w-full h-10 flex flex-row items-center bg-white rounded-3xl m-2 pl-2 pr-2 border border-lcn-blue-4">
                     <View className="ml-2">
                         <FontAwesome name="search" size={20} color="#47A9FF" />
                     </View>
@@ -181,11 +218,11 @@ const ThemThanhVien = () => {
                         placeholder="Tìm tên hoặc số điện thoại"
                         placeholderTextColor={'#47A9FF'}
                     ></TextInput>
-                </View> */}
-            </View>
-            <View>{renderBanBe()}</View>
+                </View>
+            </View> */}
+            <ScrollView>{renderBanBe()}</ScrollView>
         </View>
     );
 };
 
-export default memo(ThemThanhVien);
+export default memo(XoaThanhVien);

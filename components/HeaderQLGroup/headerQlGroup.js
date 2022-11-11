@@ -3,7 +3,9 @@ import React, { Children } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 
-export default function HeaderQlGroup({ children, btnName, onPress }) {
+export default function HeaderQlGroup({ children, btnName, onPress, remove }) {
+    var bgRed = '';
+    if (!!remove) bgRed = ' bg-red-600 ';
     const navigation = useNavigation();
     return (
         <SafeAreaView
@@ -28,7 +30,7 @@ export default function HeaderQlGroup({ children, btnName, onPress }) {
                 </View>
                 <View className="ml-2 w-1/3">
                     <TouchableOpacity
-                        className={' w-28  h-9 items-center justify-center rounded-3xl bg-lcn-blue-4'}
+                        className={' w-28  h-9 items-center justify-center rounded-3xl bg-lcn-blue-4' + bgRed}
                         onPress={onPress}
                     >
                         <Text className=" font-semibold text-white">{btnName}</Text>
