@@ -7,7 +7,7 @@ export default function MessageModal({ handleCloseModal, handleOpenModal, modalV
             <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={handleCloseModal}>
                 <TouchableOpacity activeOpacity={1} onPressOut={handleCloseModal}>
                     <View className=" h-full w-full flex flex-1 items-center justify-center">
-                        <View className="bg-white shadow-md p-2 ">
+                        <View className="bg-red-500 shadow-md p-2 ">
                             <TouchableOpacity
                                 onPress={() => {
                                     Alert.alert('oo');

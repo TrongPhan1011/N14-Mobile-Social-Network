@@ -2,10 +2,22 @@ import { View, Text, ScrollView } from 'react-native';
 import React from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { getAllFriend } from '../../services/userService';
+import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 export default function ThongTinChung({}) {
     const profile = useSelector((state) => state.friendSlice.friend);
+
+    const dispatch = useDispatch();
+    const [userFriend, setUserFriend] = useState([]);
+    var currAuth = useSelector((state) => state.auth);
+    var currAccount = currAuth.currentUser;
+    var accessToken = currAccount.accessToken;
+    var curSignIn = useSelector((state) => state.signIn);
+    var curUser = curSignIn.userLogin;
+    var axiosJWT = getAxiosJWT(dispatch, currAccount);
+
     var myDate = '';
     var date = profile?.birthday.split('-');
     if (date) {

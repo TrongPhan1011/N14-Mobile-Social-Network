@@ -21,7 +21,6 @@ import { useNavigation } from '@react-navigation/native';
 export default function ItemBanBe({ userId, name, avt }) {
     const navigation = useNavigation();
 
-    console.log(userId);
     var img = avatarDefault;
     if (avt) {
         img = {
@@ -52,7 +51,7 @@ export default function ItemBanBe({ userId, name, avt }) {
                             </View>
 
                             <Text className="ml-3 text-lg font-semibold text-lcn-blue-5 w-2/3">{name}</Text>
-                            <View className="w-3 h-3 bg-lcn-green-1 rounded-full ml-2"></View>
+                            <View className="w-2 h-2 bg-lcn-green-1 rounded-full ml-3 mb-2"></View>
                         </View>
                         <View className=" flex flex-row justify-end items-center w-1/3 pr-4">
                             <Ionicons name="call" size={30} color="#47A9FF" style={{ marginRight: 20 }}></Ionicons>

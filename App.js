@@ -44,6 +44,7 @@ import QuanTriGroup from './screens/QuanTriGroup';
 import XoaThanhVien from './screens/XoaThanhVien';
 import DuyetThanhVien from './screens/DuyetThanhVien';
 import XoaQuyenQuanTri from './screens/XoaQuyenQuanTri';
+import PreviewAvatar from './components/PreviewAvatar';
 import Otp from './screens/Otp';
 
 export default function App() {
@@ -276,6 +277,14 @@ export default function App() {
                         }}
                     />
                     <Stack.Screen
+                        name="PreviewAvatar"
+                        component={PreviewAvatar}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
                         name="QuanLyNhom"
                         component={QuanLyNhom}
                         options={{
@@ -283,6 +292,7 @@ export default function App() {
                             tabBarShowLabel: false,
                         }}
                     />
+
                     <Stack.Screen
                         name="ThemMoiChat"
                         component={ThemMoiChat}

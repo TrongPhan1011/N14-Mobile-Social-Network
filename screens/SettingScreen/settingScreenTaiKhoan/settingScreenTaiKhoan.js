@@ -16,12 +16,15 @@ import HeaderProfile from '../../../components/HeaderProfile';
 import { Provider, Appbar, RadioButton } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
-
+import { connect, useDispatch, useSelector } from 'react-redux';
 export default function SettingScreenTaiKhoan() {
     const navigation = useNavigation();
     const [checked, setChecked] = useState('nam');
     const [isSelected, setSelection] = useState(false);
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
+    const dispatch = useDispatch();
+    var curSignIn = useSelector((state) => state.signIn);
+    console.log(curSignIn);
     return (
         <View className="bg-white">
             <View>
@@ -33,7 +36,8 @@ export default function SettingScreenTaiKhoan() {
                         <Text className="font-semibold text-xl text-lcn-blue-5">Tên người dùng:</Text>
                     </View>
                 </View>
-                <View className="border-solid border-x border-y border-sky-500 ml-4 rounded-3xl w-96 h-15 p-1.5 pl-6 pr-6 flex flex-row items-center bg-white">
+
+                <View className="border-solid border-x border-y border-sky-500 ml-4 rounded-3xl w-80 h-15 p-1.5 pl-6 pr-6 flex flex-row items-center bg-white">
                     <View className="overflow-hidden">
                         <FontAwesome name="user" size={20} color="#47A9FF" />
                     </View>
