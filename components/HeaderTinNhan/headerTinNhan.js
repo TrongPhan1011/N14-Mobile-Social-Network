@@ -17,21 +17,21 @@ export default function HeaderTinNhan({ onPressChiTiet, onPressCallVideo, onPres
                 <View>
                     <Ionicons name="arrow-back-outline" size={30} color="#47A9FF" onPress={onPressChiTiet} />
                 </View>
-                <View className="w-7/12 ml-4">
+                <View className="w-6/12 ml-4">
                     <View className="flex flex-row">
-                        <Text className="font-semibold text-xl text-lcn-blue-5 ">{name}</Text>
+                        <Text className="font-semibold text-xl text-lcn-blue-5">{name}</Text>
                         <View className="w-3 h-3 bg-lcn-green-1 rounded-full ml-2 items-center mt-2"></View>
                     </View>
                     <Text className="text-sm text-gray-700">Online</Text>
                 </View>
-                <View>
+                <View className="ml-5">
                     <FontAwesome name="phone" size={30} color="#47A9FF" />
                 </View>
                 <View className="ml-5">
                     <FontAwesome name="video-camera" size={30} color="#47A9FF" onPress={onPressCallVideo} />
                 </View>
-                <View className="ml-3 relative">
-                    <Feather name="more-vertical" size={30} color="#47A9FF" onPress={onPressOpenMenu} />
+                <View className="ml-5 relative">
+                    <Feather name="info" size={30} color="#47A9FF" onPress={onPressOpenMenu} />
 
                     {/* <MenuTinNhan /> */}
                 </View>

@@ -82,3 +82,20 @@ export const declineFriend = async (idUser, idFriend, accessToken, axiosJWT) => 
         console.log(error);
     }
 };
+
+export const getUserByTextSearch = async (idUser, searchValue, limit, accessToken, axiosJWT) => {
+    try {
+        const res = await axiosJWT.get('user/textsearch', {
+            params: {
+                q: searchValue,
+                _limit: limit,
+                idUser,
+            },
+            headers: { token: `baerer ${accessToken}` },
+        });
+
+        return res.data;
+    } catch (error) {
+        console.log('Người dùng không tồn tại!');
+    }
+};

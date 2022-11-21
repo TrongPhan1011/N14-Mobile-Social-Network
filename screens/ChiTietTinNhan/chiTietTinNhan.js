@@ -10,14 +10,15 @@ import {
     Keyboard,
     Alert,
     FlatList,
+    Pressable,
 } from 'react-native';
 import React, { useState, useEffect, memo, useRef } from 'react';
 import HeaderTinNhan from '../../components/HeaderTinNhan';
 import HeaderTinNhanGroup from '../../components/HeaderTinNhanGroup';
 import ItemTinNhan from '../../components/ItemTinNhan';
+import ItemTinNhanSystem from '../../components/ItemTinNhanSystem';
 import FooterTinNhan from '../../components/FooterTinNhan';
 import { useNavigation } from '@react-navigation/native';
-import { messageType } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import ItemAddMember from '../../components/ItemAddMember/itemAddMember';
@@ -25,6 +26,7 @@ import { getMessageByIdChat } from '../../services/messageService';
 import socket from '../../utils/getSocketIO';
 import avatarDefault from '../../assets/avatarDefault.png';
 import { getChatById } from '../../services/chatService';
+import Avatar from '../../components/Avatar';
 
 export default memo(function ChiTietTinNhan() {
     const dispatch = useDispatch();
@@ -70,7 +72,7 @@ export default memo(function ChiTietTinNhan() {
             setArrMessage(listMess);
         };
         getListMessage();
-    }, [groupChatSelect]);
+    }, [groupChatSelect, limitMessage]);
 
     // useEffect(() => {
     //     const scrollToBottom = () => {
@@ -87,7 +89,7 @@ export default memo(function ChiTietTinNhan() {
         arrivalMessage &&
             groupChatSelect?.member.includes(arrivalMessage.authorID.id) &&
             setArrMessage((prev) => [...prev, arrivalMessage]);
-    }, [groupChatSelect, arrivalMessage]);
+    }, [groupChatSelect, arrivalMessage, limitMessage]);
 
     const handleChiTietTinNhan = () => {
         if (arrMessage.length > 0) {
@@ -95,19 +97,22 @@ export default memo(function ChiTietTinNhan() {
                 // var isLastMess = false;
                 // var indexLast = arrMessage.length - 1;
                 // if (index === indexLast) isLastMess = true;
-
-                if (item.authorID.id === currSignIn.id) {
-                    return (
-                        <ItemTinNhan from="me" key={index + item.authorID.id} messageData={item}>
-                            {item.title}
-                        </ItemTinNhan>
-                    );
-                } else
-                    return (
-                        <ItemTinNhan key={index + item.authorID.id} messageData={item}>
-                            {item.title}
-                        </ItemTinNhan>
-                    );
+                if (item.type_mess === 'system') {
+                    return <ItemTinNhanSystem key={index + item.authorID.id}>{item.title}</ItemTinNhanSystem>;
+                } else {
+                    if (item.authorID.id === currSignIn.id) {
+                        return (
+                            <ItemTinNhan from="me" key={index + item.authorID.id} messageData={item}>
+                                {item.title}
+                            </ItemTinNhan>
+                        );
+                    } else
+                        return (
+                            <ItemTinNhan key={index + item.authorID.id} messageData={item}>
+                                {item.title}
+                            </ItemTinNhan>
+                        );
+                }
             });
         }
     };
@@ -118,7 +123,17 @@ export default memo(function ChiTietTinNhan() {
     if (!!chatResult.avatar) {
         img = { uri: `${chatResult.avatar}` };
     }
+
+    const handleProfile = () => {
+        var member = chatResult.member;
+        var userId = member.filter((e) => e !== currSignIn.id);
+        //console.log(idFreind);
+        navigation.navigate('ProfileScreen', {
+            userId,
+        });
+    };
     // console.log(groupChatSelect);
+    //console.log(chatResult);
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -145,7 +160,12 @@ export default memo(function ChiTietTinNhan() {
                         onPressCallVideo={() => {
                             navigation.navigate('VideoCall');
                         }}
-                        onPressOpenMenu={() => navigation.navigate('QuanLyNhom')}
+                        onPressOpenMenu={handleProfile}
+                        // onPressOpenMenu={() =>
+                        //     navigation.navigate('ProfileScreen', {
+                        //         chatResult.id,
+                        //     })
+                        // }
                         name={chatResult.name}
                     />
                 )}
@@ -158,14 +178,29 @@ export default memo(function ChiTietTinNhan() {
                     <View className="">
                         {/* <ScrollView className="overflow-y-auto "> */}
                         <View className="h-32 w-full items-center p-2">
-                            <Image
+                            {/* <Image
                                 style={{ width: 80, height: 80, resizeMode: 'contain' }}
                                 className="rounded-full"
                                 source={img}
-                            ></Image>
+                            ></Image> */}
+                            <Avatar
+                                src={chatResult.typeChat === 'group' ? chatResult.avatar : chatResult?.avatar}
+                                typeAvatar={chatResult.typeChat === 'group' ? 'group' : 'inbox'}
+                                idGroup={chatResult.id}
+                            />
                             <View className="flex flex-row mt-2 items-center pt-2">
                                 <Text className="font-semibold ">Bạn đã kết nối với</Text>
                                 <Text className="text-lcn-blue-5 font-semibold ml-1">{chatResult.name}</Text>
+                            </View>
+                            <View>
+                                <Pressable
+                                    onPress={() => {
+                                        setLimitMessage(limitMessage + 20);
+                                        //console.log(limitMessage);
+                                    }}
+                                >
+                                    <Text className="text-lcn-blue-5 mt-4 text-xs font-bold">Xem thêm tin nhắn</Text>
+                                </Pressable>
                             </View>
                         </View>
                         <View className=" w-full">{handleChiTietTinNhan()}</View>

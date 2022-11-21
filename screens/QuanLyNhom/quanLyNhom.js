@@ -1,7 +1,7 @@
 import { View, Text, StatusBar, Platform, Image, ScrollView, Alert, TouchableHighlight, Switch } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import HeaderProfile from '../../components/HeaderProfile/headerProfile';
+import HeaderProfile from '../../components/HeaderProfile';
 import ItemQuanLyNhom from '../../components/ItemQuanLyNhom/itemQuanLyNhom';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -11,9 +11,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { leaveToChat, changeStatusChat } from '../../services/chatService';
+import { leaveToChat, changeStatusChat, removeChat } from '../../services/chatService';
 import avatarDefault from '../../assets/avatarDefault.png';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
+import { userLogin } from '../../redux/Slice/signInSlice';
+import { selectGroup } from '../../redux/Slice/sidebarChatSlice';
+import { getMessageFileByIdChat, getMessageByIdChat } from '../../services/messageService';
+import Avatar from '../../components/Avatar';
+import RenameModal from '../../components/ModalRenameGroup';
 
 const QuanLyNhom = () => {
     const dispatch = useDispatch();
@@ -24,19 +29,33 @@ const QuanLyNhom = () => {
     var axiosJWT = getAxiosJWT(dispatch, currAuth);
     const navigation = useNavigation();
     const statusGroup = groupChatSelect?.status;
+    const [modalVisible, setModalVisible] = useState(false);
+    const [arrImg, setArrImg] = useState([]);
     const [isEnabled, setIsEnabled] = useState(statusGroup === 2 ? true : false);
+
     const duyetThanhVien = async () => {
         if (groupChatSelect.adminChat.includes(curSignIn.id)) {
             setIsEnabled((previousState) => !previousState);
-            if (statusGroup == 1) await changeStatusChat(groupChatSelect.id, '2', accessToken, axiosJWT);
-            else await changeStatusChat(groupChatSelect.id, '1', accessToken, axiosJWT);
+            if (statusGroup == 1) {
+                let newChat = await changeStatusChat(groupChatSelect.id, '2', accessToken, axiosJWT);
+                dispatch(selectGroup(newChat));
+            } else {
+                let newChatOff = await changeStatusChat(groupChatSelect.id, '1', accessToken, axiosJWT);
+                dispatch(selectGroup(newChatOff));
+            }
         } else Alert.alert('Chỉ có quản trị viên mới có quyền!');
     };
     const onPressAddMember = () => {
         navigation.navigate('ThemThanhVien');
     };
+    const onPressRename = () => {
+        setModalVisible(true);
+    };
     const onPressXemThanhVien = () => {
         navigation.navigate('XemThanhVien');
+    };
+    const onPressXemFile = () => {
+        navigation.navigate('FileGroup');
     };
     const onPressLeaveGroup = () => {
         Alert.alert('Cảnh báo', 'Bạn có chắc muốn rời nhóm không?', [
@@ -49,6 +68,7 @@ const QuanLyNhom = () => {
                 text: 'Xác nhận',
                 onPress: async () => {
                     await leaveToChat(groupChatSelect.id, curSignIn.id, accessToken, axiosJWT);
+                    dispatch(userLogin(curSignIn.id));
                     navigation.navigate('HomeTabBar');
                 },
             },
@@ -64,7 +84,7 @@ const QuanLyNhom = () => {
             {
                 text: 'Xác nhận',
                 onPress: async () => {
-                    //await leaveToChat(groupChatSelect.id, curSignIn.id, accessToken, axiosJWT);
+                    await removeChat(groupChatSelect.id, curSignIn.id, accessToken, axiosJWT);
                     navigation.navigate('HomeTabBar');
                 },
             },
@@ -91,17 +111,31 @@ const QuanLyNhom = () => {
     if (!!groupChatSelect.avatar) {
         img = { uri: `${groupChatSelect.avatar}` };
     }
+
+    const handleCloseModal = () => {
+        setModalVisible(false);
+    };
+
+    const handleOpenModal = () => {
+        setModalVisible(true);
+    };
+
     return (
         <View className="h-full w-full bg-white">
-            <HeaderProfile>Tùy chọn</HeaderProfile>
+            <HeaderProfile userName={'Tùy chọn'}></HeaderProfile>
             <ScrollView>
                 <View>
                     <View className="w-full mt-2 items-center">
-                        <Image
+                        {/* <Image
                             style={{ width: 120, height: 120, resizeMode: 'contain' }}
                             className="rounded-full"
                             source={img}
-                        ></Image>
+                        ></Image> */}
+                        <Avatar
+                            src={groupChatSelect.avatar}
+                            typeAvatar={groupChatSelect.typeChat === 'group' ? 'group' : 'inbox'}
+                            idGroup={groupChatSelect.id}
+                        />
                         <Text className="font-semibold text-xl text-lcn-blue-5 mt-2">{groupChatSelect.name}</Text>
                     </View>
                     <View className="h-4 w-full flex justify-center flex-row mt-2">
@@ -113,10 +147,12 @@ const QuanLyNhom = () => {
                         <ItemQuanLyNhom
                             icon={<FontAwesome name="pencil-square-o" size={30} color="#47A9FF" />}
                             text="Đổi tên nhóm"
+                            onPress={onPressRename}
                         ></ItemQuanLyNhom>
                         <ItemQuanLyNhom
                             icon={<Feather name="paperclip" size={30} color="#47A9FF" />}
                             text="Tài liệu, hình ảnh, video"
+                            onPress={onPressXemFile}
                         ></ItemQuanLyNhom>
                         <ItemQuanLyNhom
                             onPress={onPressXemThanhVien}
@@ -197,6 +233,11 @@ const QuanLyNhom = () => {
                     </View>
                 </View>
             </ScrollView>
+            <RenameModal
+                modalVisible={modalVisible}
+                handleCloseModal={handleCloseModal}
+                handleOpenModal={handleOpenModal}
+            ></RenameModal>
         </View>
     );
 };

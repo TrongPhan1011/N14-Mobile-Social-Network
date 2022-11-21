@@ -4,7 +4,7 @@ import HeaderQlGroup from '../../components/HeaderQLGroup';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import ItemBanBeGroup from '../../components/ItemBanBeGroup';
-import { getAllFriend } from '../../services/userService';
+import { getAllFriend, getUserById } from '../../services/userService';
 import { useDispatch, useSelector } from 'react-redux';
 import { inCludesString } from '../../lib/regexString';
 import { Checkbox } from 'react-native-paper';
@@ -12,6 +12,8 @@ import avatarDefault from '../../assets/avatarDefault.png';
 import { groupChatSelect, selectGroup } from '../../redux/Slice/sidebarChatSlice';
 import { useNavigation } from '@react-navigation/native';
 import { requestMemberToChat, getMemberRequest } from '../../services/chatService';
+import socket from '../../utils/getSocketIO';
+import { addMess } from '../../services/messageService';
 
 const DuyetThanhVien = () => {
     const dispatch = useDispatch();
@@ -65,13 +67,34 @@ const DuyetThanhVien = () => {
                 dispatch(selectGroup(dataNewChat));
                 setListChecked([]);
                 setListMember([]);
+                for (let memberId of listChecked) {
+                    var member = await getUserById(memberId, accessToken, axiosJWT);
+                    saveMessSystem(dataNewChat.id, curSignIn.fullName + ' đã duyệt ' + member.fullName);
+                }
                 Alert.alert('Duyệt thành viên thành công');
                 navigation.navigate('ChiTietTinNhan');
             }
         } else Alert.alert('Vui lòng chọn người cần duyệt');
     };
 
-    //console.log(listChecked);
+    const saveMessSystem = async (id, text) => {
+        var newMessSave = {
+            title: text,
+            authorID: curSignIn.id,
+            seen: [{ id: curSignIn.id, seenAt: Date.now() }],
+            type_mess: 'system',
+            idChat: id,
+            status: 1,
+            file: [],
+        };
+        if (!!newMessSave) {
+            var messData = await addMess(newMessSave, accessToken, axiosJWT);
+            socket.emit('sendMessage', {
+                receiverId: id,
+                contentMessage: messData,
+            });
+        }
+    };
 
     const renderBanBe = () => {
         let arrAdmin = listMember.filter((member) => {

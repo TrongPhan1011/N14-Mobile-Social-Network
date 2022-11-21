@@ -4,11 +4,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMessageById } from '../../services/messageService';
 import { addUserSeenToMess } from '../../services/messageService';
+import { getUserById } from '../../services/userService';
 import { formatTimeAuto, getLastName } from '../../lib/formatString';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import avatarDefault from '../../assets/avatarDefault.png';
 import socket from '../../utils/getSocketIO';
 import { selectGroup } from '../../redux/Slice/sidebarChatSlice';
+import Avatar from '../Avatar/Avatar';
 
 export default memo(function itemChat({ groupChat, userLoginData }) {
     const navigation = useNavigation();
@@ -20,6 +22,9 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
     const curSignIn = useSelector((state) => state.signIn.userLogin);
     const [itemDataChat, setItemDataChat] = useState();
     const [seenState, setSeenState] = useState(false);
+    const [currentInbox, setCurrentInbox] = useState();
+    const [memberFetch, setMemberFetch] = useState();
+    const [onlineValue, setOnlineValue] = useState('hidden');
     var AxiosJWT = getAxiosJWT(dispatch, currAuth);
     var arrIdMessage = groupChat.message;
     var bgSeen = 'bg-lcn-blue-4';
@@ -35,6 +40,21 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
             }
         };
         getMessageLast();
+
+        var userChatOther = null;
+        const checkOnlineChat = async () => {
+            if (groupChat.typeChat === 'inbox') {
+                if (groupChat.member[0] !== userLoginData.id) {
+                    userChatOther = await getUserById(groupChat.member[0], accessToken, AxiosJWT);
+                } else userChatOther = await getUserById(groupChat.member[1], accessToken, AxiosJWT);
+
+                setCurrentInbox(userChatOther);
+                if (userChatOther.statusOnline) {
+                    setOnlineValue('');
+                } else setOnlineValue('hidden');
+            }
+        };
+        checkOnlineChat();
     }, []);
 
     useEffect(() => {
@@ -47,7 +67,7 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
                 setSeenState({
                     textName: ' font-semibold ',
                     textChatTitle: ' text-gray-900 ',
-                    circleSeen: '',
+                    circleSeen: '  ',
                 });
             } else {
                 setSeenState({
@@ -57,30 +77,25 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
                 });
             }
         };
+
         const getInforMessageLast = () => {
             var titleMess = '',
                 messCreatedAt = '',
-                lastNameAuthor = 'Bạn';
+                lastNameAuthor = '';
             if (!!messageLast && messageLast.idChat === groupChat?.id) {
                 titleMess = messageLast.title || 'Đã gửi file';
                 messCreatedAt = formatTimeAuto(messageLast.createdAt) || '';
                 var fullNameAuthor = messageLast.authorID.fullName || '';
-                if (messageLast.authorID.id === curSignIn.id) {
-                    lastNameAuthor = 'Bạn';
+                if (messageLast.authorID.id === curSignIn.id && messageLast.type_mess !== 'system') {
+                    lastNameAuthor = 'Bạn:';
                 } else {
-                    lastNameAuthor = getLastName(fullNameAuthor);
+                    lastNameAuthor = getLastName(fullNameAuthor) + ':';
+                }
+                if (messageLast.type_mess === 'system') {
+                    lastNameAuthor = '';
                 }
                 getClassSeen();
             }
-            // var arrUserSeen = messageLast?.seen;
-            // var seen = checkSeen(arrUserSeen, userLoginData.id);
-            //css đã xem
-            // if (seen) {
-            //     setSeenState({
-            //         bgSeen: 'hidden',
-            //         textSeen: 'text-gray-900',
-            //     });
-            // }
 
             return {
                 authorName: lastNameAuthor || '',
@@ -156,28 +171,46 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
                     <TouchableHighlight activeOpacity={0.6} underlayColor="#C6E4FF" onPress={handleChiTietTinNhan}>
                         <View className=" mt-1 rounded-xl p-4 pl-6 pr-6 flex flex-row items-center">
                             <View className="overflow-hidden">
-                                <Image
+                                {/* <Image
                                     style={{ width: 60, height: 60, resizeMode: 'contain' }}
                                     className="rounded-full"
                                     source={img}
-                                ></Image>
-                                <View className="w-3 h-3 bg-lcn-green-1 rounded-full absolute right-1 bottom-0 "></View>
+                                ></Image> */}
+                                <Avatar
+                                    src={
+                                        groupChat.typeChat === 'group'
+                                            ? groupChat.avatar
+                                            : currentInbox?.profile?.urlAvartar
+                                    }
+                                    typeAvatar={groupChat.typeChat === 'group' ? 'group' : 'inbox'}
+                                    idGroup={groupChat.id}
+                                />
+                                <View
+                                    className={
+                                        'w-3 h-3 bg-lcn-green-1 rounded-full absolute right-1 bottom-0 ' + onlineValue
+                                    }
+                                ></View>
                             </View>
-                            <View className="ml-4 w-4/6">
+                            <View className="ml-4 w-7/12">
                                 <Text className="font-semibold text-xl text-lcn-blue-5">{groupChat.name}</Text>
                                 <View className="flex flex-row">
                                     <Text className={'text-sm ' + seenState.textChatTitle}>
-                                        {itemDataChat.authorName}:
+                                        {itemDataChat.authorName}
                                     </Text>
                                     <Text className={'text-sm ml-1 ' + seenState.textChatTitle}>
                                         {itemDataChat.title}
                                     </Text>
                                 </View>
                             </View>
-                            <View className="">
-                                <Text></Text>
+                            <View className="absolute right-6">
+                                <Text className="mt-3"></Text>
                                 <View>
-                                    <View className={'w-4 h-4 rounded-full ml-5 ' + seenState?.circleSeen}></View>
+                                    <View
+                                        className={
+                                            'w-4 h-4 rounded-full bg-lcn-blue-4 absolute right-0 -top-4 ' +
+                                            seenState?.circleSeen
+                                        }
+                                    ></View>
                                     <Text className={'text-sm ' + seenState?.textChatTitle}>
                                         {itemDataChat.messCreatedAt}
                                     </Text>

@@ -44,6 +44,9 @@ import QuanTriGroup from './screens/QuanTriGroup';
 import XoaThanhVien from './screens/XoaThanhVien';
 import DuyetThanhVien from './screens/DuyetThanhVien';
 import XoaQuyenQuanTri from './screens/XoaQuyenQuanTri';
+import FileGroup from './screens/FileGroup';
+import SearchTinNhan from './screens/SearchTinNhan';
+import ForwardMessage from './screens/ForwardMessage';
 import Otp from './screens/Otp';
 
 export default function App() {
@@ -342,6 +345,30 @@ export default function App() {
                     <Stack.Screen
                         name="XoaQuyenQuanTri"
                         component={XoaQuyenQuanTri}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="FileGroup"
+                        component={FileGroup}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="SearchTinNhan"
+                        component={SearchTinNhan}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="ForwardMessage"
+                        component={ForwardMessage}
                         options={{
                             headerShown: false,
                             tabBarShowLabel: false,

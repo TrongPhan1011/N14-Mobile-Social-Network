@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView } from 'react-native';
+import { View, Text, SafeAreaView, Alert } from 'react-native';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -14,8 +14,14 @@ import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import { findFriend } from '../../redux/Slice/friendSlice';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from '../../components/Button/button';
+import { getChatByIdMember, findInbox } from '../../services/chatService';
+import { selectGroup } from '../../redux/Slice/sidebarChatSlice';
+import { useNavigation } from '@react-navigation/native';
 const Tab = createMaterialTopTabNavigator();
+
 function ProfileScreen({ route }) {
+    const navigation = useNavigation();
+    const userLoginData = useSelector((state) => state.signIn.userLogin);
     const userId = route.params.userId;
     const dispatch = useDispatch();
     const [userProfile, setUserProfile] = useState({});
@@ -23,6 +29,7 @@ function ProfileScreen({ route }) {
     const [birthday, setBirthday] = useState();
     const [active, setActive] = useState('');
     const [inRelationship, setInRelationship] = useState('');
+    const [arrayGroup, setArrayGroup] = useState([]);
     var currAuth = useSelector((state) => state.auth);
     var currAccount = currAuth.currentUser;
     var accessToken = currAccount.accessToken;
@@ -56,6 +63,12 @@ function ProfileScreen({ route }) {
         getProfile();
     }, [userId]);
 
+    const handleInbox = async () => {
+        var inboxChat = await findInbox(userLoginData.id, userProfile.id, accessToken, axiosJWT);
+        dispatch(selectGroup(inboxChat));
+        navigation.navigate('ChiTietTinNhan');
+    };
+
     return (
         <>
             <SafeAreaView className="bg-white">
@@ -71,6 +84,7 @@ function ProfileScreen({ route }) {
                     <Button
                         classNames={'flex flex-row w-25 h-10 rounded-[50px] border border-lcn-green-1'}
                         className={'bg-lcn-blue-2'}
+                        onPress={handleInbox}
                     >
                         <Ionicons name="chatbubble-outline" size={20} color="#66DA53"></Ionicons>
                         <Text className={'text-lcn-green-1 font-semibold text-sm ml-2'}>Nhắn tin</Text>

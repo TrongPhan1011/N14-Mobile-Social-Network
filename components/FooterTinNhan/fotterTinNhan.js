@@ -132,34 +132,13 @@ export default memo(function fotterTinNhan({ type }) {
             quality: 1,
         });
 
-        //console.log(result);
-        // setListFileIMG((prev) => [...prev, ...result]);
         if (!!result.selected) arrImg.push(...result.selected);
         else arrImg.push(result);
         //console.log(arrImg);
 
         if (!result.cancelled) {
             try {
-                //for (result of arrImg) uploadImage(result);
-                //for (var i = 0; i < arrImg.length; i++)
                 uploadImage();
-                // arrImg.map((item, index) => {
-                //     uploadImage(item[index]);
-                // });
-                // var typeFile = '';
-                // if (result.type === 'image' || result.type === 'jpeg') typeFile = 'image/jpeg';
-                // else if (result.type === 'video') typeFile = 'video/mp4';
-                // else typeFile = 'doc';
-                // var photo = {
-                //     uri: result.uri,
-                //     type: typeFile,
-                //     name: 'file',
-                // };
-                // const formDataIMG = new FormData();
-                // formDataIMG.append('images', photo);
-                // var arrURLImg = await uploadFileImg(formDataIMG);
-                // var newMessIMG = getNewMess('', 'img/video', arrURLImg);
-                // await saveMess(newMessIMG.newMessSave, newMessIMG.newMess);
             } catch (error) {
                 console.log(error);
             }
@@ -224,23 +203,6 @@ export default memo(function fotterTinNhan({ type }) {
             alert('Upload failed');
         }
     };
-
-    // const uploadImage = async (filename, img) => {
-    //     Auth.currentCredentials();
-    //     try {
-    //         const response = await Storage.put(filename, img, {
-    //             level: 'public',
-    //             contentType: 'image/jpeg',
-    //             progressCallback(progress) {
-    //                 setLoading(progress);
-    //             },
-    //         });
-    //         return response.key;
-    //     } catch (error) {
-    //         console.log(error);
-    //         return error.response;
-    //     }
-    // };
 
     const setLoading = (progress) => {
         const calculated = parseInt((progress.loaded / progress.total) * 100);

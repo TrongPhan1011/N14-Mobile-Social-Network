@@ -1,27 +1,74 @@
-import { View, Text, Modal, StyleSheet, Pressable, Alert, TouchableOpacity } from 'react-native';
+import {
+    View,
+    Text,
+    Modal,
+    StyleSheet,
+    Pressable,
+    Alert,
+    TouchableOpacity,
+    SafeAreaView,
+    TouchableHighlight,
+} from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import React, { useState } from 'react';
-
-export default function MessageModal({ handleCloseModal, handleOpenModal, modalVisible }) {
+// const handleThuHoi = async () => {
+//     var result = await ThuHoiTinNhan(groupChatSelect.id, messageData.id, accessToken, AxiosJWT);
+//     if (result) {
+//         setHiddenModal('hidden');
+//     }
+// };
+export default function MessageModal({
+    handleCloseModal,
+    handleOpenModal,
+    modalVisible,
+    handleThuHoi,
+    handleRemoveWithUser,
+    handleForward,
+}) {
     return (
-        <View className="relative">
-            <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={handleCloseModal}>
-                <TouchableOpacity activeOpacity={1} onPressOut={handleCloseModal}>
-                    <View className=" h-full w-full flex flex-1 items-center justify-center">
-                        <View className="bg-white shadow-md p-2 ">
-                            <TouchableOpacity
-                                onPress={() => {
-                                    Alert.alert('oo');
-                                }}
+        <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={handleCloseModal}>
+            <TouchableOpacity activeOpacity={0.5} onPressOut={handleCloseModal} className="">
+                <View
+                    className={'w-full h-full flex items-center justify-center  '}
+                    style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+                >
+                    <View className="w-60 bg-white border border-lcn-blue-4 rounded-2xl relative">
+                        <View className="flex flex-col p-2 ">
+                            <TouchableHighlight
+                                activeOpacity={0.6}
+                                underlayColor="#C6E4FF"
+                                className="p-2 "
+                                onPress={handleForward}
                             >
-                                <Text>Test</Text>
-                            </TouchableOpacity>
+                                <View className="flex flex-row items-center">
+                                    <Text className="text-center text-lcn-blue-5 font-medium">Chuyển tiếp</Text>
+                                </View>
+                            </TouchableHighlight>
+                            <TouchableHighlight
+                                activeOpacity={0.6}
+                                underlayColor="#C6E4FF"
+                                className="p-2 "
+                                onPress={handleThuHoi}
+                            >
+                                <View className="flex flex-row items-center">
+                                    <Text className="text-center font-medium text-red-500">Xóa với mọi người</Text>
+                                </View>
+                            </TouchableHighlight>
+                            <TouchableHighlight
+                                activeOpacity={0.6}
+                                underlayColor="#C6E4FF"
+                                className="p-2"
+                                onPress={handleRemoveWithUser}
+                            >
+                                <View className="flex flex-row items-center">
+                                    <Text className="text-center font-medium text-red-500">Xóa chỉ mình tôi</Text>
+                                </View>
+                            </TouchableHighlight>
                         </View>
                     </View>
-                </TouchableOpacity>
-            </Modal>
-            {/* <Pressable onPress={handleOpenModal}>
-                <Text>Show Modal</Text>
-            </Pressable> */}
-        </View>
+                </View>
+            </TouchableOpacity>
+        </Modal>
     );
 }

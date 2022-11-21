@@ -4,7 +4,7 @@ import HeaderQlGroup from '../../components/HeaderQLGroup';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import ItemBanBeGroup from '../../components/ItemBanBeGroup';
-import { getAllFriend } from '../../services/userService';
+import { getAllFriend, getUserById } from '../../services/userService';
 import { useDispatch, useSelector } from 'react-redux';
 import { inCludesString } from '../../lib/regexString';
 import { Checkbox } from 'react-native-paper';
@@ -13,6 +13,8 @@ import avatarDefault from '../../assets/avatarDefault.png';
 import { groupChatSelect, selectGroup } from '../../redux/Slice/sidebarChatSlice';
 import { useNavigation } from '@react-navigation/native';
 import { removeMemberToChat, getMemberOfChat } from '../../services/chatService';
+import socket from '../../utils/getSocketIO';
+import { addMess } from '../../services/messageService';
 
 const XoaThanhVien = () => {
     const dispatch = useDispatch();
@@ -48,6 +50,10 @@ const XoaThanhVien = () => {
                 dispatch(selectGroup(dataNewChat));
                 setListChecked([]);
                 setListMember([]);
+                for (let memberId of listChecked) {
+                    var member = await getUserById(memberId, accessToken, axiosJWT);
+                    saveMessSystem(dataNewChat.id, member.fullName + ' đã bị xoá khỏi nhóm');
+                }
                 Alert.alert('Xóa thành viên thành công');
                 navigation.navigate('ChiTietTinNhan');
             }
@@ -68,7 +74,25 @@ const XoaThanhVien = () => {
         setListMember(temp);
     };
 
-    //console.log(listChecked);
+    const saveMessSystem = async (id, text) => {
+        var newMessSave = {
+            title: text,
+            authorID: curSignIn.id,
+            seen: [{ id: curSignIn.id, seenAt: Date.now() }],
+            type_mess: 'system',
+            idChat: id,
+            status: 1,
+            file: [],
+        };
+        if (!!newMessSave) {
+            var messData = await addMess(newMessSave, accessToken, axiosJWT);
+            socket.emit('sendMessage', {
+                receiverId: id,
+                contentMessage: messData,
+            });
+        }
+    };
+
     const renderBanBe = () => {
         let arrAdmin = listMember.filter((member) => {
             if (groupChatSelect.adminChat.includes(member.id) && inCludesString(searchValue, member.fullName)) {
@@ -91,52 +115,35 @@ const XoaThanhVien = () => {
             }
 
             return (
-                // <ItemBanBeGroup
-                //     key={item._id}
-                //     userId={item._id}
-                //     name={item.fullName}
-                //     avt={img}
-                //     waiting
-                //     friend
-                //     listChecked={listChecked}
-                // />
                 <View>
                     {item.isAdmin ? (
-                        <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl" key={item._id}>
+                        <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl" key={item.id + index}>
                             <TouchableHighlight
                                 activeOpacity={0.6}
                                 underlayColor="#C6E4FF"
-                                key={item._id}
                                 onPress={() => getAllChecked(item, index)}
                             >
-                                <View className="flex flex-row bg-white  p-2 " key={item._id}>
-                                    <View className="flex flex-row items-center w-10/12" key={item._id}>
-                                        <View key={item._id}>
+                                <View className="flex flex-row bg-white  p-2 ">
+                                    <View className="flex flex-row items-center w-10/12">
+                                        <View>
                                             <Image
                                                 style={{ height: 40, width: 40, resizeMode: 'contain' }}
                                                 className="rounded-full ml-4"
                                                 source={img}
-                                                key={item._id}
                                             ></Image>
                                         </View>
 
-                                        <View className="flex flex-col" key={item._id}>
-                                            <Text className="ml-3 text-lg font-semibold text-lcn-blue-5" key={item._id}>
+                                        <View className="flex flex-col">
+                                            <Text className="ml-3 text-lg font-semibold text-lcn-blue-5">
                                                 {item.fullName}
                                             </Text>
-                                            <Text className="ml-3 text-gray-600" key={item._id}>
-                                                Quản trị viên
-                                            </Text>
+                                            <Text className="ml-3 text-gray-600">Quản trị viên</Text>
                                         </View>
                                     </View>
-                                    <View
-                                        className={' flex flex-row justify-end items-center w-2/12 pr-4'}
-                                        key={item._id}
-                                    >
+                                    <View className={' flex flex-row justify-end items-center w-2/12 pr-4'}>
                                         <Checkbox
                                             status={item.isChecked ? 'checked' : 'unchecked'}
                                             onPress={() => getAllChecked(item, index)}
-                                            key={item._id}
                                             testID={item.id}
                                         />
                                     </View>
@@ -144,53 +151,35 @@ const XoaThanhVien = () => {
                             </TouchableHighlight>
                         </View>
                     ) : (
-                        <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl" key={item._id}>
+                        <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl" key={item.id}>
                             <TouchableHighlight
                                 activeOpacity={0.6}
                                 underlayColor="#C6E4FF"
-                                key={item._id}
                                 onPress={() => getAllChecked(item, index)}
                             >
-                                <View className="flex flex-row bg-white  p-2 " key={item._id}>
-                                    <View className="flex flex-row items-center w-10/12" key={item._id}>
-                                        <View key={item._id}>
+                                <View className="flex flex-row bg-white  p-2 ">
+                                    <View className="flex flex-row items-center w-10/12">
+                                        <View>
                                             <Image
                                                 style={{ height: 40, width: 40, resizeMode: 'contain' }}
                                                 className="rounded-full ml-4"
                                                 source={img}
-                                                key={item._id}
                                             ></Image>
                                         </View>
 
-                                        <View className="flex flex-col" key={item._id}>
-                                            <Text className="ml-3 text-lg font-semibold text-lcn-blue-5" key={item._id}>
+                                        <View className="flex flex-col">
+                                            <Text className="ml-3 text-lg font-semibold text-lcn-blue-5">
                                                 {item.fullName}
                                             </Text>
-                                            <Text className="ml-3 text-gray-600" key={item._id}>
-                                                Thành viên
-                                            </Text>
+                                            <Text className="ml-3 text-gray-600">Thành viên</Text>
                                         </View>
                                     </View>
-                                    <View
-                                        className={' flex flex-row justify-end items-center w-2/12 pr-4'}
-                                        key={item._id}
-                                    >
+                                    <View className={' flex flex-row justify-end items-center w-2/12 pr-4'}>
                                         <Checkbox
                                             //status={tick ? 'checked' : 'unchecked'}
                                             status={item.isChecked ? 'checked' : 'unchecked'}
                                             value={item.id}
                                             onPress={() => getAllChecked(item, index)}
-                                            //     () => {
-                                            //     setTick(!tick);
-                                            //     if (!tick) setListChecked((prev) => [...prev, item._id]);
-                                            //     else {
-                                            //         var arrRemove = listChecked.filter((item) => {
-                                            //             !item?.includes(item);
-                                            //         });
-                                            //         setListChecked(arrRemove);
-                                            //     }
-                                            // }}
-                                            key={item._id}
                                             testID={item.id}
                                         />
                                     </View>

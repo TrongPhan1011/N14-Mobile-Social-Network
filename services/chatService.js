@@ -169,3 +169,79 @@ export const leaveToChat = async (idChat, idUser, accessToken, axiosJWT) => {
         return null;
     }
 };
+export const addGroupChat = async (newGroup, accessToken, axiosJWT) => {
+    try {
+        const res = await axiosJWT.post('/chat/', newGroup, {
+            headers: { token: `baerer ${accessToken}` },
+        });
+        if (!!res) {
+            return res.data;
+        }
+        return null;
+    } catch (error) {
+        return null;
+    }
+};
+
+export const findInbox = async (idUser, idFriend, accessToken, axiosJWT) => {
+    try {
+        // console.log(idUser);
+        const res = await axiosJWT.get('/chat/idInbox', {
+            params: {
+                idUser: idUser,
+                idFriend: idFriend,
+            },
+            headers: { token: `baerer ${accessToken}` },
+        });
+        if (!!res) {
+            return res.data;
+        }
+        return null;
+    } catch (error) {
+        return null;
+    }
+};
+
+export const removeChat = async (idChat, curUserId, accessToken, axiosJWT) => {
+    try {
+        console.log(curUserId);
+        const res = await axiosJWT.put(
+            '/chat/removeChat/' + idChat,
+            {},
+            {
+                params: {
+                    idCurUser: curUserId,
+                },
+                headers: { token: `baerer ${accessToken}` },
+            },
+        );
+        if (!!res) {
+            return res.data;
+        }
+        return null;
+    } catch (error) {
+        return null;
+    }
+};
+
+export const changeNameChat = async (idChat, newNameChat, idUser, accessToken, axiosJWT) => {
+    try {
+        const res = await axiosJWT.put(
+            '/chat/changeNameChat/' + idChat,
+            {},
+            {
+                params: {
+                    name: newNameChat,
+                    idUser: idUser,
+                },
+                headers: { token: `baerer ${accessToken}` },
+            },
+        );
+        if (!!res) {
+            return res.data;
+        }
+        return null;
+    } catch (error) {
+        return null;
+    }
+};

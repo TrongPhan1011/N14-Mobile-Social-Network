@@ -21,16 +21,19 @@ export default function HeaderSearch() {
                         <FontAwesome name="search" size={20} color="#47A9FF" />
                     </View>
 
-                    <TextInput
-                        className="w-5/6 ml-2"
-                        placeholder="Tìm kiếm"
-                        placeholderTextColor={'#47A9FF'}
-                    ></TextInput>
+                    <Pressable className="w-5/6" onPress={() => navigation.navigate('SearchTinNhan')}>
+                        <TextInput
+                            className="w-full ml-2"
+                            placeholder="Tìm kiếm"
+                            placeholderTextColor={'#47A9FF'}
+                            onPressIn={() => navigation.navigate('SearchTinNhan')}
+                        ></TextInput>
+                    </Pressable>
 
-                    <View className="right-0">
-                        <Feather
-                            name="plus"
-                            size={20}
+                    <View className="right-2">
+                        <FontAwesome
+                            name="pencil-square-o"
+                            size={25}
                             color="#47A9FF"
                             onPress={() => navigation.navigate('ThemMoiChat')}
                         />
