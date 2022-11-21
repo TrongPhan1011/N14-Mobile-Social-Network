@@ -27,7 +27,7 @@ export default function ItemBanBeProfile({}) {
 
     const userId = profile?.id;
 
-    // console.log(user);
+    // console.log(userId);
 
     const dispatch = useDispatch();
     const [userFriend, setUserFriend] = useState([]);
