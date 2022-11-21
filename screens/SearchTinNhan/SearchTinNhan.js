@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
-import useDebounce from '../../hook/useDebounce';
+import useDebounce from '../../hooks/useDebounce';
 import { getUserByTextSearch } from '../../services/userService';
 import ItemSearchTinNhanGroup from '../../components/ItemSearchTinNhanGroup';
 import ItemSearchTinNhan from '../../components/ItemSearchTinNhan';

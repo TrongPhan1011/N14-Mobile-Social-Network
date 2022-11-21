@@ -10,6 +10,7 @@ npm-debug.*
 *.orig.*
 web-build/
 utils/env.js
+utils/getSocketIO.js
 
 # macOS
 .DS_Store

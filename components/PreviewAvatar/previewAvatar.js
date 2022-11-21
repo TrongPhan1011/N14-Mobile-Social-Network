@@ -13,6 +13,7 @@ import {
     Dimensions,
     ImageStyle,
     ImageResizeMode,
+    Alert,
 } from 'react-native';
 import React, { useState, useEffect, useRef, memo } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -26,12 +27,41 @@ import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import { uploadFileImg, uploadFileBase64 } from '../../services/fileService';
 import Button from '../Button/button';
-const ChiTietHinhAnh = () => {
+import { updateAvatar, updateBanner } from '../../services/userService';
+import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
+const PreviewAvatar = ({ route }) => {
+    var arrImage = route.params.arrayImage;
+    var banner = route.params.banner;
+    console.log(banner);
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    // const [banner, setBanner] = useState(false);
+    var currAuth = useSelector((state) => state.auth);
+    var currAccount = currAuth.currentUser;
+    var axiosJWT = getAxiosJWT(dispatch, currAccount);
+
+    var accessToken = currAccount.accessToken;
+    const [selectedFile, setSelectedFile] = useState();
     const arrayImage = useSelector((state) => state.sidebarChatSlice.arrayImage);
     const [urlImage, setUrlImage] = useState(arrayImage[0]);
-    var arrImg = [];
+    var curSignIn = useSelector((state) => state.signIn);
+    var curUser = curSignIn.userLogin;
+
+    // const [preview, setPreview] = useState(ava);
+    // var arrImage = arrImg;
+    useEffect(() => {
+        if (!selectedFile) {
+            // setPreview(ava);
+            // setBanner(false);
+            return;
+        }
+
+        const objectUrl = URL.createObjectURL(selectedFile);
+        setPreview(objectUrl);
+
+        // free memory when ever this component is unmounted
+        return () => URL.revokeObjectURL(objectUrl);
+    }, [selectedFile]);
     useEffect(() => {
         (async () => {
             if (Constants.platform.ios) {
@@ -44,6 +74,30 @@ const ChiTietHinhAnh = () => {
         })();
     }, []);
     // const [border, setBorder] = useState('');
+    // const saveImg = async () => {
+    //     var listFileImgPreview = [];
+
+    //     listFileImgPreview.push(selectedFile);
+    //     const formDataFile = new FormData();
+
+    //     formDataFile.append('images', listFileImgPreview[0]);
+    //     console.log(listFileImgPreview);
+    //     var urlIMG = await uploadFileImg(formDataFile);
+    //     console.log(urlIMG);
+    //     if (banner === true) {
+    //         const updateImg = await updateBanner(curUser.id, urlIMG[0].path, accessToken, axiosJWT, dispatch);
+    //         if (!!updateImg) {
+    //             alert('Đổi ảnh thành công');
+    //             window.location.reload(false);
+    //         }
+    //     } else {
+    //         const updateImg = await updateAvatar(curUser.id, urlIMG[0].path, accessToken, axiosJWT, dispatch);
+    //         if (!!updateImg) {
+    //             alert('Đổi ảnh thành công');
+    //             window.location.reload(false);
+    //         }
+    //     }
+    // };
     var singleImage = '';
     if (arrayImage.length < 2) singleImage = ' hidden';
 
@@ -76,88 +130,59 @@ const ChiTietHinhAnh = () => {
         );
     };
 
-    const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            //allowsEditing: true,
-            allowsMultipleSelection: true,
-            //base64: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        //console.log(result);
-        // setListFileIMG((prev) => [...prev, ...result]);
-        if (!!result.selected) arrImg.push(...result.selected);
-        else arrImg.push(result);
-        //console.log(arrImg);
-
-        if (!result.cancelled) {
-            try {
-                //for (result of arrImg) uploadImage(result);
-                //for (var i = 0; i < arrImg.length; i++)
-                uploadImage();
-                // arrImg.map((item, index) => {
-                //     uploadImage(item[index]);
-                // });
-                // var typeFile = '';
-                // if (result.type === 'image' || result.type === 'jpeg') typeFile = 'image/jpeg';
-                // else if (result.type === 'video') typeFile = 'video/mp4';
-                // else typeFile = 'doc';
-                // var photo = {
-                //     uri: result.uri,
-                //     type: typeFile,
-                //     name: 'file',
-                // };
-                // const formDataIMG = new FormData();
-                // formDataIMG.append('images', photo);
-                // var arrURLImg = await uploadFileImg(formDataIMG);
-                // var newMessIMG = getNewMess('', 'img/video', arrURLImg);
-                // await saveMess(newMessIMG.newMessSave, newMessIMG.newMess);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    };
     const uploadImage = async () => {
-        if (arrImg.length === 1) {
-            var typeFile = '';
-            if (arrImg[0].type === 'image' || arrImg[0].type === 'jpeg') typeFile = 'image/jpeg';
-            else if (arrImg[0].type === 'video') typeFile = 'video/mp4';
-            else typeFile = 'doc';
+        console.log(arrImage[0]);
+        if (arrImage.length === 1) {
+            var typeFile = 'image/jpeg';
+            // if (arrImage[0].type === 'image' || arrImage[0].type === 'jpeg') typeFile = 'image/jpeg';
+            // else if (arrImage[0].type === 'video') typeFile = 'video/mp4';
+            // else typeFile = 'doc';
             var photo = {
-                uri: arrImg[0].uri,
+                uri: arrImage[0],
                 type: typeFile,
                 name: 'file',
             };
             const formDataIMG = new FormData();
 
             formDataIMG.append('images', photo);
-            //console.log(formDataIMG);
+            console.log(photo);
             var arrURLImg = await uploadFileImg(formDataIMG);
-            var newMessIMG = getNewMess('', 'img/video', arrURLImg);
-            await saveMess(newMessIMG.newMessSave, newMessIMG.newMess);
-            //formDataIMG.delete();
-        } else {
-            const formDataIMGGroup = new FormData();
-            for (var i = 0; i < arrImg.length; i++) {
-                var typeFile = '';
-                if (arrImg[i].type === 'image' || arrImg[i].type === 'jpeg') typeFile = 'image/jpeg';
-                else if (arrImg[i].type === 'video') typeFile = 'video/mp4';
-                else typeFile = 'doc';
-                var photo = {
-                    uri: arrImg[i].uri,
-                    type: typeFile,
-                    name: 'file',
-                };
 
-                formDataIMGGroup.append('images', photo);
+            //console.log(arrURLImg);
+            // var newMessIMG = getNewMess('', 'img/video', arrURLImg);
+            // await saveMess(newMessIMG.newMessSave, newMessIMG.newMess);
+            //formDataIMG.delete();
+
+            if (banner === true) {
+                const updateImg = await updateBanner(curUser.id, arrURLImg[0].path, accessToken, axiosJWT, dispatch);
+                if (!!updateImg) {
+                    Alert.alert('Đổi ảnh bìa thành công');
+                }
+            } else {
+                const updateImg = await updateAvatar(curUser.id, arrURLImg[0].path, accessToken, axiosJWT, dispatch);
+                if (!!updateImg) {
+                    Alert.alert('Thành công');
+                }
             }
+            // } else {
+            //     const formDataIMGGroup = new FormData();
+            //     for (var i = 0; i < arrImg.length; i++) {
+            //         var typeFile = '';
+            //         if (arrImg[i].type === 'image' || arrImg[i].type === 'jpeg') typeFile = 'image/jpeg';
+            //         else if (arrImg[i].type === 'video') typeFile = 'video/mp4';
+            //         else typeFile = 'doc';
+            //         var photo = {
+            //             uri: arrImg[i].uri,
+            //             type: typeFile,
+            //             name: 'file',
+            //         };
+
+            //         formDataIMGGroup.append('images', photo);
+            //     }
             //console.log(formDataIMGGroup);
-            var arrURLImgGroup = await uploadFileImg(formDataIMGGroup);
-            var newMessIMGroup = getNewMess('', 'img/video', arrURLImgGroup);
-            await saveMess(newMessIMGroup.newMessSave, newMessIMGroup.newMess);
+            // var arrURLImgGroup = await uploadFileImg(formDataIMGGroup);
+            // var newMessIMGroup = getNewMess('', 'img/video', arrURLImgGroup);
+            // await saveMess(newMessIMGroup.newMessSave, newMessIMGroup.newMess);
             //arrImg = [];
             //formDataIMG.delete();
         }
@@ -197,7 +222,7 @@ const ChiTietHinhAnh = () => {
                             <Text>Đã xóa yêu cầu</Text>
                         </Button>
                     </Pressable> */}
-                    <Pressable className="w-1/6 ">
+                    {/* <Pressable className="w-1/6 ">
                         <Feather
                             name="download"
                             size={30}
@@ -210,7 +235,7 @@ const ChiTietHinhAnh = () => {
 
                     <Pressable className="">
                         <Feather name="more-vertical" size={30} color="#47A9FF" onPress={pickImage} />
-                    </Pressable>
+                    </Pressable> */}
                 </View>
 
                 <View style={{ flex: 1, overflow: 'hidden' }} className="flex-1 items-center justify-center bg-white">
@@ -249,9 +274,19 @@ const ChiTietHinhAnh = () => {
                 <View className={'h-24 bg-white items-center justify-center' + singleImage}>
                     <View className="h-16 w-72 items-center justify-center">{renderImage()}</View>
                 </View>
+                <View className={'items-center justify-center mb-5'}>
+                    <Button
+                        classNames={
+                            ' w-40 text-gray-500 border-gray-500 m-0 rounded-2xl border h-10 bg-white flex items-center justify-center'
+                        }
+                        onPress={uploadImage}
+                    >
+                        <Text>Lưu thay đổi</Text>
+                    </Button>
+                </View>
             </View>
         </SafeAreaView>
     );
 };
 
-export default ChiTietHinhAnh;
+export default PreviewAvatar;

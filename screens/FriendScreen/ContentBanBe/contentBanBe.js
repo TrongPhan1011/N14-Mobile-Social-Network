@@ -36,35 +36,36 @@ export default function ContentBanBe({ type }) {
     //     getListWaiting();
     // }, []);
     var Comp = ItemBanBe;
-    if (type === 'choXacNhan') {
-        Comp = ItemChoXacNhan;
-    } else if (type === 'chan') {
-        Comp = ItemChan;
-    }
+    // if (type === 'choXacNhan') {
+    //     Comp = ItemChoXacNhan;
+    // } else if (type === 'chan') {
+    //     Comp = ItemChan;
+    // }
 
     const handleRenderItem = () => {
         var listAdd = listAddFriend;
         delete listAdd[0];
         if (listFriend.length > 0 && Comp === ItemBanBe) {
             dispatch(findSuccess(listFriend[0]));
+
             return listFriend.map((item) => {
                 return <Comp key={item._id} userId={item._id} name={item.fullName} avt={item?.profile?.urlAvartar} />;
             });
         }
-        if (listAdd.length > 0 && type === 'choXacNhan') {
-            dispatch(findSuccess(listAdd[0]));
-            return listAdd.map((item) => {
-                return (
-                    <Comp
-                        key={item._id}
-                        friendName={item.fullName}
-                        friendId={item._id}
-                        accessToken={accessToken}
-                        axiosJWT={axiosJWT}
-                    />
-                );
-            });
-        }
+        // if (listAdd.length > 0 && type === 'choXacNhan') {
+        //     dispatch(findSuccess(listAdd[0]));
+        //     return listAdd.map((item) => {
+        //         return (
+        //             <Comp
+        //                 key={item._id}
+        //                 friendName={item.fullName}
+        //                 friendId={item._id}
+        //                 accessToken={accessToken}
+        //                 axiosJWT={axiosJWT}
+        //             />
+        //         );
+        //     });
+        // }
     };
 
     return (

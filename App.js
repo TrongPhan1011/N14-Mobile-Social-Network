@@ -47,6 +47,7 @@ import XoaQuyenQuanTri from './screens/XoaQuyenQuanTri';
 import FileGroup from './screens/FileGroup';
 import SearchTinNhan from './screens/SearchTinNhan';
 import ForwardMessage from './screens/ForwardMessage';
+import PreviewAvatar from './components/PreviewAvatar';
 import Otp from './screens/Otp';
 
 export default function App() {
@@ -279,6 +280,14 @@ export default function App() {
                         }}
                     />
                     <Stack.Screen
+                        name="PreviewAvatar"
+                        component={PreviewAvatar}
+                        options={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                        }}
+                    />
+                    <Stack.Screen
                         name="QuanLyNhom"
                         component={QuanLyNhom}
                         options={{
@@ -286,6 +295,7 @@ export default function App() {
                             tabBarShowLabel: false,
                         }}
                     />
+
                     <Stack.Screen
                         name="ThemMoiChat"
                         component={ThemMoiChat}

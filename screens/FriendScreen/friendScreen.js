@@ -6,15 +6,45 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import BanBe from './ContentBanBe/contentBanBe';
 import ChoXacNhan from './ContentChoXacNhan/contentChoXacNhan';
 import { useLocation } from 'react-router-dom';
-import { useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect, memo } from 'react';
+import HeaderSearchFriend from '../../components/HeaderSearchFriend';
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function FriendScreen() {
+    const dispatch = useDispatch();
+    const [count, setCount] = useState(0);
+    const [countXN, setCountXN] = useState(0);
+    const curSignIn = useSelector((state) => state.signIn.userLogin);
+    // var curUser = curSignIn.userLogin;
+    console.log(curSignIn);
+    useEffect(() => {
+        setCount(0);
+        for (var i = 0; i <= curSignIn.friend.length; i++) {
+            if (curSignIn.friend[i]?.status === 1) {
+                setCount((prev) => prev + 1);
+            }
+        }
+    }, [curSignIn]);
+
+    useEffect(() => {
+        setCountXN(0);
+        for (var i = 0; i <= curSignIn.friend.length; i++) {
+            if (curSignIn.friend[i]?.status === 0) {
+                const id = curSignIn.friend[i - 1].id;
+                if (curSignIn.friend[i].id != id) {
+                    setCountXN((prev) => prev + 1);
+                    // console.log('jjj');
+                }
+            }
+        }
+    }, [curSignIn]);
+
     return (
         <>
             <SafeAreaView />
-            <HeaderSearch />
+            <HeaderSearchFriend />
             <Tab.Navigator
                 screenOptions={{
                     tabBarAutoCapitalize: 'false',
@@ -23,8 +53,8 @@ export default function FriendScreen() {
                     tabBarLabelStyle: { textTransform: 'none', fontSize: 18 },
                 }}
             >
-                <Tab.Screen tabBarAutoCapitalize="none" name="Tất cả" component={BanBe} />
-                <Tab.Screen name="Chờ xác nhận" component={ChoXacNhan} />
+                <Tab.Screen tabBarAutoCapitalize="none" name={'Tất cả' + '(' + count + ')'} component={BanBe} />
+                <Tab.Screen name={'Chờ xác nhận' + '(' + countXN + ')'} component={ChoXacNhan} />
             </Tab.Navigator>
 
             {/* <View>

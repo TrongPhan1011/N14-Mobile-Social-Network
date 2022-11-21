@@ -35,9 +35,9 @@ export default function ContentChoXacNhan({ type }) {
         };
 
         getListWaiting();
-    }, []);
+    }, [listFriend]);
 
-    console.log(listAddFriend);
+    // console.log(listAddFriend);
     var Comp = ItemChoXacNhan;
     if (type === 'choXacNhan') {
         Comp = ItemChoXacNhan;

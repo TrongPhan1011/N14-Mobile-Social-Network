@@ -3,14 +3,14 @@ import React from 'react';
 import HeaderThemBan from '../../components/HeaderThemBan/headerThemBan';
 import ItemThemBan from '../../components/ItemThemBan';
 import ItemBanBe from '../../components/ItemBanBe';
-export default function ThemBanScreen() {
+export default function ThemBanScreen(list) {
     return (
         <>
             <View className="bg-white">
                 <SafeAreaView>
                     <HeaderThemBan />
 
-                    <ItemThemBan />
+                    {/* <ItemThemBan /> */}
                 </SafeAreaView>
             </View>
         </>

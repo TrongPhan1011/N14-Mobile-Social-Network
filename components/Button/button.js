@@ -21,6 +21,7 @@ export default function Button({ children, classNames, xoa, xacnhan, huy, dangNh
         <TouchableOpacity
             className={' w-28  h-9 items-center justify-center rounded-3xl ' + bgXoa + bgXacNhan + bgHuy + classNames}
             onPress={onPress}
+            passProps={passProps}
         >
             {children}
         </TouchableOpacity>

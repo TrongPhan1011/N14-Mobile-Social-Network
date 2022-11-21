@@ -1,10 +1,15 @@
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import React from 'react';
+import ItemBanBeProfile from '../../components/ItemBanBeProfile';
 
 export default function BanBeProfile() {
     return (
-        <View>
-            <Text>BanBeProfile</Text>
-        </View>
+        <ScrollView>
+            <View>
+                <Text>
+                    <ItemBanBeProfile />
+                </Text>
+            </View>
+        </ScrollView>
     );
 }
