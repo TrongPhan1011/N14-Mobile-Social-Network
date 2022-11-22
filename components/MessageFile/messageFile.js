@@ -20,8 +20,9 @@ import { ThuHoiTinNhan, removeMessWithUser } from '../../services/messageService
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import MessageModal from '../MessageModal';
+import socket from '../../utils/getSocketIO';
 
-export default memo(function MessageFile({ data, idMess }) {
+export default memo(function MessageFile({ data, idMess, messageData }) {
     const dispatch = useDispatch();
     const arrayImage = useSelector((state) => state.sidebarChatSlice.arrayImage);
     const navigation = useNavigation();
@@ -69,6 +70,7 @@ export default memo(function MessageFile({ data, idMess }) {
                         handleCloseModal={handleCloseModal}
                         handleOpenModal={handleOpenModal}
                         handleThuHoi={handleThuHoiTinNhan}
+                        handleForward={handleForward}
                         handleRemoveWithUser={handleRemoveWithUser}
                     ></MessageModal>
                 </View>
@@ -97,6 +99,7 @@ export default memo(function MessageFile({ data, idMess }) {
                         handleCloseModal={handleCloseModal}
                         handleOpenModal={handleOpenModal}
                         handleThuHoi={handleThuHoiTinNhan}
+                        handleForward={handleForward}
                         handleRemoveWithUser={handleRemoveWithUser}
                     ></MessageModal>
                 </View>
@@ -118,6 +121,7 @@ export default memo(function MessageFile({ data, idMess }) {
                         handleCloseModal={handleCloseModal}
                         handleOpenModal={handleOpenModal}
                         handleThuHoi={handleThuHoiTinNhan}
+                        handleForward={handleForward}
                         handleRemoveWithUser={handleRemoveWithUser}
                     ></MessageModal>
                 </View>
@@ -139,7 +143,7 @@ export default memo(function MessageFile({ data, idMess }) {
             if (file.fileType === 'image') {
                 arrUrlImg.push(file?.path);
                 return (
-                    <View>
+                    <View key={file.path + ''}>
                         <Pressable
                             key={file.title + index}
                             className="p-0.5 overflow-hidden rounded-2xl"
@@ -153,7 +157,6 @@ export default memo(function MessageFile({ data, idMess }) {
                                 source={{
                                     uri: `${file?.path}`,
                                 }}
-                                key={file.title + index}
                             ></Image>
                         </Pressable>
                         <MessageModal
@@ -163,6 +166,7 @@ export default memo(function MessageFile({ data, idMess }) {
                             handleOpenModal={handleOpenModal}
                             handleThuHoi={handleThuHoiTinNhan}
                             handleRemoveWithUser={handleRemoveWithUser}
+                            handleForward={handleForward}
                         ></MessageModal>
                     </View>
                 );
@@ -170,7 +174,7 @@ export default memo(function MessageFile({ data, idMess }) {
                 return (
                     <View>
                         <Pressable onLongPress={handleOpenModal}>
-                            <View className="rounded-2xl" key={file.title + index}>
+                            <View className="rounded-2xl" key={file.path + index}>
                                 <Video
                                     ref={video}
                                     source={{
@@ -194,6 +198,7 @@ export default memo(function MessageFile({ data, idMess }) {
                             handleOpenModal={handleOpenModal}
                             handleThuHoi={handleThuHoiTinNhan}
                             handleRemoveWithUser={handleRemoveWithUser}
+                            handleForward={handleForward}
                         ></MessageModal>
                     </View>
                 );
@@ -227,6 +232,7 @@ export default memo(function MessageFile({ data, idMess }) {
     const handleThuHoiTinNhan = async () => {
         var result = await ThuHoiTinNhan(groupChatSelect.id, idMess, accessToken, AxiosJWT);
         if (result) {
+            socket.emit('removeMess', { receiverId: groupChatSelect.id, idMess: idMess });
             handleCloseModal();
         }
     };
@@ -237,6 +243,10 @@ export default memo(function MessageFile({ data, idMess }) {
             setStatusMess(0);
             handleCloseModal();
         }
+    };
+    const handleForward = () => {
+        navigation.navigate('ForwardMessage', { messageData });
+        handleCloseModal();
     };
 
     return <>{handleRenderFile()}</>;

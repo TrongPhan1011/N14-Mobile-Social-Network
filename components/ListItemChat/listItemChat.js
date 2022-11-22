@@ -32,46 +32,28 @@ export default memo(function ListItemChat() {
 
     const [chatResult, setChatResult] = useState([]);
 
-    //new
-    useEffect(() => {
-        const resetGroupChat = async () => {
-            var newCurChat = await getChatById(groupChatSelect?.id, currAuth.accessToken, AxiosJWT);
-            if (newCurChat) dispatch(selectGroup(newCurChat));
-        };
-
-        socket.on('getMessage', (data) => {
-            if (!!data) {
-                console.log(data);
-                if (data.type_mess === 'system') {
-                    resetGroupChat();
-                }
-                setReRender(true);
-            }
-        });
-    }, [socket]);
-
-    // useEffect(() => {
-    //     const fetchChat = async () => {
-    //         const arrChat = await getChatByIdMember(userLoginData.id, currAuth.accessToken, AxiosJWT);
-
-    //         setChatResult(arrChat);
-    //     };
-    //     fetchChat();
-    // }, [userLogin]);
     useEffect(() => {
         const fetchChat = async () => {
-            if (reRender) {
-                const arrChat = await getChatByIdMember(userLoginData.id, currAuth.accessToken, AxiosJWT);
+            const arrChat = await getChatByIdMember(userLoginData.id, currAuth.accessToken, AxiosJWT);
 
-                if (!!arrChat) {
-                    setChatResult(arrChat);
-
-                    setReRender(false);
-                }
-            }
+            setChatResult(arrChat);
         };
         fetchChat();
-    }, [userLoginData, reRender]);
+    }, [userLogin]);
+    // useEffect(() => {
+    //     const fetchChat = async () => {
+    //         if (reRender) {
+    //             const arrChat = await getChatByIdMember(userLoginData.id, currAuth.accessToken, AxiosJWT);
+
+    //             if (!!arrChat) {
+    //                 setChatResult(arrChat);
+
+    //                 setReRender(false);
+    //             }
+    //         }
+    //     };
+    //     fetchChat();
+    // }, [userLoginData, reRender, groupChatSelect]);
 
     const handdleConnectSocket = (item) => {
         socket.emit('sendMessage', { receiverId: item.id, contentMessage: null });

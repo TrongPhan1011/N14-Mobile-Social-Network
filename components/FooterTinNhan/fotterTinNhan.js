@@ -20,16 +20,24 @@ export default memo(function fotterTinNhan({ type }) {
     const curChat = useSelector((state) => state.sidebarChatSlice.groupChatSelect);
     const currAuth = useSelector((state) => state.auth.currentUser);
     const curSignIn = useSelector((state) => state.signIn.userLogin);
+    var replyMess = useSelector((state) => state.messageSlice.replyMess);
     var accessToken = currAuth.accessToken;
     var axiosJWT = getAxiosJWT(dispatch, currAuth);
     const [currMessage, setCurrMessage] = useState('');
     const [messageSend, setMessageSend] = useState();
     const [image, setImage] = useState(null);
     const [percentage, setPercentage] = useState(0);
+    const [replyMessData, setReplyMessData] = useState();
     const [listFileIMG, setListFileIMG] = useState([]);
     var arrImg = [];
 
     //const txtSendRef = useRef();
+    // useEffect(() => {
+    //     if (!!replyMess) {
+    //         setReplyMessData(replyMess);
+    //     }
+    //     console.log(replyMess);
+    // }, [replyMess]);
 
     useEffect(() => {
         if (!!curChat && !!messageSend) {
