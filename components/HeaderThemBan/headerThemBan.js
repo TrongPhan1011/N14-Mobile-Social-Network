@@ -80,7 +80,7 @@ export default function HeaderThemBan() {
         };
         fetchSearch();
     }, [valueSearch, limitValue, searchButton]);
-    console.log(searchResult);
+
     const handleHiddenSearch = useCallback(() => {
         setHiddenSearchResult('hidden');
         setSearchButton('friend');
