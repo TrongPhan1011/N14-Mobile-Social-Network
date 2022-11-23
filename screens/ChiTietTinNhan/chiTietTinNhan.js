@@ -29,7 +29,7 @@ import { getChatById } from '../../services/chatService';
 import Avatar from '../../components/Avatar';
 import { selectGroup } from '../../redux/Slice/sidebarChatSlice';
 
-const ChiTietTinNhan = () => {
+const ChiTietTinNhan = ({ route }) => {
     const dispatch = useDispatch();
     const groupChatSelect = useSelector((state) => state.sidebarChatSlice.groupChatSelect);
     const currAuth = useSelector((state) => state.auth.currentUser);
@@ -43,6 +43,8 @@ const ChiTietTinNhan = () => {
     const [reRender, setReRender] = useState(true);
     const [arrivalMessage, setArrivalMessage] = useState(null);
     const bottomRef = useRef();
+    const groupName = route.params.groupName;
+    //console.log(groupName);
 
     useEffect(() => {
         socket.on('getMessage', (data) => {
@@ -158,6 +160,7 @@ const ChiTietTinNhan = () => {
     };
     // console.log(groupChatSelect);
     //console.log(chatResult);
+
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -174,7 +177,7 @@ const ChiTietTinNhan = () => {
                             navigation.navigate('VideoCall');
                         }}
                         onPressOpenMenu={() => navigation.navigate('QuanLyNhom')}
-                        name={chatResult.name}
+                        name={groupName}
                     />
                 ) : (
                     <HeaderTinNhan
@@ -190,7 +193,7 @@ const ChiTietTinNhan = () => {
                         //         chatResult.id,
                         //     })
                         // }
-                        name={chatResult.name}
+                        name={groupName}
                     />
                 )}
 

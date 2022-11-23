@@ -161,8 +161,13 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
         }
         //add id cua group chat duoc chon vao store
         //console.log(groupChat);
+
+        var groupName = '';
+        if (groupChat.typeChat === 'group') groupName = groupChat.name;
+        else groupName = currentInbox?.fullName;
+        //console.log(groupName);
         if (!!groupChat) dispatch(selectGroup(groupChat));
-        navigation.navigate('ChiTietTinNhan');
+        navigation.navigate('ChiTietTinNhan', { groupName });
     };
     return (
         <>
@@ -192,7 +197,9 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
                                 ></View>
                             </View>
                             <View className="ml-4 w-7/12">
-                                <Text className="font-semibold text-xl text-lcn-blue-5">{groupChat.name}</Text>
+                                <Text className="font-semibold text-xl text-lcn-blue-5">
+                                    {groupChat.typeChat === 'group' ? groupChat.name : currentInbox?.fullName}
+                                </Text>
                                 <View className="flex flex-row">
                                     <Text className={'text-sm ' + seenState.textChatTitle}>
                                         {itemDataChat.authorName}
