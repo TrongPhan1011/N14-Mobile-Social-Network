@@ -180,3 +180,29 @@ export const updateBanner = async (idUser, newBanner, accessToken, axiosJWT, dis
         console.log(error);
     }
 };
+
+export const updateProfile = async (idUser, newProfile, accessToken, axiosJWT, dispatch) => {
+    try {
+        const res = await axiosJWT.put(
+            'user/profile/',
+            {
+                idUser: idUser,
+                education: newProfile.education,
+                birthday: newProfile.birthday,
+                gender: newProfile.gender,
+                fullName: newProfile.fullName,
+            },
+            {
+                headers: { token: `baerer ${accessToken}` },
+            },
+        );
+        const dataUserLogin = await axiosJWT.get(`user/id/${idUser}`, {
+            headers: { token: `baerer ${accessToken}` },
+        });
+
+        dispatch(userLogin(dataUserLogin.data));
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};

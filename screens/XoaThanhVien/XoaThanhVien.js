@@ -117,7 +117,7 @@ const XoaThanhVien = () => {
             return (
                 <View>
                     {item.isAdmin ? (
-                        <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl" key={item.id + index}>
+                        <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl" key={item._id + index}>
                             <TouchableHighlight
                                 activeOpacity={0.6}
                                 underlayColor="#C6E4FF"
@@ -151,7 +151,7 @@ const XoaThanhVien = () => {
                             </TouchableHighlight>
                         </View>
                     ) : (
-                        <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl" key={item.id}>
+                        <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl" key={item._id}>
                             <TouchableHighlight
                                 activeOpacity={0.6}
                                 underlayColor="#C6E4FF"

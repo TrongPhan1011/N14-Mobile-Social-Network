@@ -32,6 +32,7 @@ export default memo(function ListItemChat() {
 
     const [chatResult, setChatResult] = useState([]);
 
+<<<<<<< HEAD
     //new
     // useEffect(() => {
     //     const resetGroupChat = async () => {
@@ -50,6 +51,8 @@ export default memo(function ListItemChat() {
     //     });
     // }, [socket]);
 
+=======
+>>>>>>> 22df20f23e00734267c8b9ef30785902092d803c
     useEffect(() => {
         const fetchChat = async () => {
             const arrChat = await getChatByIdMember(userLoginData.id, currAuth.accessToken, AxiosJWT);
@@ -71,7 +74,11 @@ export default memo(function ListItemChat() {
     //         }
     //     };
     //     fetchChat();
+<<<<<<< HEAD
     // }, [userLoginData, reRender]);
+=======
+    // }, [userLoginData, reRender, groupChatSelect]);
+>>>>>>> 22df20f23e00734267c8b9ef30785902092d803c
 
     const handdleConnectSocket = (item) => {
         socket.emit('sendMessage', { receiverId: item.id, contentMessage: null });

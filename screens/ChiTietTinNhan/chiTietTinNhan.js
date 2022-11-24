@@ -27,8 +27,9 @@ import socket from '../../utils/getSocketIO';
 import avatarDefault from '../../assets/avatarDefault.png';
 import { getChatById } from '../../services/chatService';
 import Avatar from '../../components/Avatar';
+import { selectGroup } from '../../redux/Slice/sidebarChatSlice';
 
-export default memo(function ChiTietTinNhan() {
+const ChiTietTinNhan = ({ route }) => {
     const dispatch = useDispatch();
     const groupChatSelect = useSelector((state) => state.sidebarChatSlice.groupChatSelect);
     const currAuth = useSelector((state) => state.auth.currentUser);
@@ -38,8 +39,12 @@ export default memo(function ChiTietTinNhan() {
     const [chatResult, setChatResult] = useState([]);
     const [limitMessage, setLimitMessage] = useState(20);
     const [arrMessage, setArrMessage] = useState([]);
+    const [messRemove, setMessRemove] = useState([]);
+    const [reRender, setReRender] = useState(true);
     const [arrivalMessage, setArrivalMessage] = useState(null);
     const bottomRef = useRef();
+    const groupName = route.params.groupName;
+    //console.log(groupName);
 
     useEffect(() => {
         socket.on('getMessage', (data) => {
@@ -58,7 +63,26 @@ export default memo(function ChiTietTinNhan() {
                 setArrivalMessage(getNewMess);
             }
         });
-    }, []);
+
+        // const resetGroupChat = async () => {
+        //     var newCurChat = await getChatById(groupChatSelect.id, accessToken, AxiosJWT);
+        //     dispatch(selectGroup(newCurChat));
+        // };
+        // socket.on('getMessage', (data) => {
+        //     if (!!data) {
+        //         if (data.type_mess === 'system') {
+        //             resetGroupChat();
+        //         }
+        //         //setReRender(true);
+        //     }
+        // });
+
+        socket.on('getMessRemoved', (data) => {
+            if (!!data) {
+                setMessRemove((prev) => [...prev, data]);
+            }
+        });
+    }, [socket, groupChatSelect]);
 
     useEffect(() => {
         const fetchChat = async () => {
@@ -90,7 +114,7 @@ export default memo(function ChiTietTinNhan() {
             groupChatSelect?.member.includes(arrivalMessage.authorID.id) &&
             setArrMessage((prev) => [...prev, arrivalMessage]);
     }, [groupChatSelect, arrivalMessage, limitMessage]);
-
+    //console.log(messRemove);
     const handleChiTietTinNhan = () => {
         if (arrMessage.length > 0) {
             return arrMessage.map((item, index) => {
@@ -100,15 +124,17 @@ export default memo(function ChiTietTinNhan() {
                 if (item.type_mess === 'system') {
                     return <ItemTinNhanSystem key={index + item.authorID.id}>{item.title}</ItemTinNhanSystem>;
                 } else {
-                    if (item.authorID.id === currSignIn.id) {
+                    if (!!messRemove && messRemove.includes(item.id)) {
+                        return <View key={item.id + index}></View>;
+                    } else if (item.authorID.id === currSignIn.id) {
                         return (
-                            <ItemTinNhan from="me" key={index + item.authorID.id} messageData={item}>
+                            <ItemTinNhan from="me" key={item.id + index + item.authorID.id} messageData={item}>
                                 {item.title}
                             </ItemTinNhan>
                         );
                     } else
                         return (
-                            <ItemTinNhan key={index + item.authorID.id} messageData={item}>
+                            <ItemTinNhan key={item.id + item.authorID.id} messageData={item}>
                                 {item.title}
                             </ItemTinNhan>
                         );
@@ -134,6 +160,7 @@ export default memo(function ChiTietTinNhan() {
     };
     // console.log(groupChatSelect);
     //console.log(chatResult);
+
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -150,7 +177,7 @@ export default memo(function ChiTietTinNhan() {
                             navigation.navigate('VideoCall');
                         }}
                         onPressOpenMenu={() => navigation.navigate('QuanLyNhom')}
-                        name={chatResult.name}
+                        name={groupName}
                     />
                 ) : (
                     <HeaderTinNhan
@@ -166,7 +193,7 @@ export default memo(function ChiTietTinNhan() {
                         //         chatResult.id,
                         //     })
                         // }
-                        name={chatResult.name}
+                        name={groupName}
                     />
                 )}
 
@@ -213,4 +240,6 @@ export default memo(function ChiTietTinNhan() {
             </View>
         </KeyboardAvoidingView>
     );
-});
+};
+
+export default memo(ChiTietTinNhan);

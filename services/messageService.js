@@ -46,6 +46,7 @@ export const addMess = async (data, accessToken, axiosJWT) => {
 
         return res.data;
     } catch (error) {
+        console.log(error);
         console.log('Luu tin nhan khong thanh cong');
     }
 };

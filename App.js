@@ -128,7 +128,7 @@ export default function App() {
                         tabBarIcon: ({ color }) => <Ionicons name="ios-newspaper-outline" size={30} color={color} />,
                     }}
                 />
-                <Tab.Screen
+                {/* <Tab.Screen
                     name="Thông báo"
                     component={ThongBaoScreen}
                     options={{
@@ -137,7 +137,7 @@ export default function App() {
                         // tabBarShowLabel: false,
                         tabBarIcon: ({ color }) => <FontAwesome name="bell-o" size={30} color={color} />,
                     }}
-                />
+                /> */}
                 <Tab.Screen
                     name="Cài đặt"
                     component={SettingScreen}

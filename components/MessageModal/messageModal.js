@@ -25,6 +25,7 @@ export default function MessageModal({
     handleThuHoi,
     handleRemoveWithUser,
     handleForward,
+    handleReply,
 }) {
     return (
         <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={handleCloseModal}>
@@ -43,6 +44,16 @@ export default function MessageModal({
                             >
                                 <View className="flex flex-row items-center">
                                     <Text className="text-center text-lcn-blue-5 font-medium">Chuyển tiếp</Text>
+                                </View>
+                            </TouchableHighlight>
+                            <TouchableHighlight
+                                activeOpacity={0.6}
+                                underlayColor="#C6E4FF"
+                                className="p-2 "
+                                onPress={handleReply}
+                            >
+                                <View className="flex flex-row items-center">
+                                    <Text className="text-center text-lcn-blue-5 font-medium">Trả lời</Text>
                                 </View>
                             </TouchableHighlight>
                             <TouchableHighlight

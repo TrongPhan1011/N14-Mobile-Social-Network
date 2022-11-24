@@ -8,7 +8,10 @@ import MessageFile from '../MessageFile/messageFile';
 import { ThuHoiTinNhan, removeMessWithUser } from '../../services/messageService';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
+import { Video, AVPlaybackStatus } from 'expo-av';
 import { useNavigation } from '@react-navigation/native';
+import socket from '../../utils/getSocketIO';
+import { replyMess } from '../../redux/Slice/messageSlice';
 
 export default function ItemTinNhan({ children, from, type, messageData }) {
     const navigation = useNavigation();
@@ -16,11 +19,14 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
     const [statusMess, setStatusMess] = useState(messageData.status);
     const [hidenModal, setHiddenModal] = useState('hidden');
     const dispatch = useDispatch();
+    const [socketMessChange, setSocketMessChange] = useState();
     const groupChatSelect = useSelector((state) => state.sidebarChatSlice.groupChatSelect);
     const currAuth = useSelector((state) => state.auth.currentUser);
     const currSignIn = useSelector((state) => state.signIn.userLogin);
     var accessToken = currAuth.accessToken;
     var AxiosJWT = getAxiosJWT(dispatch, currAuth);
+    const [status, setStatus] = React.useState({});
+    const video = React.useRef(null);
 
     var seen = '';
     var nameSend = '';
@@ -40,6 +46,18 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
         nameSend = getLastName(messageData.authorID.fullName);
     }
     //if (type === 'ALL') seen = 'Đã xem';
+
+    useEffect(() => {
+        socket.emit('removeMess', { receiverId: groupChatSelect.id, idMess: '' });
+    }, []);
+
+    useEffect(() => {
+        socket.emit('sendMessChange', {
+            receiverId: groupChatSelect.id,
+            contentMessage: socketMessChange,
+        });
+    }, [socketMessChange]);
+
     const handelDaXem = () => {
         if (!!messageData.file && messageData.file.length > 0) {
         } else {
@@ -58,6 +76,75 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
         setModalVisible(true);
     };
 
+    const getRepMessType = (replyMess) => {
+        //console.log(replyMess);
+        if (!!replyMess.file) {
+            if (replyMess.file.fileType === 'image') {
+                return (
+                    <View className={' w-24 pt-1 overflow-x-hidden flex items-center ml-2 mr-2'}>
+                        <Image
+                            style={{ width: 100, height: 100, resizeMode: 'contain' }}
+                            className={'object-cover rounded-md '}
+                            source={{
+                                uri: `${replyMess.file.path}`,
+                            }}
+                        ></Image>
+                    </View>
+                );
+            } else if (replyMess.file.fileType === 'video') {
+                return (
+                    <View className={'w-52 overflow-x-hidden  flex items-center  mr-1 pt-1'}>
+                        <Video
+                            ref={video}
+                            source={{
+                                uri: `${replyMess.file.path}`,
+                            }}
+                            style={{ width: '100%', aspectRatio: 16 / 9 }}
+                            useNativeControls
+                            resizeMode="contain"
+                            isLooping={true}
+                            usePoster={true}
+                            posterStyle={{ resizeMode: 'cover' }}
+                            onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+                            className="object-cover rounded-md"
+                        />
+                    </View>
+                );
+            } else
+                return (
+                    <View
+                        className={
+                            ' pr-2 pl-2 h-10 p-1 text-sm  bg-slate-100 bg-opacity-80 t rounded-full shadow-md flex flex-row items-center justify-center font-medium text-slate-400 ml-2 mr-2'
+                        }
+                    >
+                        <Feather name="paperclip" size={20} color="#47A9FF" />
+                        <Text>Tệp đính kèm</Text>
+                    </View>
+                );
+        } else
+            return (
+                <View
+                    className={
+                        'max-w-xs flex p-2 pt-1 bg-slate-100 text-slate-500 text-sm  rounded-full items-center ml-3 mr-3'
+                    }
+                >
+                    <Text>{messageData?.replyMessage?.title}</Text>
+                </View>
+            );
+    };
+
+    const renderReplyMess = () => {
+        if (!!messageData.replyMessage)
+            return (
+                <View
+                    //href={'#' + messageData.replyMessage.id}
+                    className={'w-full flex relative -bottom-5  ' + flexRowReverse}
+                >
+                    {getRepMessType(messageData.replyMessage)}
+                </View>
+            );
+    };
+
     const files = messageData.file;
     if (!!messageData.file && messageData.file.length > 0) bgFile = ' bg-white ';
     if (statusMess === 0 && messageData.authorID.id === currSignIn.id) bgFile = ' bg-white ';
@@ -71,7 +158,7 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
             );
         }
         if (!!messageData.file && messageData.file.length > 0) {
-            return <MessageFile data={files} idMess={messageData.id} />;
+            return <MessageFile data={files} idMess={messageData.id} messageData={messageData} />;
         }
         return <Text className={' break-words p-1 text-sm' + textColorSend}>{children}</Text>;
     };
@@ -80,7 +167,7 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
     const handleThuHoi = async () => {
         var result = await ThuHoiTinNhan(groupChatSelect.id, messageData.id, accessToken, AxiosJWT);
         if (result) {
-            //setHiddenModal('hidden');
+            socket.emit('removeMess', { receiverId: groupChatSelect.id, idMess: messageData.id });
             handleCloseModal();
         }
     };
@@ -98,8 +185,15 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
         handleCloseModal();
     };
 
+    const handleReply = () => {
+        //console.log(messageData);
+        dispatch(replyMess(messageData));
+        handleCloseModal();
+    };
+
     return (
         <View className="">
+            {renderReplyMess()}
             <View className="w-full">
                 <Text className={'text-center text-[12px] text-slate-400 pr-2 ' + hidden}>
                     {formatTimeAuto(messageData.createdAt)}
@@ -153,6 +247,7 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
                         handleThuHoi={handleThuHoi}
                         handleRemoveWithUser={handleRemoveWithUser}
                         handleForward={handleForward}
+                        handleReply={handleReply}
                     ></MessageModal>
                 </View>
             </View>
