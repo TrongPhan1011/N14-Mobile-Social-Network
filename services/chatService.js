@@ -179,6 +179,7 @@ export const addGroupChat = async (newGroup, accessToken, axiosJWT) => {
         }
         return null;
     } catch (error) {
+        console.log(error);
         return null;
     }
 };
@@ -219,6 +220,21 @@ export const removeChat = async (idChat, curUserId, accessToken, axiosJWT) => {
             return res.data;
         }
         return null;
+    } catch (error) {
+        return null;
+    }
+};
+export const getInboxByIdFriend = async (idUser, idFriend, accessToken, axiosJWT) => {
+    try {
+        const res = await axiosJWT.get('/chat/idInbox', {
+            params: {
+                idUser: idUser,
+                idFriend: idFriend,
+            },
+            headers: { token: `baerer ${accessToken}` },
+        });
+
+        return res.data;
     } catch (error) {
         return null;
     }

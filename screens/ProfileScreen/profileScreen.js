@@ -15,10 +15,13 @@ import { findFriend } from '../../redux/Slice/friendSlice';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from '../../components/Button/button';
 import { getChatByIdMember, findInbox } from '../../services/chatService';
-import { selectGroup } from '../../redux/Slice/sidebarChatSlice';
+import { addGroupChatId, selectGroup } from '../../redux/Slice/sidebarChatSlice';
 import { useNavigation } from '@react-navigation/native';
 import { getAllFriend, addFriend, declineFriend } from '../../services/userService';
 import { userName } from '../../redux/Slice/signUpSlice';
+import { getInboxByIdFriend } from '../../services/chatService';
+import { currentChat } from '../../redux/Slice/sidebarChatSlice';
+import { addGroupChat } from '../../services/chatService';
 const Tab = createMaterialTopTabNavigator();
 
 function ProfileScreen({ route }) {
@@ -37,13 +40,20 @@ function ProfileScreen({ route }) {
     const [arrayGroup, setArrayGroup] = useState([]);
     const [userFriend, setUserFriend] = useState([]);
     const [count, setCount] = useState(0);
+    // var currAuth = useSelector((state) => state.auth);
+    // const currAuth = useSelector((state) => state.auth.currentUser);
+    // var accessToken = currAuth.accessToken;
+    // var curSignIn = useSelector((state) => state.signIn);
+    // var curUser = curSignIn.userLogin;
+    // var axiosJWT = getAxiosJWT(dispatch, currAuth);
     var currAuth = useSelector((state) => state.auth);
-    var currAccount = currAuth.currentUser;
+    var currAccount = useSelector((state) => state.auth.currentUser);
     var accessToken = currAccount.accessToken;
     var curSignIn = useSelector((state) => state.signIn);
     var curUser = curSignIn.userLogin;
     var axiosJWT = getAxiosJWT(dispatch, currAccount);
-
+    const [listChecked, setListChecked] = useState([]);
+    const [listMember, setListMember] = useState([]);
     useEffect(() => {
         const getProfile = async () => {
             const getUserProfile = await getUserById(userId, accessToken, axiosJWT);
@@ -87,11 +97,49 @@ function ProfileScreen({ route }) {
 
         getProfile();
     }, [userId]);
+    // const handleInbox = async () => {
+    //     var inboxChat = await getInboxByIdFriend(curUser.id, userId, accessToken, axiosJWT);
+    //     if (!!inboxChat) {
+    //         dispatch(currentChat(inboxChat));
+    //         navigation.navigate('ChiTietTinNhan');
+    //     }
+    // };
 
     const handleInbox = async () => {
-        var inboxChat = await findInbox(userLoginData.id, userProfile.id, accessToken, axiosJWT);
-        dispatch(selectGroup(inboxChat));
-        navigation.navigate('ChiTietTinNhan');
+        var inboxChat = await getInboxByIdFriend(curUser.id, userId, accessToken, axiosJWT);
+
+        // console.log(curUser.id);
+        // console.log(userId);
+        if (!!inboxChat) {
+            dispatch(selectGroup(inboxChat));
+            //dispatch(currentChat(inboxChat));
+            navigation.navigate('ChiTietTinNhan');
+        }
+        // else {
+        //     var newGroup = {
+        //         name: 'hhhhh',
+        //         userCreate: curSignIn.id,
+        //         avatar: '',
+        //         adminChat: [curSignIn.id],
+        //         typeChat: 'inbox',
+        //         member: [curSignIn.id, userId, ...listChecked],
+        //     };
+
+        //     var newGroupFetch = await addGroupChat(newGroup, accessToken, axiosJWT);
+
+        //     // dispatch(addGroupChatId(newGroupFetch));
+        //     // dispatch(selectGroup(newGroupFetch));
+        //     // console.log(newGroupFetch);
+        //     // navigation.navigate('ChiTietTinNhan');
+        //     if (newGroupFetch) {
+        //         dispatch(userLogin(newGroupFetch.userLogin));
+        //         //dispatch(selectGroup(newGroupFetch.newChat));
+
+        //         navigation.navigate('HomeTabBar');
+        //         Alert.alert('Tạo cuộc trò chuyện thành công');
+        //     }
+        //     // console.log('jjj');
+        // }
     };
     useEffect(() => {
         const getListFriend = async () => {

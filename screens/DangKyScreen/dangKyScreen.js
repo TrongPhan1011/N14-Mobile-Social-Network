@@ -172,6 +172,7 @@ function DangKyScreen() {
     //         return true;
     //     }
     // };
+
     const birthday =
         date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString() + '-' + date.getDate().toString();
     const handleRegister = async () => {
@@ -184,7 +185,12 @@ function DangKyScreen() {
         // console.log(gender);
         console.log(currentAccount);
 
-        if (!!validPassword && !!validName && !!validEmail && !!validConfirmPassword) {
+        if (
+            validPassword === 'opacity-0' &&
+            validName === 'opacity-0' &&
+            validEmail === 'opacity-0' &&
+            validConfirmPassword === 'opacity-0'
+        ) {
             if (new Date().getFullYear() - date.getFullYear() < 18) {
                 setValidDate('opacity-1');
             } else {
@@ -212,7 +218,10 @@ function DangKyScreen() {
                     Alert.alert('Đồng ý với điều khoản của chương trình');
                 }
             }
-        } else return false;
+        } else {
+            Alert.alert('Thông tin nhập vào không phù hợp');
+            return false;
+        }
     };
 
     return (

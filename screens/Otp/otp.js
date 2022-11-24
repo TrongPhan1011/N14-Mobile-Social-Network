@@ -61,6 +61,7 @@ function Otp() {
         console.log(registerHandle);
         if (!!registerHandle) {
             await loginUser(registerHandle, dispatch);
+            Alert.alert('Bạn đã đăng ký thành công!!');
             navigation.navigate('HomeTabBar');
         } else {
             Alert.alert('Mã OTP không đúng');

@@ -94,7 +94,13 @@ export default function HeaderThemBan() {
     };
     const handleRenderItem = () => {
         var list = searchResult;
-        console.log(list.length);
+        if (searchValue.trim().length === 0) {
+            return (
+                <View className={'items-center'}>
+                    <Text>Dữ liệu nhập vào bị rỗng!!!</Text>
+                </View>
+            );
+        }
         if (list.length > 0) {
             return list.map((item) => {
                 return (
