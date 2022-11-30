@@ -17,6 +17,7 @@ export default function TextInputDN({
     maxLength,
     onPress,
     onChange,
+
     pointerEvents,
 }) {
     return (

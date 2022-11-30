@@ -32,27 +32,6 @@ export default memo(function ListItemChat() {
 
     const [chatResult, setChatResult] = useState([]);
 
-<<<<<<< HEAD
-    //new
-    // useEffect(() => {
-    //     const resetGroupChat = async () => {
-    //         var newCurChat = await getChatById(groupChatSelect?.id, currAuth.accessToken, AxiosJWT);
-    //         if (newCurChat) dispatch(selectGroup(newCurChat));
-    //     };
-
-    //     socket.on('getMessage', (data) => {
-    //         if (!!data) {
-    //             console.log(data);
-    //             if (data.type_mess === 'system') {
-    //                 resetGroupChat();
-    //             }
-    //             setReRender(true);
-    //         }
-    //     });
-    // }, [socket]);
-
-=======
->>>>>>> 22df20f23e00734267c8b9ef30785902092d803c
     useEffect(() => {
         const fetchChat = async () => {
             const arrChat = await getChatByIdMember(userLoginData.id, currAuth.accessToken, AxiosJWT);
@@ -74,11 +53,7 @@ export default memo(function ListItemChat() {
     //         }
     //     };
     //     fetchChat();
-<<<<<<< HEAD
-    // }, [userLoginData, reRender]);
-=======
     // }, [userLoginData, reRender, groupChatSelect]);
->>>>>>> 22df20f23e00734267c8b9ef30785902092d803c
 
     const handdleConnectSocket = (item) => {
         socket.emit('sendMessage', { receiverId: item.id, contentMessage: null });

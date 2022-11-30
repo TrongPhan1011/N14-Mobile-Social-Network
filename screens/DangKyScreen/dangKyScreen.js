@@ -54,12 +54,10 @@ function DangKyScreen() {
         const currentDate = selectedDate;
         setShow(false);
         setDate(currentDate);
-        if (new Date().getFullYear() - currentDate.getFullYear() > 18) {
+        if (new Date().getFullYear() - currentDate.getFullYear() > 16) {
             setValidDate('opacity-0');
-            console.log('2');
         } else {
             setValidDate('opacity-1');
-            console.log('1');
         }
     };
     const showMode = (currentMode) => {
@@ -144,34 +142,6 @@ function DangKyScreen() {
             setFailLogin('');
         } else setFailLogin('hidden');
     };
-    // var birthday = date;
-    // const a = new Date().getFullYear() - birthday.getFullYear();
-    // console.log(a);
-
-    // const checkDate = (dataDate) => {
-    //     // var birthday = userdate.split('-');
-    //     //     // var mydate = new Date(birthday[0], birthday[1] - 1, birthday[2]);
-    //     //     // console.log(mydate);
-    //     var birthday = dataDate;
-    //     console.log(dataDate);
-    //     const a = new Date().getFullYear() - birthday.getFullYear();
-    //     if (a < 18) {
-    //         // setValidDate('opacity-1');
-    //         // return '';
-    //         console.log(a);
-    //     }
-    //     // else {
-    //     //     setValidDate('opacity-0');
-    //     //     setDate(birthday);
-    //     //     return birthday;
-    //     // }
-    // };
-    // const checkDate = () => {
-    //     if (new Date().getFullYear() - date.getFullYear() < 18) {
-    //         setValidDate('opacity-1');
-    //         return true;
-    //     }
-    // };
 
     const birthday =
         date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString() + '-' + date.getDate().toString();
@@ -183,7 +153,6 @@ function DangKyScreen() {
         // var valueDate = checkDate(date);
         // var gender = selectedRadioBtn;
         // console.log(gender);
-        console.log(currentAccount);
 
         if (
             validPassword === 'opacity-0' &&
@@ -369,7 +338,7 @@ function DangKyScreen() {
                             editable={true}
                             placeholderTextColor={'#000000'}
                             // secureTextEntry={true}
-                            Icon={<Ionicons name="calendar" size={20} color="#47A9FF" onPress={showDatepicker} />}
+                            Icon2={<Ionicons name="calendar" size={20} color="#47A9FF" onPress={showDatepicker} />}
                             // onPress={checkDate(date)}
                             onChangeText={(date) => {
                                 setDate(date);

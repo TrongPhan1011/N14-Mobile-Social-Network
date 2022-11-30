@@ -172,7 +172,7 @@ const ChiTietHinhAnh = () => {
         console.log('');
         console.log(`Zoomed from ${zoomableViewEventObject.lastZoomLevel} to  ${zoomableViewEventObject.zoomLevel}`);
     };
-    console.log(urlImage);
+
     var img = urlImage;
     if (urlImage.length > 2) {
         img = {

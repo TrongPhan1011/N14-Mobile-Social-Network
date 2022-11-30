@@ -32,10 +32,21 @@ const sidebarChatSlice = createSlice({
         addArrayImage: (state, action) => {
             state.arrayImage = action.payload;
         },
+        removeCurrentChat: (state) => {
+            state.currentChat = null;
+            state.error = false;
+        },
     },
 });
 
-export const { addGroupChatId, loginErorr, addCountUnseenChat, selectGroup, addArrayImage, currentChat } =
-    sidebarChatSlice.actions;
+export const {
+    addGroupChatId,
+    loginErorr,
+    addCountUnseenChat,
+    selectGroup,
+    addArrayImage,
+    currentCha,
+    removeCurrentChat,
+} = sidebarChatSlice.actions;
 
 export default sidebarChatSlice.reducer;

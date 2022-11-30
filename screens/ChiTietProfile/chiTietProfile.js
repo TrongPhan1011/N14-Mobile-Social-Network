@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, Image, Pressable, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { addArrayImage } from '../../redux/Slice/sidebarChatSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -188,59 +188,19 @@ export default function ChiTietProfile({ userId, avatar, coverPhoto, userName })
         setVisible(false);
         setVisibleBia(false);
     };
-    const rederBia = () => {
-        if (activeBia == 'hiden') {
-            <View className="w-full h-40  ">
-                <Pressable
-                    //onPress={handleChiTietHinhAnhBia}
-                    onPress={showDialogBia}
-                >
-                    <TouchableWithoutFeedback>
-                        <Dialog.Container visible={visibleBia}>
-                            <Dialog.Description>
-                                <Text onPress={handleChiTietHinhAnhBia}>Xem ảnh bìa</Text>
-                            </Dialog.Description>
-
-                            <Dialog.Description>
-                                <Text onPress={pickImageBia}>Đổi ảnh bìa</Text>
-                            </Dialog.Description>
-                            {/* <Dialog.Description>
-                                    <View className={'text-right ml-5'}>
-                                        <Text
-                                            onPress={() => {
-                                                navigation.goBack();
-                                            }}
-                                        >
-                                            Trở lại
-                                        </Text>
-                                    </View>
-                                </Dialog.Description> */}
-                            <Dialog.Button label="Trở lại" onPress={handleCancel} />
-                        </Dialog.Container>
-                    </TouchableWithoutFeedback>
-                    <Image
-                        className="h-full w-full"
-                        // source={{
-                        //     uri: `${coverPhoto}`,
-                        // }}
-                        source={imgBia}
-                    ></Image>
-                </Pressable>
-            </View>;
-        }
-    };
 
     const reder = () => {
         if (active === 'hidden') {
             return (
                 <>
-                    <View className="w-full h-40  ">
+                    <View className="w-full h-40 ">
                         <Pressable
                             //onPress={handleChiTietHinhAnhBia}
+
                             onPress={showDialogBia}
                         >
-                            <TouchableWithoutFeedback>
-                                <Dialog.Container visible={visibleBia}>
+                            <TouchableOpacity activeOpacity={0.9}>
+                                <Dialog.Container animationType="fade" transparent={true} visible={visibleBia}>
                                     <Dialog.Description>
                                         <Text onPress={handleChiTietHinhAnhBia}>Xem ảnh bìa</Text>
                                     </Dialog.Description>
@@ -261,7 +221,7 @@ export default function ChiTietProfile({ userId, avatar, coverPhoto, userName })
                                 </Dialog.Description> */}
                                     <Dialog.Button label="Trở lại" onPress={handleCancel} />
                                 </Dialog.Container>
-                            </TouchableWithoutFeedback>
+                            </TouchableOpacity>
                             <Image
                                 className="h-full w-full"
                                 // source={{
@@ -277,7 +237,7 @@ export default function ChiTietProfile({ userId, avatar, coverPhoto, userName })
                             onPress={showDialog}
                             // onPressOut={handleCancel}
                         >
-                            <TouchableWithoutFeedback>
+                            <TouchableOpacity>
                                 <Dialog.Container visible={visible}>
                                     <Dialog.Description>
                                         <Text onPress={handleChiTietHinhAnhAvartar}>Xem ảnh đại diện</Text>
@@ -299,7 +259,7 @@ export default function ChiTietProfile({ userId, avatar, coverPhoto, userName })
                                 </Dialog.Description> */}
                                     <Dialog.Button label="Trở lại" onPress={handleCancel} />
                                 </Dialog.Container>
-                            </TouchableWithoutFeedback>
+                            </TouchableOpacity>
                             <Image
                                 className="h-32 w-32  "
                                 // source={{
