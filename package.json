@@ -37,6 +37,7 @@
         "npm": "^8.19.3",
         "react": "18.0.0",
         "react-dom": "^18.2.0",
+        "react-facebook-emoji": "^1.0.12",
         "react-icons": "^4.4.0",
         "react-native": "0.69.5",
         "react-native-alert-notification": "^0.3.4",

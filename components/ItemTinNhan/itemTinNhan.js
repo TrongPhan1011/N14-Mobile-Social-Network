@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { formatTimeAuto, getLastName } from '../../lib/formatString';
 import MessageModal from '../MessageModal';
 import MessageFile from '../MessageFile/messageFile';
-import { ThuHoiTinNhan, removeMessWithUser } from '../../services/messageService';
+import { ThuHoiTinNhan, removeMessWithUser, addReaction } from '../../services/messageService';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import { Video, AVPlaybackStatus } from 'expo-av';
@@ -35,17 +35,18 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
     var bgFile = '';
     var flexRowReverse = '';
     var avatarHidden = '';
+    var positionReaction = ' absolute h-0 bottom-2 pl-1 ';
     if (!!from) {
         bgMessage = ' bg-lcn-blue-4 text-white ';
         flexRowReverse = 'flex-row-reverse';
         seen = 'Đã gửi';
         textColorSend = ' text-white ';
         avatarHidden = ' hidden ';
+        positionReaction = 'relative h-3 -bottom-2';
     } else {
         seen = 'Đã xem';
         nameSend = getLastName(messageData.authorID.fullName);
     }
-    //if (type === 'ALL') seen = 'Đã xem';
 
     useEffect(() => {
         socket.emit('removeMess', { receiverId: groupChatSelect.id, idMess: '' });
@@ -81,7 +82,7 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
         if (!!replyMess.file) {
             if (replyMess.file.fileType === 'image') {
                 return (
-                    <View className={' w-24 pt-1 overflow-x-hidden flex items-center ml-2 mr-2'}>
+                    <View className={' w-24 pt-1 overflow-x-hidden flex items-center ml-2 mr-2 opacity-50 '}>
                         <Image
                             style={{ width: 100, height: 100, resizeMode: 'contain' }}
                             className={'object-cover rounded-md '}
@@ -93,19 +94,16 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
                 );
             } else if (replyMess.file.fileType === 'video') {
                 return (
-                    <View className={'w-52 overflow-x-hidden  flex items-center  mr-1 pt-1'}>
+                    <View className={'w-52 overflow-x-hidden  flex items-center  mr-1 pt-1 opacity-50'}>
                         <Video
                             ref={video}
                             source={{
                                 uri: `${replyMess.file.path}`,
                             }}
                             style={{ width: '100%', aspectRatio: 16 / 9 }}
-                            useNativeControls
                             resizeMode="contain"
                             isLooping={true}
                             usePoster={true}
-                            posterStyle={{ resizeMode: 'cover' }}
-                            onPlaybackStatusUpdate={(status) => setStatus(() => status)}
                             className="object-cover rounded-md"
                         />
                     </View>
@@ -125,7 +123,7 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
             return (
                 <View
                     className={
-                        'max-w-xs flex p-2 pt-1 bg-slate-100 text-slate-500 text-sm  rounded-full items-center ml-3 mr-3'
+                        'w-min flex p-2 pt-1 bg-slate-100 opacity-50 text-slate-500 text-sm  rounded-full items-center ml-3 mr-3'
                     }
                 >
                     <Text>{messageData?.replyMessage?.title}</Text>
@@ -138,7 +136,7 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
             return (
                 <View
                     //href={'#' + messageData.replyMessage.id}
-                    className={'w-full flex relative -bottom-5  ' + flexRowReverse}
+                    className={'w-full flex relative -bottom-5 ' + flexRowReverse}
                 >
                     {getRepMessType(messageData.replyMessage)}
                 </View>
@@ -191,6 +189,78 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
         handleCloseModal();
     };
 
+    const renderReactMess = () => {
+        if (!!messageData.reactionMess && messageData.reactionMess.length > 0)
+            return (
+                <>
+                    <View className={'w-full flex ' + flexRowReverse + positionReaction}>
+                        {renderListReaction()}
+
+                        <View
+                            className={
+                                'text-[9px] hidden min-w-[12rem] absolute bg-black bg-opacity-80  text-white p-1 rounded-md'
+                            }
+                        >
+                            {renderItemReact()}
+                        </View>
+                    </View>
+                </>
+            );
+    };
+
+    const getArrItemReact = (type) => {
+        return messageData.reactionMess.filter((item) => item.type_emotion === type);
+    };
+
+    const renderItemReact = () => {
+        var arrLike = getArrItemReact('👍');
+        var arrHeart = getArrItemReact('❤');
+        var arrHaha = getArrItemReact('😆');
+        var arrWow = getArrItemReact('😮');
+        var arrSad = getArrItemReact('😢');
+        var arrAngry = getArrItemReact('😡');
+        var mergeReact = [...arrLike, ...arrHeart, ...arrHaha, ...arrWow, ...arrSad, ...arrAngry];
+
+        return mergeReact.map((item, index) => {
+            return (
+                <View key={index + ''} className={'flex justify-between'}>
+                    <View className="flex">
+                        <View
+                            className={
+                                ' w-4 h-4  flex items-center justify-center rounded-full bg-slate-100  bg-opacity-80 backdrop-blur-md'
+                            }
+                        >
+                            <Text>{item.type_emotion}</Text>
+                        </View>
+                    </View>
+                    <View className="pl-4">
+                        <Text>{item.idUser.fullName}</Text>
+                    </View>
+                </View>
+            );
+        });
+    };
+
+    const renderListReaction = () => {
+        var listTypeReact = [];
+
+        return messageData.reactionMess.map((reaction, index) => {
+            if (listTypeReact.includes(reaction.type_emotion)) {
+                return <View key={index + ''}></View>;
+            } else listTypeReact.push(reaction.type_emotion);
+            return (
+                <View
+                    key={index + ' '}
+                    className={
+                        'ring-2 ring-white w-4 h-4 text-xs  flex items-center justify-center rounded-full bg-slate-100  bg-opacity-80 backdrop-blur-md'
+                    }
+                >
+                    <Text>{reaction.type_emotion}</Text>
+                </View>
+            );
+        });
+    };
+
     return (
         <View className="">
             {renderReplyMess()}
@@ -224,6 +294,7 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
                         >
                             {/* <Text className={' break-words p-1 text-sm' + textColorSend}>{children}</Text> */}
                             {renderMessage()}
+                            {renderReactMess()}
                         </View>
 
                         <View className=" flex-row items-center justify-center hidden">
@@ -248,6 +319,8 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
                         handleRemoveWithUser={handleRemoveWithUser}
                         handleForward={handleForward}
                         handleReply={handleReply}
+                        idUser={messageData.authorID.id}
+                        messageData={messageData}
                     ></MessageModal>
                 </View>
             </View>

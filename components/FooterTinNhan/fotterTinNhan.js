@@ -1,6 +1,7 @@
 import { View, Text, TextInput, SafeAreaView, TouchableHighlight, TouchableOpacity, Alert, Image } from 'react-native';
 import React, { useState, useEffect, useRef, memo } from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import { addMess } from '../../services/messageService';
@@ -11,7 +12,10 @@ import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import Auth from '@aws-amplify/auth';
 import Amplify from '@aws-amplify/core';
+import { replyMess } from '../../redux/Slice/messageSlice';
+import { Video } from 'expo-av';
 import Storage from '@aws-amplify/storage';
+//import { replyMess } from '../../redux/Slice/messageSlice';
 //import { Item } from 'react-native-paper/lib/typescript/components/List/List';
 //import * as Clipboard from 'expo-clipboard';
 
@@ -20,7 +24,7 @@ export default memo(function fotterTinNhan({ type }) {
     const curChat = useSelector((state) => state.sidebarChatSlice.groupChatSelect);
     const currAuth = useSelector((state) => state.auth.currentUser);
     const curSignIn = useSelector((state) => state.signIn.userLogin);
-    var replyMess = useSelector((state) => state.messageSlice.replyMess);
+    var dataReply = useSelector((state) => state.messageSlice.replyMess);
     var accessToken = currAuth.accessToken;
     var axiosJWT = getAxiosJWT(dispatch, currAuth);
     const [currMessage, setCurrMessage] = useState('');
@@ -29,15 +33,18 @@ export default memo(function fotterTinNhan({ type }) {
     const [percentage, setPercentage] = useState(0);
     const [replyMessData, setReplyMessData] = useState();
     const [listFileIMG, setListFileIMG] = useState([]);
+    const video = React.useRef(null);
     var arrImg = [];
 
     //const txtSendRef = useRef();
-    // useEffect(() => {
-    //     if (!!replyMess) {
-    //         setReplyMessData(replyMess);
-    //     }
-    //     console.log(replyMess);
-    // }, [replyMess]);
+    useEffect(() => {
+        if (!!dataReply) {
+            setReplyMessData(dataReply);
+        }
+    }, [dataReply]);
+
+    var hiddenReply = ' hidden ';
+    if (!!replyMessData) hiddenReply = '';
 
     useEffect(() => {
         if (!!curChat && !!messageSend) {
@@ -54,7 +61,7 @@ export default memo(function fotterTinNhan({ type }) {
                 const cameraRollStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
                 const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
                 if (cameraRollStatus.status !== 'granted' || cameraStatus.status !== 'granted') {
-                    alert('Sorry, we need these permissions to make this work!');
+                    alert('Xin lỗi, chúng tôi cần quyền truy cập từ thiết bị của bạn!');
                 }
             }
         })();
@@ -81,6 +88,17 @@ export default memo(function fotterTinNhan({ type }) {
     };
 
     var getNewMess = (title, type, file) => {
+        let newReplyDataSocket = null,
+            newReplyDataSave = null;
+
+        if (!!replyMessData) {
+            newReplyDataSocket = {
+                id: replyMessData.id,
+                title: replyMessData.title,
+                file: replyMessData.file[0],
+            };
+            newReplyDataSave = replyMessData.id;
+        }
         var newMess = {
             title: title,
             authorID: {
@@ -100,6 +118,7 @@ export default memo(function fotterTinNhan({ type }) {
                 },
             ],
             file: [],
+            replyMessage: newReplyDataSocket,
             createdAt: Date.now(),
             updatedAt: Date.now(),
         };
@@ -116,6 +135,7 @@ export default memo(function fotterTinNhan({ type }) {
             idChat: newMess.idChat,
             status: 1,
             file: newMess.file,
+            replyMessage: newMess.replyMessage,
         };
 
         return { newMess, newMessSave };
@@ -125,8 +145,10 @@ export default memo(function fotterTinNhan({ type }) {
         if (!!currMessage && currMessage !== '') {
             var newMessText = getNewMess(currMessage, 'text', null);
             saveMess(newMessText.newMessSave, newMessText.newMess);
+            setCurrMessage('');
+            setReplyMessData(null);
+            dispatch(replyMess(null));
         }
-        setCurrMessage('');
     };
 
     const pickImage = async () => {
@@ -194,49 +216,6 @@ export default memo(function fotterTinNhan({ type }) {
             //formDataIMG.delete();
         }
     };
-    const handleImagePicked = async (pickerResult) => {
-        try {
-            if (pickerResult.cancelled) {
-                alert('Upload cancelled');
-                return;
-            } else {
-                setPercentage(0);
-                const img = await fetchImageFromUri(pickerResult.uri);
-                console.log(img);
-                const uploadUrl = await uploadImage('demo.jpg', img);
-                downloadImage(uploadUrl);
-            }
-        } catch (e) {
-            console.log(e);
-            alert('Upload failed');
-        }
-    };
-
-    const setLoading = (progress) => {
-        const calculated = parseInt((progress.loaded / progress.total) * 100);
-        updatePercentage(calculated); // due to s3 put function scoped
-    };
-
-    const updatePercentage = (number) => {
-        setPercentage(number);
-    };
-
-    const downloadImage = (uri) => {
-        Storage.get(uri)
-            .then((result) => setImage(result))
-            .catch((err) => console.log(err));
-    };
-
-    const fetchImageFromUri = async (uri) => {
-        const response = await fetch(uri);
-        const blob = await response.blob();
-        return blob;
-    };
-
-    const copyToClipboard = () => {
-        Clipboard.setString(image);
-        alert('Copied image URL to clipboard');
-    };
 
     // const takePhoto = async () => {
     //     let result = await ImagePicker.launchCameraAsync({
@@ -247,33 +226,81 @@ export default memo(function fotterTinNhan({ type }) {
     //     this.handleImagePicked(result);
     // };
 
-    var handlePreviewIMG = (selectedFiles) => {
-        //console.log(selectedFiles);
-        var listFileImgPreview = [];
-        const SIZE_FILE = 62914560; // = 60MB
-        const TOTAL_IMG = 50;
+    //console.log(replyMessData);
+    const reviewMessFileReply = () => {
+        if (replyMessData?.type_mess === 'img/video')
+            return (
+                <View>
+                    {replyMessData?.file[0].fileType === 'image' ? (
+                        <Image
+                            style={{ width: 50, height: 50, resizeMode: 'cover' }}
+                            className=""
+                            source={{
+                                uri: `${replyMessData?.file[0].path}`,
+                            }}
+                        ></Image>
+                    ) : (
+                        <View className="w-24">
+                            <Video
+                                ref={video}
+                                source={{
+                                    uri: `${replyMessData?.file[0].path}`,
+                                }}
+                                style={{ width: '100%', aspectRatio: 16 / 9 }}
+                                resizeMode="contain"
+                                usePoster={true}
+                                posterStyle={{ resizeMode: 'cover' }}
+                            />
+                        </View>
+                    )}
+                </View>
+            );
+        else
+            return (
+                <View className="bg-blue-200 p-2 rounded-2xl flex flex-row w-full items-center">
+                    <View className="mr-2 items-center">
+                        <MaterialCommunityIcons name="file-word" size={30} color="#47A9FF" />
+                    </View>
+                    <Text className="break-words pr-10">{replyMessData?.file[0].title}</Text>
+                </View>
+            );
+    };
 
-        if (selectedFiles.length > TOTAL_IMG) {
-            Alert.alert('Tối đa mỗi lần gửi là 50 ảnh hoặc video');
-            return;
-        }
-        // console.log('length ' + selectedFiles.length);
-        for (var i = 0; i < selectedFiles.length; i++) {
-            var img = selectedFiles[i].uri;
-            console.log(img);
-            if (img.size > SIZE_FILE) {
-                Alert.alert('Dung lượng mỗi ảnh hoặc video tối đa là 60MB');
-                return;
-            }
-
-            //img.preview = URL.createObjectURL(img);
-            listFileImgPreview.push(img);
-        }
-        setListFileIMG((prev) => [...prev, ...listFileImgPreview]);
+    const reviewMessageReply = () => {
+        //console.log(replyMessData);
+        return (
+            <View
+                className={
+                    ' w-full flex p-2 ml-1 bg-slate-200 flex-row relative border-l-4 border-lcn-blue-4' + hiddenReply
+                }
+            >
+                <View className="">
+                    <Text className="text-xs">Đang trả lời cho tin nhắn</Text>
+                    {replyMessData?.type_mess === 'text' ? (
+                        <Text className="text-sm text-black">{replyMessData?.title}</Text>
+                    ) : (
+                        reviewMessFileReply()
+                    )}
+                </View>
+                <View className="absolute right-1">
+                    <AntDesign
+                        className=""
+                        name="close"
+                        size={20}
+                        color="#47A9FF"
+                        onPress={() => {
+                            dispatch(replyMess(null));
+                            setReplyMessData(null);
+                        }}
+                    />
+                </View>
+            </View>
+        );
     };
 
     return (
         <SafeAreaView className="">
+            {reviewMessageReply()}
             {/* {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />} */}
             <View className=" flex flex-row items-center bg-white justify-center p-2 border border-slate-100 border-t">
                 <View className="">

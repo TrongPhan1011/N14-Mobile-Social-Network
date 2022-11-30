@@ -52,7 +52,7 @@ const ThemThanhVien = () => {
                     var member = await getUserById(memberId, accessToken, axiosJWT);
                     saveMessSystem(dataNewChat.id, member.fullName + ' đã trở thành quản trị viên');
                 }
-                Alert.alert('Thêm Admin thành công');
+                //Alert.alert('Thêm Admin thành công');
                 navigation.navigate('ChiTietTinNhan');
             }
         } else Alert.alert('Vui lòng chọn người cần thêm');
@@ -68,11 +68,29 @@ const ThemThanhVien = () => {
             status: 1,
             file: [],
         };
+        var newMessSocket = {
+            title: text,
+            authorID: {
+                id: curSignIn.id,
+                fullName: curSignIn.fullName,
+                profile: {
+                    urlAvartar: curSignIn.profile.urlAvartar,
+                },
+            },
+
+            seen: [{ id: curSignIn.id, seenAt: Date.now() }],
+            type: 'system',
+            idChat: id,
+            status: 1,
+            file: [],
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+        };
         if (!!newMessSave) {
             var messData = await addMess(newMessSave, accessToken, axiosJWT);
             socket.emit('sendMessage', {
                 receiverId: id,
-                contentMessage: messData,
+                contentMessage: newMessSocket,
             });
         }
     };
@@ -112,74 +130,62 @@ const ThemThanhVien = () => {
                 img = { uri: `${item.profile.urlAvartar}` };
             }
             return (
-                <View key={item._id}>
+                <View key={item.id + index + '1a'}>
                     {item.isAdmin ? (
-                        <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl" key={item._id}>
+                        <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl">
                             <TouchableHighlight
                                 activeOpacity={0.6}
                                 underlayColor="#C6E4FF"
-                                key={item._id}
                                 onPress={() => getAllChecked(item, index)}
                             >
-                                <View className="flex flex-row bg-white  p-2 " key={item._id}>
-                                    <View className="flex flex-row items-center w-10/12" key={item._id}>
-                                        <View key={item._id}>
+                                <View className="flex flex-row bg-white  p-2 ">
+                                    <View className="flex flex-row items-center w-10/12">
+                                        <View>
                                             <Image
                                                 style={{ height: 40, width: 40, resizeMode: 'contain' }}
                                                 className="rounded-full ml-4"
                                                 source={img}
-                                                key={item._id}
                                             ></Image>
                                         </View>
 
-                                        <View className="flex flex-col" key={item._id}>
-                                            <Text className="ml-3 text-lg font-semibold text-lcn-blue-5" key={item._id}>
+                                        <View className="flex flex-col">
+                                            <Text className="ml-3 text-lg font-semibold text-lcn-blue-5">
                                                 {item.fullName}
                                             </Text>
-                                            <Text className="ml-3 text-gray-600" key={item._id}>
-                                                Quản trị viên
-                                            </Text>
+                                            <Text className="ml-3 text-gray-600">Quản trị viên</Text>
                                         </View>
                                     </View>
                                 </View>
                             </TouchableHighlight>
                         </View>
                     ) : (
-                        <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl" key={item._id}>
+                        <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl">
                             <TouchableHighlight
                                 activeOpacity={0.6}
                                 underlayColor="#C6E4FF"
-                                key={item._id}
                                 onPress={() => getAllChecked(item, index)}
                             >
-                                <View className="flex flex-row bg-white  p-2 " key={item._id}>
-                                    <View className="flex flex-row items-center w-10/12" key={item._id}>
-                                        <View key={item._id}>
+                                <View className="flex flex-row bg-white  p-2 ">
+                                    <View className="flex flex-row items-center w-10/12">
+                                        <View>
                                             <Image
                                                 style={{ height: 40, width: 40, resizeMode: 'contain' }}
                                                 className="rounded-full ml-4"
                                                 source={img}
-                                                key={item._id}
                                             ></Image>
                                         </View>
 
-                                        <View className="flex flex-col" key={item._id}>
-                                            <Text className="ml-3 text-lg font-semibold text-lcn-blue-5" key={item._id}>
+                                        <View className="flex flex-col">
+                                            <Text className="ml-3 text-lg font-semibold text-lcn-blue-5">
                                                 {item.fullName}
                                             </Text>
-                                            <Text className="ml-3 text-gray-600" key={item._id}>
-                                                Thành viên
-                                            </Text>
+                                            <Text className="ml-3 text-gray-600">Thành viên</Text>
                                         </View>
                                     </View>
-                                    <View
-                                        className={' flex flex-row justify-end items-center w-2/12 pr-4'}
-                                        key={item._id}
-                                    >
+                                    <View className={' flex flex-row justify-end items-center w-2/12 pr-4'}>
                                         <Checkbox
                                             status={item.isChecked ? 'checked' : 'unchecked'}
                                             onPress={() => getAllChecked(item, index)}
-                                            key={item._id}
                                             testID={item.id}
                                         />
                                     </View>
@@ -192,7 +198,7 @@ const ThemThanhVien = () => {
         });
     };
     return (
-        <View className="bg-white">
+        <View className="bg-white h-full">
             <HeaderQlGroup btnName="Thêm" onPress={handleAddAdmin}>
                 Thêm quyền quản trị
             </HeaderQlGroup>

@@ -20,8 +20,11 @@ import socket from '../../utils/getSocketIO';
 import { addMess } from '../../services/messageService';
 import { getUserById } from '../../services/userService';
 import { groupChatSelect, selectGroup } from '../../redux/Slice/sidebarChatSlice';
+import { useNavigation } from '@react-navigation/native';
+import { userLogin } from '../../redux/Slice/signInSlice';
 
 export default function renameModal({ handleCloseModal, handleOpenModal, modalVisible }) {
+    const navigation = useNavigation();
     const dispatch = useDispatch();
     const groupChatSelect = useSelector((state) => state.sidebarChatSlice.groupChatSelect);
     const currAuth = useSelector((state) => state.auth.currentUser);
@@ -34,13 +37,18 @@ export default function renameModal({ handleCloseModal, handleOpenModal, modalVi
         if (name === '') {
             Alert.alert('Vui lòng nhập tên nhóm trước khi lưu');
         } else {
-            var result = await changeNameChat(groupChatSelect.id, name, currSignIn.id, accessToken, axiosJWT);
+            var result = await changeNameChat(groupChatSelect?.id, name, currSignIn?.id, accessToken, axiosJWT);
+
             if (!!result) {
-                //dispatch(selectGroup(result));
+                //dispatch(userLogin(currSignIn));
+                //console.log(groupChatSelect);
                 var member = await getUserById(currSignIn.id, accessToken, axiosJWT);
                 await saveMessSystem(groupChatSelect.id, currSignIn.fullName + ' đã đổi tên nhóm thành ' + name);
                 setName('');
-                Alert.alert('Đổi tên nhóm thành công');
+                //Alert.alert('Đổi tên nhóm thành công');
+                // dispatch(userLogin(null));
+                // dispatch(userLogin(currSignIn));
+                navigation.navigate('ChiTietTinNhan');
                 modalVisible = false;
             }
         }
@@ -56,11 +64,29 @@ export default function renameModal({ handleCloseModal, handleOpenModal, modalVi
             status: 1,
             file: [],
         };
+        var newMessSocket = {
+            title: text,
+            authorID: {
+                id: currSignIn.id,
+                fullName: currSignIn.fullName,
+                profile: {
+                    urlAvartar: currSignIn.profile.urlAvartar,
+                },
+            },
+
+            seen: [{ id: currSignIn.id, seenAt: Date.now() }],
+            type: 'system',
+            idChat: id,
+            status: 1,
+            file: [],
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+        };
         if (!!newMessSave) {
             var messData = await addMess(newMessSave, accessToken, axiosJWT);
             socket.emit('sendMessage', {
                 receiverId: id,
-                contentMessage: messData,
+                contentMessage: newMessSocket,
             });
         }
     };

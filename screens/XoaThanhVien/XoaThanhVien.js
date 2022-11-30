@@ -47,14 +47,14 @@ const XoaThanhVien = () => {
             var dataNewChat = await removeMemberToChat(groupChatSelect?.id, listChecked, accessToken, axiosJWT);
 
             if (dataNewChat) {
-                dispatch(selectGroup(dataNewChat));
+                //dispatch(selectGroup(dataNewChat));
                 setListChecked([]);
                 setListMember([]);
                 for (let memberId of listChecked) {
                     var member = await getUserById(memberId, accessToken, axiosJWT);
                     saveMessSystem(dataNewChat.id, member.fullName + ' đã bị xoá khỏi nhóm');
                 }
-                Alert.alert('Xóa thành viên thành công');
+                //Alert.alert('Xóa thành viên thành công');
                 navigation.navigate('ChiTietTinNhan');
             }
         } else Alert.alert('Vui lòng chọn người cần xóa');
@@ -84,11 +84,29 @@ const XoaThanhVien = () => {
             status: 1,
             file: [],
         };
+        var newMessSocket = {
+            title: text,
+            authorID: {
+                id: curSignIn.id,
+                fullName: curSignIn.fullName,
+                profile: {
+                    urlAvartar: curSignIn.profile.urlAvartar,
+                },
+            },
+
+            seen: [{ id: curSignIn.id, seenAt: Date.now() }],
+            type: 'system',
+            idChat: id,
+            status: 1,
+            file: [],
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+        };
         if (!!newMessSave) {
             var messData = await addMess(newMessSave, accessToken, axiosJWT);
             socket.emit('sendMessage', {
                 receiverId: id,
-                contentMessage: messData,
+                contentMessage: newMessSocket,
             });
         }
     };
@@ -115,9 +133,12 @@ const XoaThanhVien = () => {
             }
 
             return (
-                <View>
+                <View key={item.id + index + 'root'}>
                     {item.isAdmin ? (
-                        <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl" key={item._id + index}>
+                        <View
+                            className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl"
+                            //key={item._id + index + '1'}
+                        >
                             <TouchableHighlight
                                 activeOpacity={0.6}
                                 underlayColor="#C6E4FF"
@@ -151,7 +172,10 @@ const XoaThanhVien = () => {
                             </TouchableHighlight>
                         </View>
                     ) : (
-                        <View className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl" key={item._id}>
+                        <View
+                            className="flex flex-row mt-2 p-2 rounded-b-2xl rounded-t-2xl"
+                            //key={index + '2' + item._id}
+                        >
                             <TouchableHighlight
                                 activeOpacity={0.6}
                                 underlayColor="#C6E4FF"

@@ -28,8 +28,9 @@ import avatarDefault from '../../assets/avatarDefault.png';
 import { getChatById } from '../../services/chatService';
 import Avatar from '../../components/Avatar';
 import { selectGroup } from '../../redux/Slice/sidebarChatSlice';
+import { useMemo } from 'react';
 
-const ChiTietTinNhan = ({ route }) => {
+const ChiTietTinNhan = () => {
     const dispatch = useDispatch();
     const groupChatSelect = useSelector((state) => state.sidebarChatSlice.groupChatSelect);
     const currAuth = useSelector((state) => state.auth.currentUser);
@@ -43,10 +44,12 @@ const ChiTietTinNhan = ({ route }) => {
     const [reRender, setReRender] = useState(true);
     const [arrivalMessage, setArrivalMessage] = useState(null);
     const bottomRef = useRef();
-    const groupName = route.params.groupName;
-    //console.log(groupName);
+    const groupName = useSelector((state) => state.sidebarChatSlice.nameGroup);
+    const [name, setName] = useState(groupName);
+    const [reactMess, setReactMess] = useState();
+    //console.log(name);
 
-    useEffect(() => {
+    useMemo(() => {
         socket.on('getMessage', (data) => {
             if (!!data) {
                 var getNewMess = {
@@ -57,32 +60,26 @@ const ChiTietTinNhan = ({ route }) => {
                     type_mess: data.type,
                     idChat: data.idChat,
                     file: data.file,
+                    replyMessage: data.replyMessage,
                     createdAt: data.createdAt,
                     updatedAt: data.updatedAt,
                 };
+                //console.log(groupChatSelect);
                 setArrivalMessage(getNewMess);
             }
         });
-
-        // const resetGroupChat = async () => {
-        //     var newCurChat = await getChatById(groupChatSelect.id, accessToken, AxiosJWT);
-        //     dispatch(selectGroup(newCurChat));
-        // };
-        // socket.on('getMessage', (data) => {
-        //     if (!!data) {
-        //         if (data.type_mess === 'system') {
-        //             resetGroupChat();
-        //         }
-        //         //setReRender(true);
-        //     }
-        // });
 
         socket.on('getMessRemoved', (data) => {
             if (!!data) {
                 setMessRemove((prev) => [...prev, data]);
             }
         });
-    }, [socket, groupChatSelect]);
+        // socket.on('getReactMess', (data) => {
+        //     if (!!data) {
+        //         setReactMess(data);
+        //     }
+        // });
+    }, [groupChatSelect]);
 
     useEffect(() => {
         const fetchChat = async () => {
@@ -96,36 +93,62 @@ const ChiTietTinNhan = ({ route }) => {
             setArrMessage(listMess);
         };
         getListMessage();
-    }, [groupChatSelect, limitMessage]);
-
-    // useEffect(() => {
-    //     const scrollToBottom = () => {
-    //         if (arrMessage.length > 0) {
-    //             bottomRef.current?.scrollToBottom({ behavior: 'smooth' });
-    //         }
-    //     };
-    //     scrollToBottom();
-    // }, [arrMessage]);
-
-    //console.log(arrivalMessage);
+    }, [groupChatSelect, limitMessage, arrivalMessage]);
 
     useEffect(() => {
         arrivalMessage &&
             groupChatSelect?.member.includes(arrivalMessage.authorID.id) &&
             setArrMessage((prev) => [...prev, arrivalMessage]);
     }, [groupChatSelect, arrivalMessage, limitMessage]);
-    //console.log(messRemove);
+
+    useMemo(() => {
+        const resetGroupChat = async () => {
+            var newCurChat = await getChatById(groupChatSelect?.id, currAuth.accessToken, AxiosJWT);
+            //console.log(newCurChat);
+            if (!!newCurChat) {
+                dispatch(selectGroup(newCurChat));
+                // console.log('1');
+                // console.log(newCurChat.name);
+                setName(newCurChat.name);
+            }
+        };
+
+        socket.on('getMessage', (data) => {
+            if (!!data) {
+                //console.log(data);
+                if (data.type === 'system') {
+                    resetGroupChat();
+                }
+                //setReRender(true);
+            }
+        });
+
+        socket.on('getReactMess', (data) => {
+            if (!!data) {
+                setReactMess(data);
+            }
+        });
+    }, [socket, groupChatSelect]);
+    //console.log(arrMessage);
+    //console.log(groupChatSelect);
     const handleChiTietTinNhan = () => {
         if (arrMessage.length > 0) {
             return arrMessage.map((item, index) => {
                 // var isLastMess = false;
                 // var indexLast = arrMessage.length - 1;
                 // if (index === indexLast) isLastMess = true;
+                if (!!reactMess && reactMess.id === item.id) {
+                    var reactObj = reactMess.reactionMess;
+                    //console.log(item.reactionMess);
+                    if (!!item.reactionMess) {
+                        if (!item.reactionMess.includes(reactObj)) item.reactionMess = [...item.reactionMess, reactObj];
+                    } else item.reactionMess = [reactObj];
+                }
                 if (item.type_mess === 'system') {
                     return <ItemTinNhanSystem key={index + item.authorID.id}>{item.title}</ItemTinNhanSystem>;
                 } else {
                     if (!!messRemove && messRemove.includes(item.id)) {
-                        return <View key={item.id + index}></View>;
+                        return <View key={item.id + index + ''}></View>;
                     } else if (item.authorID.id === currSignIn.id) {
                         return (
                             <ItemTinNhan from="me" key={item.id + index + item.authorID.id} messageData={item}>
@@ -134,7 +157,7 @@ const ChiTietTinNhan = ({ route }) => {
                         );
                     } else
                         return (
-                            <ItemTinNhan key={item.id + item.authorID.id} messageData={item}>
+                            <ItemTinNhan key={item.id + item.authorID.id + index} messageData={item}>
                                 {item.title}
                             </ItemTinNhan>
                         );
@@ -177,7 +200,7 @@ const ChiTietTinNhan = ({ route }) => {
                             navigation.navigate('VideoCall');
                         }}
                         onPressOpenMenu={() => navigation.navigate('QuanLyNhom')}
-                        name={groupName}
+                        name={name}
                     />
                 ) : (
                     <HeaderTinNhan
@@ -193,7 +216,7 @@ const ChiTietTinNhan = ({ route }) => {
                         //         chatResult.id,
                         //     })
                         // }
-                        name={groupName}
+                        name={name}
                     />
                 )}
 
@@ -242,4 +265,4 @@ const ChiTietTinNhan = ({ route }) => {
     );
 };
 
-export default memo(ChiTietTinNhan);
+export default ChiTietTinNhan;

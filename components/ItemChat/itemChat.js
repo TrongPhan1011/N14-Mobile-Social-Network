@@ -11,6 +11,7 @@ import avatarDefault from '../../assets/avatarDefault.png';
 import socket from '../../utils/getSocketIO';
 import { selectGroup } from '../../redux/Slice/sidebarChatSlice';
 import Avatar from '../Avatar/Avatar';
+import { saveNameGroup } from '../../redux/Slice/sidebarChatSlice';
 
 export default memo(function itemChat({ groupChat, userLoginData }) {
     const navigation = useNavigation();
@@ -25,6 +26,7 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
     const [currentInbox, setCurrentInbox] = useState();
     const [memberFetch, setMemberFetch] = useState();
     const [onlineValue, setOnlineValue] = useState('hidden');
+    const [rerender, setRerender] = useState(false);
     var AxiosJWT = getAxiosJWT(dispatch, currAuth);
     var arrIdMessage = groupChat.message;
     var bgSeen = 'bg-lcn-blue-4';
@@ -55,7 +57,7 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
             }
         };
         checkOnlineChat();
-    }, []);
+    }, [groupChat, userLoginData]);
 
     useEffect(() => {
         var getClassSeen = () => {
@@ -93,6 +95,7 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
                 }
                 if (messageLast.type_mess === 'system') {
                     lastNameAuthor = '';
+                    //messCreatedAt = '';
                 }
                 getClassSeen();
             }
@@ -165,10 +168,12 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
         var groupName = '';
         if (groupChat.typeChat === 'group') groupName = groupChat.name;
         else groupName = currentInbox?.fullName;
-        //console.log(groupName);
+        dispatch(saveNameGroup(groupName));
+        //console.log(groupChat);
         if (!!groupChat) dispatch(selectGroup(groupChat));
-        navigation.navigate('ChiTietTinNhan', { groupName });
+        navigation.navigate('ChiTietTinNhan');
     };
+    //console.log(groupChat);
     return (
         <>
             {!!itemDataChat ? (

@@ -58,7 +58,7 @@ const ThemThanhVien = () => {
             var dataNewChat = await addMemberToChat(groupChatSelect?.id, listChecked, accessToken, axiosJWT);
 
             if (dataNewChat) {
-                dispatch(selectGroup(dataNewChat));
+                //dispatch(selectGroup(dataNewChat));
                 setListChecked([]);
                 setListMember([]);
                 if (dataNewChat.status === 1 || groupChatSelect.adminChat.includes(curSignIn.id)) {
@@ -69,8 +69,10 @@ const ThemThanhVien = () => {
                 } else {
                     saveMessSystem(dataNewChat.id, listChecked.length + ' thành viên đang chờ duyệt ');
                 }
-                if (dataNewChat.status === 1) Alert.alert('Thêm thành viên thành công');
-                else Alert.alert('Thành viên đang chờ duyệt');
+                if (dataNewChat.status !== 1)
+                    //Alert.alert('Thêm thành viên thành công');
+                    //else
+                    Alert.alert('Thành viên đang chờ duyệt');
                 navigation.navigate('ChiTietTinNhan');
             }
         } else Alert.alert('Vui lòng chọn người cần thêm');
@@ -86,11 +88,29 @@ const ThemThanhVien = () => {
             status: 1,
             file: [],
         };
+        var newMessSocket = {
+            title: text,
+            authorID: {
+                id: curSignIn.id,
+                fullName: curSignIn.fullName,
+                profile: {
+                    urlAvartar: curSignIn.profile.urlAvartar,
+                },
+            },
+
+            seen: [{ id: curSignIn.id, seenAt: Date.now() }],
+            type: 'system',
+            idChat: id,
+            status: 1,
+            file: [],
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+        };
         if (!!newMessSave) {
             var messData = await addMess(newMessSave, accessToken, axiosJWT);
             socket.emit('sendMessage', {
                 receiverId: id,
-                contentMessage: messData,
+                contentMessage: newMessSocket,
             });
         }
     };

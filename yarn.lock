@@ -9963,6 +9963,11 @@ react-dom@^18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-facebook-emoji@^1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/react-facebook-emoji/-/react-facebook-emoji-1.0.12.tgz#84b7520f4e9542d986ae964b8d5def12767d4797"
+  integrity sha512-dXU/LYaH/7TagzvQ7yp95KUD7mMh8+WbTctICeNuRgoZCDBUQ2fHO8ECYWyoTWvqI7PdzLTJOHIY6X5Fp/oKVA==
+
 react-freeze@^1.0.0:
   version "1.0.3"
   resolved "https://registry.npmjs.org/react-freeze/-/react-freeze-1.0.3.tgz"

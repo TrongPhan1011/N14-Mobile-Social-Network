@@ -4,7 +4,7 @@ import HeaderQlGroup from '../../components/HeaderQLGroup';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import ItemBanBeGroup from '../../components/ItemBanBeGroup';
-import { getAllFriend } from '../../services/userService';
+import { getAllFriend, getUserById } from '../../services/userService';
 import { useDispatch, useSelector } from 'react-redux';
 import { inCludesString } from '../../lib/regexString';
 import { Checkbox } from 'react-native-paper';
@@ -13,6 +13,8 @@ import { groupChatSelect, selectGroup } from '../../redux/Slice/sidebarChatSlice
 import { useNavigation } from '@react-navigation/native';
 import { addGroupChat } from '../../services/chatService';
 import { userLogin } from '../../redux/Slice/signInSlice';
+import socket from '../../utils/getSocketIO';
+import { addMess } from '../../services/messageService';
 
 const ThemMoiChat = () => {
     const dispatch = useDispatch();
@@ -54,7 +56,7 @@ const ThemMoiChat = () => {
         if (!!listChecked && listChecked.length < 2) Alert.alert('Tạo nhóm cần ít nhất 3 thành viên!');
         else if (!!listChecked && listChecked.length > 1) {
             var newGroup = {
-                name: 'Cuộc trò chuyện mới',
+                name: '',
                 userCreate: curSignIn.id,
                 avatar: '',
                 adminChat: [curSignIn.id],
@@ -67,19 +69,59 @@ const ThemMoiChat = () => {
 
             if (newGroupFetch) {
                 dispatch(userLogin(newGroupFetch.userLogin));
+                dispatch(selectGroup(newGroupFetch.newChat));
+                saveMessSystem(newGroupFetch);
                 //dispatch(selectGroup(newGroupFetch.newChat));
                 setListChecked([]);
                 setListMember([]);
-                navigation.navigate('HomeTabBar');
-                Alert.alert('Tạo cuộc trò chuyện thành công');
+                navigation.navigate('ChiTietTinNhan');
+                //Alert.alert('Tạo cuộc trò chuyện thành công');
             }
         } else Alert.alert('Vui lòng chọn thành viên trước khi tạo cuộc trò chuyện mới');
+    };
+
+    const saveMessSystem = async (newGroupFetch) => {
+        var newMessSave = {
+            title: 'Tạo nhóm thành công',
+            authorID: curSignIn.id,
+            seen: [{ id: curSignIn.id, seenAt: Date.now() }],
+            type_mess: 'system',
+            idChat: newGroupFetch.newChat.id,
+            status: 1,
+            file: [],
+        };
+        var newMessSocket = {
+            title: 'Tạo nhóm thành công',
+            authorID: {
+                id: curSignIn.id,
+                fullName: curSignIn.fullName,
+                profile: {
+                    urlAvartar: curSignIn.profile.urlAvartar,
+                },
+            },
+
+            seen: [{ id: curSignIn.id, seenAt: Date.now() }],
+            type: 'system',
+            idChat: id,
+            status: 1,
+            file: [],
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+        };
+        if (!!newMessSave) {
+            var messData = await addMess(newMessSave, accessToken, axiosJWT);
+            socket.emit('sendMessage', {
+                receiverId: id,
+                contentMessage: newMessSocket,
+            });
+        }
     };
 
     //console.log(listChecked);
 
     const renderBanBe = () => {
-        return listMember.map((item, index) => {
+        var listMemberFilter = listMember.filter((member) => inCludesString(searchValue, member.fullName));
+        return listMemberFilter.map((item, index) => {
             var img = avatarDefault;
             if (!!item.profile?.urlAvartar) {
                 img = { uri: `${item.profile.urlAvartar}` };
@@ -135,6 +177,7 @@ const ThemMoiChat = () => {
                         className=" ml-2"
                         placeholder="Tìm tên hoặc số điện thoại"
                         placeholderTextColor={'#47A9FF'}
+                        onChangeText={(value) => setSearchValue(value)}
                     ></TextInput>
                 </View>
             </View>

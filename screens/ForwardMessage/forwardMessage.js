@@ -80,27 +80,9 @@ const ForwardMessage = ({ route }) => {
             setListChat([]);
             Alert.alert('Đã chuyển tiếp tin nhắn');
             navigation.navigate('ChiTietTinNhan');
-        } else Alert.alert('Vui lòng chọn người cần thêm');
+        } else Alert.alert('Vui lòng chọn người nhận');
     };
 
-    const saveMessSystem = async (id, text) => {
-        var newMessSave = {
-            title: text,
-            authorID: curSignIn.id,
-            seen: [{ id: curSignIn.id, seenAt: Date.now() }],
-            type_mess: 'system',
-            idChat: id,
-            status: 1,
-            file: [],
-        };
-        if (!!newMessSave) {
-            var messData = await addMess(newMessSave, accessToken, axiosJWT);
-            socket.emit('sendMessage', {
-                receiverId: id,
-                contentMessage: messData,
-            });
-        }
-    };
     var getNewMess = (curMess, idChat) => {
         var newMess = {
             title: curMess.title,
@@ -153,7 +135,7 @@ const ForwardMessage = ({ route }) => {
     const renderItem = () => {
         if (listChat.length > 0) {
             let arrChatFilter = listChat.filter((chat) => {
-                if (inCludesString(searchValue, chat.name)) return true;
+                if (inCludesString(searchValue, chat.name) && chat.id !== groupChatSelect?.id) return true;
                 else return false;
             });
             return arrChatFilter.map((item, index) => {

@@ -10,12 +10,12 @@ const messageSlice = createSlice({
             state.groupChatId = action.payload;
             state.error = false;
         },
-        replyMes: (state, action) => {
+        replyMess: (state, action) => {
             state.replyMess = action.payload;
         },
     },
 });
 
-export const { addMess, replyMes } = messageSlice.actions;
+export const { addMess, replyMess } = messageSlice.actions;
 
 export default messageSlice.reducer;

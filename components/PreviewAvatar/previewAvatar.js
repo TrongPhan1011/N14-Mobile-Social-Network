@@ -28,7 +28,12 @@ import * as ImagePicker from 'expo-image-picker';
 import { uploadFileImg, uploadFileBase64 } from '../../services/fileService';
 import Button from '../Button/button';
 import { updateAvatar, updateBanner } from '../../services/userService';
+import { changeAvatarGroup } from '../../services/chatService';
+import { selectGroup } from '../../redux/Slice/sidebarChatSlice';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
+import socket from '../../utils/getSocketIO';
+import { addMess } from '../../services/messageService';
+
 const PreviewAvatar = ({ route }) => {
     var arrImage = route.params.arrayImage;
     var banner = route.params.banner;
@@ -46,6 +51,10 @@ const PreviewAvatar = ({ route }) => {
     const [urlImage, setUrlImage] = useState(arrayImage[0]);
     var curSignIn = useSelector((state) => state.signIn);
     var curUser = curSignIn.userLogin;
+    const groupChatSelect = useSelector((state) => state.sidebarChatSlice.groupChatSelect);
+    const curSignInGroup = useSelector((state) => state.signIn.userLogin);
+    // const currAuth = useSelector((state) => state.auth.currentUser);
+    // var axiosJWT = getAxiosJWT(dispatch, currAuth);
 
     // const [preview, setPreview] = useState(ava);
     // var arrImage = arrImg;
@@ -158,6 +167,19 @@ const PreviewAvatar = ({ route }) => {
                 if (!!updateImg) {
                     Alert.alert('Đổi ảnh bìa thành công');
                 }
+            } else if (banner === 'group') {
+                const updateImg = await changeAvatarGroup(
+                    groupChatSelect?.id,
+                    arrURLImg[0].path,
+                    accessToken,
+                    axiosJWT,
+                );
+                if (!!updateImg) {
+                    dispatch(selectGroup(updateImg));
+                    saveMessSystem(groupChatSelect.id, curSignInGroup.fullName + ' đã đổi ảnh đại diện nhóm ');
+                    //Alert.alert('Đổi ảnh đại diện nhóm thành công');
+                    navigation.navigate('ChiTietTinNhan');
+                }
             } else {
                 const updateImg = await updateAvatar(curUser.id, arrURLImg[0].path, accessToken, axiosJWT, dispatch);
                 if (!!updateImg) {
@@ -187,6 +209,44 @@ const PreviewAvatar = ({ route }) => {
             //formDataIMG.delete();
         }
     };
+
+    const saveMessSystem = async (id, text) => {
+        var newMessSave = {
+            title: text,
+            authorID: curSignInGroup.id,
+            seen: [{ id: curSignInGroup.id, seenAt: Date.now() }],
+            type_mess: 'system',
+            idChat: id,
+            status: 1,
+            file: [],
+        };
+        var newMessSocket = {
+            title: text,
+            authorID: {
+                id: curSignInGroup.id,
+                fullName: curSignInGroup.fullName,
+                profile: {
+                    urlAvartar: curSignInGroup.profile.urlAvartar,
+                },
+            },
+
+            seen: [{ id: curSignInGroup.id, seenAt: Date.now() }],
+            type: 'system',
+            idChat: id,
+            status: 1,
+            file: [],
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+        };
+        if (!!newMessSave) {
+            var messData = await addMess(newMessSave, accessToken, axiosJWT);
+            socket.emit('sendMessage', {
+                receiverId: id,
+                contentMessage: newMessSocket,
+            });
+        }
+    };
+
     const logOutZoomState = (event, gestureState, zoomableViewEventObject) => {
         console.log('');
         console.log('');

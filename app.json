@@ -31,7 +31,7 @@
             [
                 "expo-image-picker",
                 {
-                    "photosPermission": "Ứng dụng cần truy cập vào máy ảnh của bạn."
+                    "photosPermission": "Ứng dụng cần truy cập vào bộ nhớ thiết bị của bạn."
                 }
             ]
         ]

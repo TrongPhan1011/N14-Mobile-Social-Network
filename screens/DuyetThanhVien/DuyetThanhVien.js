@@ -71,7 +71,7 @@ const DuyetThanhVien = () => {
                     var member = await getUserById(memberId, accessToken, axiosJWT);
                     saveMessSystem(dataNewChat.id, curSignIn.fullName + ' đã duyệt ' + member.fullName);
                 }
-                Alert.alert('Duyệt thành viên thành công');
+                //Alert.alert('Duyệt thành viên thành công');
                 navigation.navigate('ChiTietTinNhan');
             }
         } else Alert.alert('Vui lòng chọn người cần duyệt');
@@ -87,11 +87,29 @@ const DuyetThanhVien = () => {
             status: 1,
             file: [],
         };
+        var newMessSocket = {
+            title: text,
+            authorID: {
+                id: curSignIn.id,
+                fullName: curSignIn.fullName,
+                profile: {
+                    urlAvartar: curSignIn.profile.urlAvartar,
+                },
+            },
+
+            seen: [{ id: curSignIn.id, seenAt: Date.now() }],
+            type: 'system',
+            idChat: id,
+            status: 1,
+            file: [],
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+        };
         if (!!newMessSave) {
             var messData = await addMess(newMessSave, accessToken, axiosJWT);
             socket.emit('sendMessage', {
                 receiverId: id,
-                contentMessage: messData,
+                contentMessage: newMessSocket,
             });
         }
     };

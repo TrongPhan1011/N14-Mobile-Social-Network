@@ -261,3 +261,25 @@ export const changeNameChat = async (idChat, newNameChat, idUser, accessToken, a
         return null;
     }
 };
+
+export const changeAvatarGroup = async (idChat, newLinkAvatar, accessToken, axiosJWT) => {
+    try {
+        const res = await axiosJWT.put(
+            '/chat/changeAvatarGroup',
+            {},
+            {
+                params: {
+                    idChat: idChat,
+                    newLink: newLinkAvatar,
+                },
+                headers: { token: `baerer ${accessToken}` },
+            },
+        );
+        if (!!res) {
+            return res.data;
+        }
+        return null;
+    } catch (error) {
+        return null;
+    }
+};

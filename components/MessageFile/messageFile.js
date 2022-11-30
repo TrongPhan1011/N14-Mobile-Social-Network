@@ -20,6 +20,7 @@ import { ThuHoiTinNhan, removeMessWithUser } from '../../services/messageService
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import MessageModal from '../MessageModal';
+import { replyMess } from '../../redux/Slice/messageSlice';
 import socket from '../../utils/getSocketIO';
 
 export default memo(function MessageFile({ data, idMess, messageData }) {
@@ -72,6 +73,9 @@ export default memo(function MessageFile({ data, idMess, messageData }) {
                         handleThuHoi={handleThuHoiTinNhan}
                         handleForward={handleForward}
                         handleRemoveWithUser={handleRemoveWithUser}
+                        handleReply={handleReply}
+                        messageData={messageData}
+                        idUser={messageData.authorID.id}
                     ></MessageModal>
                 </View>
             );
@@ -101,6 +105,9 @@ export default memo(function MessageFile({ data, idMess, messageData }) {
                         handleThuHoi={handleThuHoiTinNhan}
                         handleForward={handleForward}
                         handleRemoveWithUser={handleRemoveWithUser}
+                        handleReply={handleReply}
+                        messageData={messageData}
+                        idUser={messageData.authorID.id}
                     ></MessageModal>
                 </View>
             );
@@ -123,6 +130,9 @@ export default memo(function MessageFile({ data, idMess, messageData }) {
                         handleThuHoi={handleThuHoiTinNhan}
                         handleForward={handleForward}
                         handleRemoveWithUser={handleRemoveWithUser}
+                        handleReply={handleReply}
+                        messageData={messageData}
+                        idUser={messageData.authorID.id}
                     ></MessageModal>
                 </View>
             );
@@ -167,6 +177,9 @@ export default memo(function MessageFile({ data, idMess, messageData }) {
                             handleThuHoi={handleThuHoiTinNhan}
                             handleRemoveWithUser={handleRemoveWithUser}
                             handleForward={handleForward}
+                            handleReply={handleReply}
+                            messageData={messageData}
+                            idUser={messageData.authorID.id}
                         ></MessageModal>
                     </View>
                 );
@@ -199,6 +212,9 @@ export default memo(function MessageFile({ data, idMess, messageData }) {
                             handleThuHoi={handleThuHoiTinNhan}
                             handleRemoveWithUser={handleRemoveWithUser}
                             handleForward={handleForward}
+                            handleReply={handleReply}
+                            messageData={messageData}
+                            idUser={messageData.authorID.id}
                         ></MessageModal>
                     </View>
                 );
@@ -246,6 +262,12 @@ export default memo(function MessageFile({ data, idMess, messageData }) {
     };
     const handleForward = () => {
         navigation.navigate('ForwardMessage', { messageData });
+        handleCloseModal();
+    };
+
+    const handleReply = () => {
+        //console.log(messageData);
+        dispatch(replyMess(messageData));
         handleCloseModal();
     };
 
