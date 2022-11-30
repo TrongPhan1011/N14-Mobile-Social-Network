@@ -9,15 +9,16 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import logo from '../../assets/logo.png';
 import TextInputDN from '../../components/TextInputDN';
 import Button from '../../components/Button/button';
-import { loginUser } from '../../services/authService';
+import { loginUser, findBanAccount } from '../../services/authService';
 import { connect, useDispatch, useSelector } from 'react-redux';
+import QuenMatKhau from '../QuenMatKhauScreen/QuenMatKhau/quenMatKhau';
 
 function DangNhapScreen() {
     const navigation = useNavigation();
     const [hidePass, setHidePass] = useState(true);
     const [emailValue, setEmailValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
-
+    const [countFail, setCountFail] = useState(0);
     const [validEmail, setValidEmail] = useState('hidden');
     const [validPassword, setValidPassword] = useState('hidden');
     const [failLogin, setFailLogin] = useState('hidden');
@@ -41,7 +42,20 @@ function DangNhapScreen() {
     const handleLogin = async () => {
         var valueEmail = checkValidEmail(emailValue);
         var valuePassword = checkValidPassword(passwordValue);
+        const check = await findBanAccount(valueEmail);
         setFailLogin('opacity-0');
+        if (!!check) {
+            // setBanned('blur-sm w-screen h-screen');
+            Alert.alert(
+                'Thông báo',
+                'Hiện email đã bị tạm khoá do nhập sai quá nhiều lần xin bạn thử lại sau vài tiếng nữa',
+            );
+            navigation.navigate(DangNhapScreen);
+        }
+        if (countFail === 10) {
+            navigation.navigate(QuenMatKhau);
+        }
+        // console.log('Lỗi lần 10');
 
         if (!!validEmail && !!validPassword) {
             // đăng nhập thành công -->
@@ -128,11 +142,6 @@ function DangNhapScreen() {
 
                                 // ref={emailRef}
                             ></TextInputDN>
-                            <View>
-                                <Text className={'absolute z-10 text-red-500 text-sm  w-full ' + validEmail}>
-                                    Email không hợp lệ!
-                                </Text>
-                            </View>
                         </View>
                         <View className={'p-4'}>
                             <Text className={'text-lg font-semibold text-lcn-blue-5'}>Nhập mật khẩu</Text>

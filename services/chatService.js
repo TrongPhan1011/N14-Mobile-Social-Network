@@ -205,7 +205,7 @@ export const findInbox = async (idUser, idFriend, accessToken, axiosJWT) => {
 
 export const removeChat = async (idChat, curUserId, accessToken, axiosJWT) => {
     try {
-        console.log(curUserId);
+        //console.log(curUserId);
         const res = await axiosJWT.put(
             '/chat/removeChat/' + idChat,
             {},

@@ -1,4 +1,4 @@
-import { View, Text, TextInput, SafeAreaView, TouchableHighlight, TouchableOpacity, Alert, Image } from 'react-native';
+import { View, Text, TextInput, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import React, { useState, useEffect, useRef, memo } from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -7,17 +7,11 @@ import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import { addMess } from '../../services/messageService';
 import socket from '../../utils/getSocketIO';
 import { useDispatch, useSelector } from 'react-redux';
-import { uploadFileImg, uploadFileBase64 } from '../../services/fileService';
+import { uploadFileImg } from '../../services/fileService';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
-import Auth from '@aws-amplify/auth';
-import Amplify from '@aws-amplify/core';
 import { replyMess } from '../../redux/Slice/messageSlice';
 import { Video } from 'expo-av';
-import Storage from '@aws-amplify/storage';
-//import { replyMess } from '../../redux/Slice/messageSlice';
-//import { Item } from 'react-native-paper/lib/typescript/components/List/List';
-//import * as Clipboard from 'expo-clipboard';
 
 export default memo(function fotterTinNhan({ type }) {
     const dispatch = useDispatch();
@@ -36,7 +30,6 @@ export default memo(function fotterTinNhan({ type }) {
     const video = React.useRef(null);
     var arrImg = [];
 
-    //const txtSendRef = useRef();
     useEffect(() => {
         if (!!dataReply) {
             setReplyMessData(dataReply);
@@ -157,7 +150,6 @@ export default memo(function fotterTinNhan({ type }) {
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             //allowsEditing: true,
             allowsMultipleSelection: true,
-            //base64: true,
             aspect: [4, 3],
             quality: 1,
         });

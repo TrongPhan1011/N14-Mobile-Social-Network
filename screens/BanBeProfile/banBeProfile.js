@@ -69,49 +69,51 @@ export default function BanBeProfile() {
 
     return (
         <>
-            <Modal animationType="fade" transparent={true} visible={showModal}>
-                <TouchableOpacity activeOpacity={0.9} onPressOut={handleCloseModal} className="">
-                    <View
-                        className={'w-full h-full flex items-center justify-center  '}
-                        style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
-                    >
-                        <View className="w-80 h-96 bg-white border border-lcn-blue-4 rounded-2xl relative">
-                            <View className="p-2">
-                                <Text className="font-medium text-base text-lcn-blue-5 m-2 text-center">
-                                    Bạn bè của {profile?.fullName}
-                                </Text>
-                            </View>
-                            <View className=" m-4 border-b border-gray-500">
-                                <TextInput
-                                    placeholder="Nhập tên cần tìm"
-                                    onChangeText={(searchValue) => setSearchValue(searchValue)}
-                                ></TextInput>
-                            </View>
+            <View className={' h-full bg-white'}>
+                <Modal animationType="fade" transparent={true} visible={showModal}>
+                    <TouchableOpacity activeOpacity={0.9} onPressOut={handleCloseModal} className="">
+                        <View
+                            className={'w-full h-full flex items-center justify-center  '}
+                            style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+                        >
+                            <View className="w-80 h-96 bg-white border border-lcn-blue-4 rounded-2xl relative">
+                                <View className="p-2">
+                                    <Text className="font-medium text-base text-lcn-blue-5 m-2 text-center">
+                                        Bạn bè của {profile?.fullName}
+                                    </Text>
+                                </View>
+                                <View className=" m-4 border-b border-gray-500">
+                                    <TextInput
+                                        placeholder="Nhập tên cần tìm"
+                                        onChangeText={(searchValue) => setSearchValue(searchValue)}
+                                    ></TextInput>
+                                </View>
 
-                            <ScrollView>
-                                <View className="p-2">{renderAllFriend()}</View>
-                            </ScrollView>
+                                <ScrollView>
+                                    <View className="p-2">{renderAllFriend()}</View>
+                                </ScrollView>
+                            </View>
                         </View>
-                    </View>
-                </TouchableOpacity>
-            </Modal>
-            <View className={' pt-2 pb-1 items-center justify-center '}>
-                <Button
-                    classNames={'flex flex-row w-52 h-8 rounded-[50px] border border-lcn-blue-4'}
-                    className={'bg-lcn-blue-2'}
-                    onPress={handleShowModal}
-                >
-                    <Ionicons name="search" size={20} color="#47A9FF"></Ionicons>
-                    <Text className={'text-lcn-blue-4 font-semibold text-sm ml-2'}>Tìm bạn bè</Text>
-                </Button>
-            </View>
-            <ScrollView>
-                <View>
-                    <Text>
-                        <ItemBanBeProfile />
-                    </Text>
+                    </TouchableOpacity>
+                </Modal>
+                <View className={' pt-2 pb-1 items-center justify-center'}>
+                    <Button
+                        classNames={'flex flex-row w-52 h-8 rounded-[50px] border border-lcn-blue-4'}
+                        className={'bg-lcn-blue-2'}
+                        onPress={handleShowModal}
+                    >
+                        <Ionicons name="search" size={20} color="#47A9FF"></Ionicons>
+                        <Text className={'text-lcn-blue-4 font-semibold text-sm ml-2'}>Tìm bạn bè</Text>
+                    </Button>
                 </View>
-            </ScrollView>
+                <ScrollView>
+                    <View>
+                        <Text>
+                            <ItemBanBeProfile />
+                        </Text>
+                    </View>
+                </ScrollView>
+            </View>
         </>
     );
 }

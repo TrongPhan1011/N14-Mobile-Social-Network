@@ -2,6 +2,11 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { logOutSuccess } from '../../redux/Slice/authSlice';
 import { userLogin } from '../../redux/Slice/signInSlice';
+import { logout } from '../../services/authService';
+import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
+import { removeCurrentChat } from '../../redux/Slice/sidebarChatSlice';
+import { memo } from 'react';
+import avatarDefault from '../../assets/avatarDefault.png';
 import {
     SafeAreaView,
     View,
@@ -16,19 +21,37 @@ import {
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { connect, useDispatch, useSelector } from 'react-redux';
-const handleLogOut = async () => {
-    await logout(dispatch, currAccount.accessToken, axiosJWT);
-    dispatch(logOutSuccess());
-    dispatch(userLogin(null));
-    // navigate(config.routeConfig.signIn);
-};
 
-export default function ItemSetting() {
+export default memo(function ItemSetting() {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     var curSignIn = useSelector((state) => state.signIn);
-    console.log(curSignIn);
-    var userId = curSignIn.userLogin.id;
+
+    const userId = curSignIn?.userLogin?.id;
+
+    var currAuth = useSelector((state) => state.auth);
+    var currAccount = currAuth.currentUser;
+    //console.log(currAccount.accessToken);
+    var axiosJWT = getAxiosJWT(dispatch, currAccount);
+    const handleLogOut = async () => {
+        console.log(currAccount);
+        if (!!currAccount.accessToken) {
+            var logoutValue = await logout(currAccount.accessToken, axiosJWT);
+            if (!!logoutValue) {
+                navigation.navigate('DangNhapScreen');
+                // dispatch(logOutSuccess());
+                // dispatch(userLogin(null));
+                // dispatch(removeCurrentChat());
+            }
+
+            // Alert.alert('hdfhjsdhfshks');
+        }
+    };
+
+    var url = avatarDefault;
+    if (!!curSignIn?.userLogin?.profile?.urlAvartar) {
+        url = { uri: `${curSignIn?.userLogin?.profile?.urlAvartar}` };
+    }
     return (
         <SafeAreaView style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }}>
             <View>
@@ -46,16 +69,14 @@ export default function ItemSetting() {
                         <View>
                             <Image
                                 className="h-10 w-10 rounded-full"
-                                source={{
-                                    uri: `${curSignIn.userLogin.profile?.urlAvartar}`,
-                                }}
+                                source={url}
                                 // source={imgBia}
                             ></Image>
                         </View>
                         <View className="ml-4 w-4/6">
                             <Text className="font-semibold text-xl text-lcn-blue-5">
                                 {' '}
-                                {curSignIn.userLogin.fullName}
+                                {curSignIn?.userLogin?.fullName}
                             </Text>
                         </View>
                     </View>
@@ -143,4 +164,4 @@ export default function ItemSetting() {
             </View>
         </SafeAreaView>
     );
-}
+});

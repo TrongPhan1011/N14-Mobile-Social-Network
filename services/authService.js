@@ -31,18 +31,21 @@ export const getRefreshToken = async () => {
         return null;
     }
 };
-export const logout = async (dispatch, accessToken, axiosJWT) => {
+export const logout = async (accessToken, axiosJWT) => {
+    //console.log(accessToken);
     try {
-        await axiosJWT.post(
-            'auth/logout',
-            { logout: '' },
-            {
-                headers: { token: `baerer ${accessToken}` },
-            },
-        );
-
-        dispatch(userLogin(null)); // xoa signIn
-        dispatch(logOutSuccess()); // xoa Account
+        if (!!accessToken) {
+            await axiosJWT.post(
+                'auth/logout',
+                { logout: '' },
+                {
+                    headers: { token: `baerer ${accessToken}` },
+                },
+            );
+            return true;
+        } else {
+            return false;
+        }
     } catch (error) {
         return null;
     }
@@ -56,7 +59,26 @@ export const sendOTP = async (user, dispatch) => {
         return null;
     }
 };
+export const findBanAccount = async (email) => {
+    try {
+        const res = await httpRequest.get(`otp/ban/${email}`);
 
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const banAccount = async (email) => {
+    try {
+        const res = await httpRequest.post('otp/ban', {
+            userName: email,
+        });
+        //console.log(res);
+        return res;
+    } catch (error) {
+        return null;
+    }
+};
 export const verifyOtp = async (user) => {
     try {
         const res = await httpRequest.get('otp/verify', {
@@ -74,7 +96,7 @@ export const verifyOtp = async (user) => {
 
 export const register = async (user, dispatch) => {
     try {
-        console.log(user);
+        //console.log(user);
         const res = await httpRequest.post('auth/register/', user);
         dispatch(userSignUp(null)); // xoa signIn
 
@@ -110,6 +132,23 @@ export const updatePassword = async (user, dispatch) => {
         } else return false;
     } catch (error) {
         dispatch(loginErorr());
+        return false;
+    }
+};
+export const checkOldPassword = async (addBody) => {
+    //console.log(addBody);
+    try {
+        const dataUser = await httpRequest.get('auth/checkpass', {
+            params: {
+                userName: addBody.userName,
+                password: addBody.password,
+            },
+        });
+
+        if (!!dataUser) {
+            return true;
+        } else return false;
+    } catch (error) {
         return false;
     }
 };

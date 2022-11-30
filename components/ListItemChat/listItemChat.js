@@ -12,6 +12,7 @@ import {
     Alert,
     TouchableHighlight,
     ScrollView,
+    Pressable,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLogin } from '../../redux/Slice/signInSlice';
@@ -90,7 +91,17 @@ export default function ListItemChat() {
                 handdleConnectSocket(item);
                 return <ItemChat key={item.id} groupChat={item} userLoginData={userLoginData} />;
             });
-        } else return <></>;
+        } else
+            return (
+                <View className="w-full h-full justify-center items-center">
+                    <View className="flex items-center h-full w-full">
+                        <Text className="text-sm">Kết bạn với mọi người để bắt đầu</Text>
+                        <Pressable onPress={() => navigation.navigate('Bạn bè')}>
+                            <Text className="text-sm text-lcn-blue-5 font-medium">Kết bạn ngay</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            );
     };
 
     return <ScrollView className="flex-1 overflow-y-auto max-h-[98%]">{handleRenderChat()}</ScrollView>;

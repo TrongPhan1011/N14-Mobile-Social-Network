@@ -36,6 +36,10 @@ const sidebarChatSlice = createSlice({
         saveNameGroup: (state, action) => {
             state.nameGroup = action.payload;
         },
+        removeCurrentChat: (state) => {
+            state.currentChat = null;
+            state.error = false;
+        },
     },
 });
 
@@ -47,6 +51,8 @@ export const {
     addArrayImage,
     currentChat,
     saveNameGroup,
+    currentCha,
+    removeCurrentChat,
 } = sidebarChatSlice.actions;
 
 export default sidebarChatSlice.reducer;

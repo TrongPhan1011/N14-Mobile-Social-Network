@@ -37,7 +37,7 @@ import { addMess } from '../../services/messageService';
 const PreviewAvatar = ({ route }) => {
     var arrImage = route.params.arrayImage;
     var banner = route.params.banner;
-    console.log(banner);
+
     const navigation = useNavigation();
     const dispatch = useDispatch();
     // const [banner, setBanner] = useState(false);
@@ -140,7 +140,6 @@ const PreviewAvatar = ({ route }) => {
     };
 
     const uploadImage = async () => {
-        console.log(arrImage[0]);
         if (arrImage.length === 1) {
             var typeFile = 'image/jpeg';
             // if (arrImage[0].type === 'image' || arrImage[0].type === 'jpeg') typeFile = 'image/jpeg';
@@ -154,7 +153,7 @@ const PreviewAvatar = ({ route }) => {
             const formDataIMG = new FormData();
 
             formDataIMG.append('images', photo);
-            console.log(photo);
+
             var arrURLImg = await uploadFileImg(formDataIMG);
 
             //console.log(arrURLImg);
@@ -186,27 +185,6 @@ const PreviewAvatar = ({ route }) => {
                     Alert.alert('Thành công');
                 }
             }
-            // } else {
-            //     const formDataIMGGroup = new FormData();
-            //     for (var i = 0; i < arrImg.length; i++) {
-            //         var typeFile = '';
-            //         if (arrImg[i].type === 'image' || arrImg[i].type === 'jpeg') typeFile = 'image/jpeg';
-            //         else if (arrImg[i].type === 'video') typeFile = 'video/mp4';
-            //         else typeFile = 'doc';
-            //         var photo = {
-            //             uri: arrImg[i].uri,
-            //             type: typeFile,
-            //             name: 'file',
-            //         };
-
-            //         formDataIMGGroup.append('images', photo);
-            //     }
-            //console.log(formDataIMGGroup);
-            // var arrURLImgGroup = await uploadFileImg(formDataIMGGroup);
-            // var newMessIMGroup = getNewMess('', 'img/video', arrURLImgGroup);
-            // await saveMess(newMessIMGroup.newMessSave, newMessIMGroup.newMess);
-            //arrImg = [];
-            //formDataIMG.delete();
         }
     };
 
@@ -257,7 +235,7 @@ const PreviewAvatar = ({ route }) => {
         console.log('');
         console.log(`Zoomed from ${zoomableViewEventObject.lastZoomLevel} to  ${zoomableViewEventObject.zoomLevel}`);
     };
-    console.log(urlImage);
+
     var img = urlImage;
     if (urlImage.length > 2) {
         img = {
@@ -274,28 +252,6 @@ const PreviewAvatar = ({ route }) => {
                     <Pressable className="ml-2 w-4/6" onPress={() => navigation.goBack()}>
                         <Ionicons name="arrow-back-outline" size={30} color="#47A9FF" />
                     </Pressable>
-                    {/* <Pressable className="w-2/6">
-                        <Button
-                            classNames={'text-gray-500 border-gray-500 m-0 rounded-2xl border h-7 bg-white flex'}
-                            disabled
-                        >
-                            <Text>Đã xóa yêu cầu</Text>
-                        </Button>
-                    </Pressable> */}
-                    {/* <Pressable className="w-1/6 ">
-                        <Feather
-                            name="download"
-                            size={30}
-                            color="#47A9FF"
-                            // onPress={() => {
-                            //     if (!!urlImage) DownloadFile(urlImage);
-                            // }}
-                        />
-                    </Pressable>
-
-                    <Pressable className="">
-                        <Feather name="more-vertical" size={30} color="#47A9FF" onPress={pickImage} />
-                    </Pressable> */}
                 </View>
 
                 <View style={{ flex: 1, overflow: 'hidden' }} className="flex-1 items-center justify-center bg-white">

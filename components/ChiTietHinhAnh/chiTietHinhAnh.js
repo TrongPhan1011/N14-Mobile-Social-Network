@@ -1,27 +1,10 @@
-import {
-    View,
-    Text,
-    Image,
-    SafeAreaView,
-    StatusBar,
-    Platform,
-    Pressable,
-    ScrollView,
-    BackHandler,
-    StyleSheet,
-    ViewStyle,
-    Dimensions,
-    ImageStyle,
-    ImageResizeMode,
-} from 'react-native';
+import { View, Text, Image, SafeAreaView, StatusBar, Platform, Pressable, ScrollView } from 'react-native';
 import React, { useState, useEffect, useRef, memo } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
 import { useDispatch, useSelector } from 'react-redux';
-import { DownloadFile } from '../../services/fileService';
 import ReactNativeZoomableView from '@dudigital/react-native-zoomable-view/src/ReactNativeZoomableView';
-import avtDefault from '../../assets/avatarDefault.png';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import { uploadFileImg, uploadFileBase64 } from '../../services/fileService';
@@ -87,8 +70,6 @@ const ChiTietHinhAnh = () => {
             quality: 1,
         });
 
-        //console.log(result);
-        // setListFileIMG((prev) => [...prev, ...result]);
         if (!!result.selected) arrImg.push(...result.selected);
         else arrImg.push(result);
         //console.log(arrImg);
@@ -172,7 +153,7 @@ const ChiTietHinhAnh = () => {
         console.log('');
         console.log(`Zoomed from ${zoomableViewEventObject.lastZoomLevel} to  ${zoomableViewEventObject.zoomLevel}`);
     };
-    console.log(urlImage);
+
     var img = urlImage;
     if (urlImage.length > 2) {
         img = {

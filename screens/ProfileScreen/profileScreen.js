@@ -170,7 +170,7 @@ function ProfileScreen({ route }) {
     const handleBanBe = async () => {
         const getUserProfile = await getUserById(userId, accessToken, axiosJWT);
         const Name = getUserProfile.fullName;
-        console.log(Name);
+        //console.log(Name);
         if (inRelationship === 'Kết bạn') {
             handleKetBan();
         } else if (inRelationship === 'Bạn bè') {

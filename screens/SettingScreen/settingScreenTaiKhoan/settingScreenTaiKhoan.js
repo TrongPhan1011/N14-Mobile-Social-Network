@@ -25,7 +25,7 @@ import { getAxiosJWT } from '../../../utils/httpConfigRefreshToken';
 
 export default memo(function SettingScreenTaiKhoan() {
     const navigation = useNavigation();
-    const [checked, setChecked] = useState('nam');
+
     const dispatch = useDispatch();
     var currAuth = useSelector((state) => state.auth);
     var currAccount = currAuth.currentUser;
@@ -36,9 +36,11 @@ export default memo(function SettingScreenTaiKhoan() {
 
     const [validName, setvalidName] = useState('opacity-0');
     const [validDate, setValidDate] = useState('opacity-0');
-    const [nameValue, setNameValue] = useState('');
-    const [education, setEducation] = useState('');
-
+    const [nameValue, setNameValue] = useState(curUser.fullName);
+    const [emailValue, setEmailValue] = useState(currAccount.userName);
+    const [education, setEducation] = useState(curUser.profile.education);
+    const [birthdayValue, setBirthdayValue] = useState(curUser.birthday);
+    const [checked, setChecked] = useState(curUser.gender);
     const checkValidName = (dataName) => {
         var valueName = dataName.trim();
         if (
@@ -55,18 +57,17 @@ export default memo(function SettingScreenTaiKhoan() {
         }
     };
 
-    const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState(new Date(birthdayValue));
+    //console.log(date);
     const [show, setShow] = useState(false);
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
         setShow(false);
         setDate(currentDate);
-        if (new Date().getFullYear() - currentDate.getFullYear() > 18) {
+        if (new Date().getFullYear() - currentDate.getFullYear() > 16) {
             setValidDate('opacity-0');
-            console.log('2');
         } else {
             setValidDate('opacity-1');
-            console.log('1');
         }
     };
     const showMode = (currentMode) => {
@@ -79,23 +80,24 @@ export default memo(function SettingScreenTaiKhoan() {
         date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString() + '-' + date.getDate().toString();
     const handleUpdate = async () => {
         var valueName = checkValidName(nameValue);
-        if (!!validName) {
-            if (new Date().getFullYear() - date.getFullYear() < 18) {
+        if (validName === 'opacity-0') {
+            if (new Date().getFullYear() - date.getFullYear() < 16) {
                 setValidDate('opacity-1');
             } else {
                 setValidDate('opacity-0');
 
                 var user = {
                     fullName: valueName,
+                    email: emailValue,
                     education: education,
                     birthday: birthday,
                     gender: checked,
                 };
-                console.log(user);
-                console.log(curUser.id);
+                // console.log(user);
+                // console.log(curUser.id);
                 var update = await updateProfile(curUser.id, user, accessToken, axiosJWT, dispatch);
                 if (!!update) {
-                    alert('Sửa thông tin thành công');
+                    Alert.alert('Thông báo', 'Sửa thông tin thành công');
                 }
             }
         }
@@ -109,13 +111,13 @@ export default memo(function SettingScreenTaiKhoan() {
                 <View className={'p-4'}>
                     <Text className={'text-lg font-semibold text-lcn-blue-5'}>Tên người dùng</Text>
                     <TextInputDN
-                        onChangeText={(nameValue) => {
+                        value={nameValue}
+                        onChangeText={(value) => {
                             checkValidName(nameValue);
-                            setNameValue(nameValue);
+                            setNameValue(value);
                         }}
                         Icon={<Ionicons name="person" size={20} color="#47A9FF" />}
                         placeholder="Tên người dùng"
-                        defaultValue={curUser.fullName}
                     ></TextInputDN>
                     <View>
                         <Text className={'absolute z-10 text-red-500 text-sm  w-full ' + validName}>
@@ -127,21 +129,26 @@ export default memo(function SettingScreenTaiKhoan() {
                 <View className={'p-4'}>
                     <Text className={'text-lg font-semibold text-lcn-blue-5'}>Email</Text>
                     <TextInputDN
-                        Icon={<Ionicons name="person" size={20} color="#47A9FF" />}
+                        editable={false}
+                        value={emailValue}
+                        onChangeText={(value) => {
+                            setEmailValue(value);
+                        }}
+                        Icon={<Ionicons name="mail" size={20} color="#47A9FF" />}
                         placeholder="Email"
-                        defaultValue={curUser.email}
                     ></TextInputDN>
                 </View>
 
                 <View className={'p-4'}>
                     <Text className={'text-lg font-semibold text-lcn-blue-5'}>Tên trường học</Text>
                     <TextInputDN
-                        onChangeText={(education) => {
-                            setEducation(education);
+                        value={education}
+                        onChangeText={(value) => {
+                            //checkValidName(education);
+                            setEducation(value);
                         }}
-                        Icon={<Ionicons name="person" size={20} color="#47A9FF" />}
+                        Icon={<Ionicons name="school" size={20} color="#47A9FF" />}
                         placeholder="Tên trường học"
-                        defaultValue={curUser.profile.education}
                     ></TextInputDN>
                 </View>
 
@@ -151,19 +158,17 @@ export default memo(function SettingScreenTaiKhoan() {
                         className={'w-full'}
                         editable={true}
                         placeholderTextColor={'#000000'}
-                        // secureTextEntry={true}
-                        Icon={<Ionicons name="calendar" size={20} color="#47A9FF" onPress={showDatepicker} />}
-                        // onPress={checkDate(date)}
+                        value={birthday}
                         onChangeText={(date) => {
-                            setDate(date);
+                            setBirthdayValue(date);
 
                             //ycheckDate(date);
                         }}
-                        value={birthday}
+                        Icon2={<Ionicons name="calendar" size={20} color="#47A9FF" onPress={showDatepicker} />}
                     ></TextInputDN>
                     <View>
                         <Text className={'absolute z-10 text-red-500 text-sm  w-full ' + validDate}>
-                            Không đủ 18 tuổi!
+                            Không đủ 16 tuổi!
                         </Text>
                     </View>
 
@@ -183,7 +188,7 @@ export default memo(function SettingScreenTaiKhoan() {
                     <View className={'flex flex-row items-center justify-center'}>
                         <View className={'flex flex-row items-center mr-10'}>
                             <RadioButton
-                                value="nam"
+                                value={checked}
                                 status={checked === 'Nam' ? 'checked' : 'unchecked'}
                                 onPress={() => setChecked('Nam')}
                             />
@@ -191,7 +196,7 @@ export default memo(function SettingScreenTaiKhoan() {
                         </View>
                         <View className={'flex flex-row items-center mr-10'}>
                             <RadioButton
-                                value="nu"
+                                value={checked}
                                 status={checked === 'Nữ' ? 'checked' : 'unchecked'}
                                 onPress={() => setChecked('Nữ')}
                             />
@@ -199,7 +204,7 @@ export default memo(function SettingScreenTaiKhoan() {
                         </View>
                         <View className={'flex flex-row items-center mr-10'}>
                             <RadioButton
-                                value="Khác"
+                                value={checked}
                                 status={checked === 'Khác' ? 'checked' : 'unchecked'}
                                 onPress={() => setChecked('Khác')}
                             />

@@ -18,7 +18,7 @@ export default function FriendScreen() {
     const [countXN, setCountXN] = useState(0);
     const curSignIn = useSelector((state) => state.signIn.userLogin);
     // var curUser = curSignIn.userLogin;
-    console.log(curSignIn);
+    //console.log(curSignIn);
     useEffect(() => {
         setCount(0);
         for (var i = 0; i <= curSignIn.friend.length; i++) {
