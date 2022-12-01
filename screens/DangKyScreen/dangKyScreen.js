@@ -113,7 +113,7 @@ function DangKyScreen() {
         var valuePassword = dataPassword.trim();
         setValidPassword('opacity-0');
         // console.log(valuePassword);
-        if (valuePassword.length === 0 || !valuePassword.match(/^[a-zA-Z0-9\.@ ]{6,}$/)) {
+        if (valuePassword.length === 0 || !valuePassword.match(/^[A-Z]{1}[a-zA-Z0-9\.@ ]{5,}$/)) {
             setValidPassword('opacity-1');
             return '';
         } else {
@@ -143,8 +143,24 @@ function DangKyScreen() {
         } else setFailLogin('hidden');
     };
 
-    const birthday =
-        date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString() + '-' + date.getDate().toString();
+    // if (date.getDate().toString().length === 1) {
+    //     console.log('0' + date.getDate().toString());
+    //     ngaySinh = '0' + date.getDate().toString();
+    // }
+    if (date.getDate() < 10) {
+        var ngaySinh = '0' + date.getDate().toString();
+    } else {
+        ngaySinh = date.getDate().toString();
+    }
+
+    if (date.getMonth() + 1 < 10) {
+        var thangSinh = '0' + (date.getMonth() + 1).toString();
+    } else {
+        thangSinh = (date.getMonth() + 1).toString();
+    }
+
+    const birthday = date.getFullYear().toString() + '-' + thangSinh + '-' + ngaySinh;
+
     const handleRegister = async () => {
         var valueEmail = checkValidEmail(emailValue);
         var valuePassword = checkValidPassword(passwordValue);
@@ -286,7 +302,7 @@ function DangKyScreen() {
                         ></TextInputDN>
                         <View>
                             <Text className={'absolute z-10 text-red-500 text-sm  w-full ' + validPassword}>
-                                Mật khẩu phải có ít nhất 6 kí tự
+                                Mật khẩu phải chữ cái đầu viết hoa và tối thiểu 6 kí tự và không kí tự đặc biệt
                             </Text>
                         </View>
                     </View>

@@ -23,7 +23,7 @@ export default function CapNhatMatKhau() {
         var valuePassword = dataPassword.trim();
         setValidPassword('opacity-0');
         // console.log(valuePassword);
-        if (valuePassword.length === 0 || !valuePassword.match(/^[a-zA-Z0-9\.@ ]{6,}$/)) {
+        if (valuePassword.length === 0 || !/^[A-Z]{1}[a-zA-Z0-9\.@ ]{5,}$/) {
             setValidPassword('opacity-1');
             return '';
         } else {
@@ -120,7 +120,7 @@ export default function CapNhatMatKhau() {
                         ></TextInputDN>
                         <View>
                             <Text className={'absolute z-10 text-red-500 text-sm  w-full ' + validpassword}>
-                                Mật khẩu phải có ít nhất 6 kí tự
+                                Mật khẩu phải chữ cái đầu viết hoa và tối thiểu 6 kí tự và không kí tự đặc biệt
                             </Text>
                         </View>
                     </View>

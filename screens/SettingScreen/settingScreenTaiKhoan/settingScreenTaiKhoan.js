@@ -36,11 +36,12 @@ export default memo(function SettingScreenTaiKhoan() {
 
     const [validName, setvalidName] = useState('opacity-0');
     const [validDate, setValidDate] = useState('opacity-0');
-    const [nameValue, setNameValue] = useState(curUser.fullName);
-    const [emailValue, setEmailValue] = useState(currAccount.userName);
-    const [education, setEducation] = useState(curUser.profile.education);
-    const [birthdayValue, setBirthdayValue] = useState(curUser.birthday);
-    const [checked, setChecked] = useState(curUser.gender);
+    const [nameValue, setNameValue] = useState(curUser?.fullName);
+    const [emailValue, setEmailValue] = useState(currAccount?.userName);
+    const [education, setEducation] = useState(curUser?.profile?.education);
+    const [birthdayValue, setBirthdayValue] = useState(curUser?.birthday);
+    const [checked, setChecked] = useState(curUser?.gender);
+
     const checkValidName = (dataName) => {
         var valueName = dataName.trim();
         if (
@@ -58,7 +59,7 @@ export default memo(function SettingScreenTaiKhoan() {
     };
 
     const [date, setDate] = useState(new Date(birthdayValue));
-    //console.log(birthdayValue);
+
     const [show, setShow] = useState(false);
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
@@ -76,8 +77,19 @@ export default memo(function SettingScreenTaiKhoan() {
     const showDatepicker = () => {
         showMode('date');
     };
-    const birthday =
-        date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString() + '-' + date.getDate().toString();
+    if (date.getDate() < 10) {
+        var ngaySinh = '0' + date.getDate().toString();
+    } else {
+        ngaySinh = date.getDate().toString();
+    }
+
+    if (date.getMonth() + 1 < 10) {
+        var thangSinh = '0' + (date.getMonth() + 1).toString();
+    } else {
+        thangSinh = (date.getMonth() + 1).toString();
+    }
+
+    const birthday = date.getFullYear().toString() + '-' + thangSinh + '-' + ngaySinh;
     const handleUpdate = async () => {
         var valueName = checkValidName(nameValue);
         if (validName === 'opacity-0') {
@@ -102,8 +114,9 @@ export default memo(function SettingScreenTaiKhoan() {
             }
         }
     };
+
     return (
-        <View className="bg-white">
+        <View className="bg-white h-full">
             <View>
                 <HeaderProfile>Thông Tin Chung</HeaderProfile>
             </View>
@@ -158,7 +171,7 @@ export default memo(function SettingScreenTaiKhoan() {
                         className={'w-full'}
                         editable={true}
                         placeholderTextColor={'#000000'}
-                        value={birthdayValue}
+                        value={birthday}
                         onChangeText={(date) => {
                             setBirthdayValue(date);
 
