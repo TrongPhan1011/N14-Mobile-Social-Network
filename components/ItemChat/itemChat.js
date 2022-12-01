@@ -46,7 +46,7 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
         var userChatOther = null;
         const checkOnlineChat = async () => {
             if (groupChat.typeChat === 'inbox') {
-                if (groupChat.member[0] !== userLoginData.id) {
+                if (groupChat.member[0] !== userLoginData?.id) {
                     userChatOther = await getUserById(groupChat.member[0], accessToken, AxiosJWT);
                 } else userChatOther = await getUserById(groupChat.member[1], accessToken, AxiosJWT);
 
@@ -154,7 +154,7 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
     const handleChiTietTinNhan = () => {
         var currentDate = new Date();
         var userClickSeen = {
-            id: userLoginData.id,
+            id: userLoginData?.id,
             seenAt: currentDate,
         };
 

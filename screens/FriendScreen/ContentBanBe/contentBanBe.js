@@ -26,7 +26,7 @@ export default function ContentBanBe({ type }) {
         };
 
         getListFriend();
-    }, []);
+    }, [listFriend]);
     // useEffect(() => {
     //     const getListWaiting = async () => {
     //         const friendIsWaiting = await getWaitingFriend(curUser.id, accessToken, axiosJWT);

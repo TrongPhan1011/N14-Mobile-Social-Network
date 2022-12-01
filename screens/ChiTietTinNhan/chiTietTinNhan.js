@@ -74,11 +74,11 @@ const ChiTietTinNhan = () => {
                 setMessRemove((prev) => [...prev, data]);
             }
         });
-        // socket.on('getReactMess', (data) => {
-        //     if (!!data) {
-        //         setReactMess(data);
-        //     }
-        // });
+        socket.on('getReactMess', (data) => {
+            if (!!data) {
+                setReactMess(data);
+            }
+        });
     }, [groupChatSelect]);
 
     useEffect(() => {
@@ -101,34 +101,34 @@ const ChiTietTinNhan = () => {
             setArrMessage((prev) => [...prev, arrivalMessage]);
     }, [groupChatSelect, arrivalMessage, limitMessage]);
 
-    useMemo(() => {
-        const resetGroupChat = async () => {
-            var newCurChat = await getChatById(groupChatSelect?.id, currAuth.accessToken, AxiosJWT);
-            //console.log(newCurChat);
-            if (!!newCurChat) {
-                dispatch(selectGroup(newCurChat));
-                // console.log('1');
-                // console.log(newCurChat.name);
-                setName(newCurChat.name);
-            }
-        };
+    // useMemo(() => {
+    //     const resetGroupChat = async () => {
+    //         var newCurChat = await getChatById(groupChatSelect?.id, currAuth.accessToken, AxiosJWT);
+    //         //console.log(newCurChat);
+    //         if (!!newCurChat) {
+    //             dispatch(selectGroup(newCurChat));
+    //             // console.log('1');
+    //             // console.log(newCurChat.name);
+    //             setName(newCurChat.name);
+    //         }
+    //     };
 
-        socket.on('getMessage', (data) => {
-            if (!!data) {
-                //console.log(data);
-                if (data.type === 'system') {
-                    resetGroupChat();
-                }
-                //setReRender(true);
-            }
-        });
+    //     socket.on('getMessage', (data) => {
+    //         if (!!data) {
+    //             //console.log(data);
+    //             if (data.type === 'system') {
+    //                 resetGroupChat();
+    //             }
+    //             //setReRender(true);
+    //         }
+    //     });
 
-        socket.on('getReactMess', (data) => {
-            if (!!data) {
-                setReactMess(data);
-            }
-        });
-    }, [socket, groupChatSelect]);
+    //     socket.on('getReactMess', (data) => {
+    //         if (!!data) {
+    //             setReactMess(data);
+    //         }
+    //     });
+    // }, [socket, groupChatSelect]);
     //console.log(arrMessage);
     //console.log(groupChatSelect);
     const handleChiTietTinNhan = () => {
@@ -149,7 +149,7 @@ const ChiTietTinNhan = () => {
                 } else {
                     if (!!messRemove && messRemove.includes(item.id)) {
                         return <View key={item.id + index + ''}></View>;
-                    } else if (item.authorID.id === currSignIn.id) {
+                    } else if (item.authorID.id === currSignIn?.id) {
                         return (
                             <ItemTinNhan from="me" key={item.id + index + item.authorID.id} messageData={item}>
                                 {item.title}
@@ -175,7 +175,7 @@ const ChiTietTinNhan = () => {
 
     const handleProfile = () => {
         var member = chatResult.member;
-        var userId = member.filter((e) => e !== currSignIn.id);
+        var userId = member.filter((e) => e !== currSignIn?.id);
         //console.log(idFreind);
         navigation.navigate('ProfileScreen', {
             userId,

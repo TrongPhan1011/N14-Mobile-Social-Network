@@ -24,7 +24,6 @@ export default function HeaderTinNhan({ onPressChiTiet, onPressCallVideo, onPres
                         <Text className="font-semibold text-xl text-lcn-blue-5 ">{name}</Text>
                         <View className="w-3 h-3 bg-lcn-green-1 rounded-full ml-2 items-center mt-2 hidden"></View>
                     </View>
-                    <Text className="text-sm text-gray-700">Online</Text>
                 </View>
                 <View>
                     <Pressable onPress={() => navigation.navigate('ThemThanhVien')}>

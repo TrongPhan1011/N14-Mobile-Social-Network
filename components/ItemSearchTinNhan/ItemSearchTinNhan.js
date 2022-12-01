@@ -39,7 +39,7 @@ export default function ItemBanBe({ userId, name, avt }) {
     }
 
     const handleInbox = async () => {
-        var inboxChat = await findInbox(currSignIn.id, userId, accessToken, axiosJWT);
+        var inboxChat = await findInbox(currSignIn?.id, userId, accessToken, axiosJWT);
         dispatch(selectGroup(inboxChat));
         navigation.navigate('ChiTietTinNhan');
     };

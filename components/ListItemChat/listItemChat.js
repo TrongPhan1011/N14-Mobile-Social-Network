@@ -65,7 +65,7 @@ export default function ListItemChat() {
     useMemo(() => {
         const fetchChat = async () => {
             if (reRender) {
-                const arrChat = await getChatByIdMember(userLoginData.id, currAuth.accessToken, AxiosJWT);
+                const arrChat = await getChatByIdMember(userLoginData?.id, currAuth.accessToken, AxiosJWT);
 
                 if (!!arrChat) {
                     setChatResult(arrChat);
@@ -104,5 +104,5 @@ export default function ListItemChat() {
             );
     };
 
-    return <ScrollView className="flex-1 overflow-y-auto max-h-[98%]">{handleRenderChat()}</ScrollView>;
+    return <ScrollView className="flex-1 overflow-y-auto max-h-[98%] ">{handleRenderChat()}</ScrollView>;
 }

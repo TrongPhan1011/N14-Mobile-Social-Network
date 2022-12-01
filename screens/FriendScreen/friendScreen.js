@@ -54,7 +54,7 @@ export default function FriendScreen() {
                 }}
             >
                 <Tab.Screen tabBarAutoCapitalize="none" name={'Tất cả' + '(' + count + ')'} component={BanBe} />
-                <Tab.Screen name={'Chờ xác nhận'} component={ChoXacNhan} />
+                <Tab.Screen name={'Chờ xác nhận' + '(' + countXN + ')'} component={ChoXacNhan} />
             </Tab.Navigator>
 
             {/* <View>

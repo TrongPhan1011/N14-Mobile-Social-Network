@@ -42,7 +42,7 @@ export default function renameModal({ handleCloseModal, handleOpenModal, modalVi
             if (!!result) {
                 //dispatch(userLogin(currSignIn));
                 //console.log(groupChatSelect);
-                var member = await getUserById(currSignIn.id, accessToken, axiosJWT);
+                var member = await getUserById(currSignIn?.id, accessToken, axiosJWT);
                 await saveMessSystem(groupChatSelect.id, currSignIn.fullName + ' đã đổi tên nhóm thành ' + name);
                 setName('');
                 //Alert.alert('Đổi tên nhóm thành công');
@@ -57,8 +57,8 @@ export default function renameModal({ handleCloseModal, handleOpenModal, modalVi
     const saveMessSystem = async (id, text) => {
         var newMessSave = {
             title: text,
-            authorID: currSignIn.id,
-            seen: [{ id: currSignIn.id, seenAt: Date.now() }],
+            authorID: currSignIn?.id,
+            seen: [{ id: currSignIn?.id, seenAt: Date.now() }],
             type_mess: 'system',
             idChat: id,
             status: 1,
@@ -67,14 +67,14 @@ export default function renameModal({ handleCloseModal, handleOpenModal, modalVi
         var newMessSocket = {
             title: text,
             authorID: {
-                id: currSignIn.id,
-                fullName: currSignIn.fullName,
+                id: currSignIn?.id,
+                fullName: currSignIn?.fullName,
                 profile: {
-                    urlAvartar: currSignIn.profile.urlAvartar,
+                    urlAvartar: currSignIn?.profile.urlAvartar,
                 },
             },
 
-            seen: [{ id: currSignIn.id, seenAt: Date.now() }],
+            seen: [{ id: currSignIn?.id, seenAt: Date.now() }],
             type: 'system',
             idChat: id,
             status: 1,

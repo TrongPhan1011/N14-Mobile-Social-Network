@@ -58,7 +58,7 @@ export default memo(function SettingScreenTaiKhoan() {
     };
 
     const [date, setDate] = useState(new Date(birthdayValue));
-    //console.log(date);
+    //console.log(birthdayValue);
     const [show, setShow] = useState(false);
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
@@ -158,7 +158,7 @@ export default memo(function SettingScreenTaiKhoan() {
                         className={'w-full'}
                         editable={true}
                         placeholderTextColor={'#000000'}
-                        value={birthday}
+                        value={birthdayValue}
                         onChangeText={(date) => {
                             setBirthdayValue(date);
 

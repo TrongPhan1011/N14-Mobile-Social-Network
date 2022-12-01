@@ -19,7 +19,7 @@ function Otp() {
     const [validOTP, setValidOTP] = useState('opacity-0');
     var currentSignUpAccount = useSelector((state) => state.signUp.userSignUp);
     const userSelector = useSelector((state) => state.auth);
-    const [countDown, setCountDown] = useState(180);
+    const [countDown, setCountDown] = useState(90);
     var list = 'lll';
 
     const checkValidOTP = (dataOTP) => {
@@ -50,7 +50,7 @@ function Otp() {
 
         // đăng nhập thành công -->
         var register = await sendOTP(currentSignUpAccount, dispatch);
-        setCountDown(180);
+        setCountDown(90);
         Alert.alert('Đã gửi lại mã');
     };
 

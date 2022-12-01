@@ -21,6 +21,7 @@ import { acceptFriend, declineFriend } from '../../services/userService';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAxiosJWT } from '../../utils/httpConfigRefreshToken';
 import avtDefault from '../../assets/avatarDefault.png';
+import { addGroupChat } from '../../services/chatService';
 function ItemChoXacNhan({ friendName, friendId, avt }) {
     const dispatch = useDispatch();
 
@@ -39,7 +40,21 @@ function ItemChoXacNhan({ friendName, friendId, avt }) {
         };
     }
     const handleDongY = async () => {
-        await acceptFriend(curUser.id, friendId, accessToken, axiosJWT);
+        await acceptFriend(curUser.id, friendId, accessToken, axiosJWT, dispatch);
+        var newGroup = {
+            name: ' ',
+            userCreate: curUser.id,
+            avatar: avt,
+
+            typeChat: 'inbox',
+            member: [curUser.id, friendId],
+        };
+        var newGroupFetch = await addGroupChat(newGroup, accessToken, axiosJWT);
+        if (!!newGroupFetch) {
+            dispatch(userLogin(newGroupFetch.userLogin));
+            dispatch(currentChat(newGroupFetch.newChat));
+            Alert.alert('Bạn đã có thể nhắn tin với người này');
+        }
     };
     const handleTuchoi = async () => {
         await declineFriend(curUser.id, friendId, accessToken, axiosJWT);

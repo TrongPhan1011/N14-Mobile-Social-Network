@@ -116,14 +116,14 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
                         }
                     >
                         <Feather name="paperclip" size={20} color="#47A9FF" />
-                        <Text>Tệp đính kèm</Text>
+                        <Text>{replyMess?.file?.title}</Text>
                     </View>
                 );
         } else
             return (
                 <View
                     className={
-                        'w-min flex p-2 pt-1 bg-slate-100 opacity-50 text-slate-500 text-sm  rounded-full items-center ml-3 mr-3'
+                        'max-w-[30%] flex p-2 pt-1 bg-slate-100 opacity-50 text-slate-500 text-sm  rounded-full items-center ml-3 mr-3'
                     }
                 >
                     <Text>{messageData?.replyMessage?.title}</Text>
@@ -136,7 +136,7 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
             return (
                 <View
                     //href={'#' + messageData.replyMessage.id}
-                    className={'w-full flex relative -bottom-5 ' + flexRowReverse}
+                    className={' flex relative -bottom-5 ' + flexRowReverse}
                 >
                     {getRepMessType(messageData.replyMessage)}
                 </View>
@@ -145,10 +145,10 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
 
     const files = messageData.file;
     if (!!messageData.file && messageData.file.length > 0) bgFile = ' bg-white ';
-    if (statusMess === 0 && messageData.authorID.id === currSignIn.id) bgFile = ' bg-white ';
+    if (statusMess === 0 && messageData.authorID.id === currSignIn?.id) bgFile = ' bg-white ';
 
     var renderMessage = () => {
-        if (statusMess === 0 && messageData.authorID.id === currSignIn.id) {
+        if (statusMess === 0 && messageData.authorID.id === currSignIn?.id) {
             return (
                 <View className=" rounded-3xl p-2 pr-3 pl-3 text-sm text-center text-gray-400 italic border border-gray-300 ">
                     <Text> Tin nhắn đã được thu hồi với bạn</Text>
@@ -163,11 +163,28 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
     //console.log(messageData.file);
 
     const handleThuHoi = async () => {
-        var result = await ThuHoiTinNhan(groupChatSelect.id, messageData.id, accessToken, AxiosJWT);
-        if (result) {
-            socket.emit('removeMess', { receiverId: groupChatSelect.id, idMess: messageData.id });
-            handleCloseModal();
-        }
+        Alert.alert('Cảnh báo', 'Bạn có chắc muốn xóa tin nhắn này với mọi người không?', [
+            {
+                text: 'Hủy',
+                onPress: () => {},
+                style: 'cancel',
+            },
+            {
+                text: 'Xác nhận',
+                onPress: async () => {
+                    var result = await ThuHoiTinNhan(groupChatSelect.id, messageData.id, accessToken, AxiosJWT);
+                    if (result) {
+                        socket.emit('removeMess', { receiverId: groupChatSelect.id, idMess: messageData.id });
+                        handleCloseModal();
+                    }
+                },
+            },
+        ]);
+        // var result = await ThuHoiTinNhan(groupChatSelect.id, messageData.id, accessToken, AxiosJWT);
+        // if (result) {
+        //     socket.emit('removeMess', { receiverId: groupChatSelect.id, idMess: messageData.id });
+        //     handleCloseModal();
+        // }
     };
 
     const handleRemoveWithUser = async () => {
@@ -193,7 +210,7 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
         if (!!messageData.reactionMess && messageData.reactionMess.length > 0)
             return (
                 <>
-                    <View className={'w-full flex ' + flexRowReverse + positionReaction}>
+                    <View className={'w-full flex flex-row ' + flexRowReverse + positionReaction}>
                         {renderListReaction()}
 
                         <View
@@ -227,7 +244,7 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
                     <View className="flex">
                         <View
                             className={
-                                ' w-4 h-4  flex items-center justify-center rounded-full bg-slate-100  bg-opacity-80 backdrop-blur-md'
+                                ' w-4 h-4  flex flex-row items-center justify-center rounded-full bg-slate-100  bg-opacity-80 backdrop-blur-md'
                             }
                         >
                             <Text>{item.type_emotion}</Text>
@@ -252,7 +269,7 @@ export default function ItemTinNhan({ children, from, type, messageData }) {
                 <View
                     key={index + ' '}
                     className={
-                        'ring-2 ring-white w-4 h-4 text-xs  flex items-center justify-center rounded-full bg-slate-100  bg-opacity-80 backdrop-blur-md'
+                        'ring-2 ml-1 ring-white w-4 h-4 text-xs flex items-center justify-center rounded-full bg-slate-100  bg-opacity-80 backdrop-blur-md'
                     }
                 >
                     <Text>{reaction.type_emotion}</Text>

@@ -42,13 +42,13 @@ export default function MessageModal({
     // console.log(idUser);
     // console.log(currSignIn.id);
     var hidden = ' hidden ';
-    if (idUser === currSignIn.id) hidden = '';
+    if (idUser === currSignIn?.id) hidden = '';
 
     const sendReactMess = async (typeReact) => {
         //e.stopPropagation();
 
         if (!!messageData.reactionMess && messageData.reactionMess.length > 0) {
-            var userReactData = messageData.reactionMess.filter((reaction) => reaction.idUser === currSignIn.id);
+            var userReactData = messageData.reactionMess.filter((reaction) => reaction.idUser === currSignIn?.id);
             for (let reactUser of userReactData) {
                 if (typeReact === reactUser.type_emotion) {
                     return;
@@ -57,7 +57,7 @@ export default function MessageModal({
         }
         var newReaction = {
             idUser: {
-                id: currSignIn.id,
+                id: currSignIn?.id,
 
                 fullName: currSignIn.fullName,
             },
@@ -71,7 +71,7 @@ export default function MessageModal({
         var dataReactSave = {
             id: messageData.id,
             reactionMess: {
-                idUser: currSignIn.id,
+                idUser: currSignIn?.id,
 
                 type_emotion: typeReact,
             },
