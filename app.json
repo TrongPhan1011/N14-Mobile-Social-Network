@@ -1,40 +1,50 @@
 {
-    "expo": {
-        "name": "LCN Chat",
-        "slug": "mobile-social-network",
-        "version": "1.0.0",
-        "orientation": "portrait",
-        "icon": "./assets/iconlogo.png",
-        "userInterfaceStyle": "light",
-        "splash": {
-            "image": "./assets/splash.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
-        },
-        "updates": {
-            "fallbackToCacheTimeout": 0
-        },
-        "assetBundlePatterns": ["**/*"],
-        "ios": {
-            "supportsTablet": true
-        },
-        "android": {
-            "adaptiveIcon": {
-                "foregroundImage": "./assets/iconlogo.png",
-                "backgroundColor": "#FFFFFF"
-            },
-            "package": "com.lcn.lcnchat"
-        },
-        "web": {
-            "favicon": "./assets/iconlogo.png"
-        },
-        "plugins": [
-            [
-                "expo-image-picker",
-                {
-                    "photosPermission": "Ứng dụng cần truy cập vào bộ nhớ thiết bị của bạn."
-                }
-            ]
-        ]
+  "expo": {
+    "name": "LCN Chat",
+    "slug": "mobile-social-network",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/iconlogo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/iconlogo.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.lcn.lcnchat",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/iconlogo.png"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Ứng dụng cần truy cập vào bộ nhớ thiết bị của bạn."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "41827034-b08f-44f0-9a84-a5ccbea019b2"
+      }
     }
+  }
 }

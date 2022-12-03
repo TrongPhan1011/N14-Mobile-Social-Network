@@ -43,6 +43,7 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
         };
         getMessageLast();
 
+        //kiem tra user online
         var userChatOther = null;
         const checkOnlineChat = async () => {
             if (groupChat.typeChat === 'inbox') {
@@ -195,11 +196,11 @@ export default memo(function itemChat({ groupChat, userLoginData }) {
                                     typeAvatar={groupChat.typeChat === 'group' ? 'group' : 'inbox'}
                                     idGroup={groupChat.id}
                                 />
-                                <View
+                                {/* <View
                                     className={
                                         'w-3 h-3 bg-lcn-green-1 rounded-full absolute right-1 bottom-0 ' + onlineValue
                                     }
-                                ></View>
+                                ></View> */}
                             </View>
                             <View className="ml-4 w-7/12">
                                 <Text className="font-semibold text-xl text-lcn-blue-5">

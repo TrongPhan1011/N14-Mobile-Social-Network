@@ -135,7 +135,7 @@ const ForwardMessage = ({ route }) => {
     const renderItem = () => {
         if (listChat.length > 0) {
             let arrChatFilter = listChat.filter((chat) => {
-                if (inCludesString(searchValue, chat.name) && chat.id !== groupChatSelect?.id) return true;
+                if (inCludesString(searchValue, chat.name)) return true;
                 else return false;
             });
             return arrChatFilter.map((item, index) => {

@@ -48,7 +48,7 @@ export default function renameModal({ handleCloseModal, handleOpenModal, modalVi
                 //Alert.alert('Đổi tên nhóm thành công');
                 // dispatch(userLogin(null));
                 // dispatch(userLogin(currSignIn));
-                navigation.navigate('ChiTietTinNhan');
+                navigation.navigate('HomeTabBar');
                 modalVisible = false;
             }
         }

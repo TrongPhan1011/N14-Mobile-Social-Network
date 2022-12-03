@@ -28,18 +28,18 @@ export default function FriendScreen() {
         }
     }, [curSignIn]);
 
-    // useEffect(() => {
-    //     setCountXN(0);
-    //     for (var i = 0; i < curSignIn.friend.length; i++) {
-    //         if (curSignIn.friend[i]?.status === 0) {
-    //             const id = curSignIn.friend[i - 1].id;
-    //             if (curSignIn.friend[i].id != id) {
-    //                 setCountXN((prev) => prev + 1);
-    //                 // console.log('jjj');
-    //             }
-    //         }
-    //     }
-    // }, [curSignIn]);
+    useEffect(() => {
+        setCountXN(0);
+        for (var i = 0; i < curSignIn.friend.length; i++) {
+            if (curSignIn.friend[i]?.status === 0) {
+                const id = curSignIn.friend[i - 1].id;
+                if (curSignIn.friend[i].id != id) {
+                    setCountXN((prev) => prev + 1);
+                    // console.log('jjj');
+                }
+            }
+        }
+    }, [curSignIn]);
 
     return (
         <>

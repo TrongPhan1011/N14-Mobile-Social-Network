@@ -51,12 +51,12 @@ export default function ThongTinChung({}) {
             <View className="flex flex-row items-center w-full p-4">
                 <View className="w-10 items-center">
                     <Text className={'text-yellow-500'}>
-                        <FontAwesome name="mobile-phone" size={30} />
+                        <FontAwesome name="envelope" size={25} />
                     </Text>
                 </View>
                 <View className="break-words">
                     <Text className="ml-3 text-lg font-semibold text-lcn-blue-5 break-words max-w-[96%]">
-                        {profile?.phoneNumber}
+                        {profile?.email}
                     </Text>
                 </View>
             </View>

@@ -81,7 +81,7 @@ const ChiTietTinNhan = () => {
         });
     }, [groupChatSelect]);
 
-    useEffect(() => {
+    useMemo(() => {
         const fetchChat = async () => {
             const arrChat = await getChatById(groupChatSelect?.id, accessToken, AxiosJWT);
 
@@ -95,7 +95,7 @@ const ChiTietTinNhan = () => {
         getListMessage();
     }, [groupChatSelect, limitMessage, arrivalMessage]);
 
-    useEffect(() => {
+    useMemo(() => {
         arrivalMessage &&
             groupChatSelect?.member.includes(arrivalMessage.authorID.id) &&
             setArrMessage((prev) => [...prev, arrivalMessage]);
@@ -265,4 +265,4 @@ const ChiTietTinNhan = () => {
     );
 };
 
-export default ChiTietTinNhan;
+export default memo(ChiTietTinNhan);

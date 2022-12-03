@@ -33,7 +33,6 @@ export default function ListItemChat() {
 
     const [chatResult, setChatResult] = useState([]);
 
-    //new
     useMemo(() => {
         const resetGroupChat = async () => {
             var newCurChat = await getChatById(groupChatSelect?.id, currAuth.accessToken, AxiosJWT);
@@ -51,31 +50,21 @@ export default function ListItemChat() {
         });
     }, [socket, groupChatSelect]);
 
-    //old
-    // useEffect(() => {
-    //     const fetchChat = async () => {
-    //         const arrChat = await getChatByIdMember(userLoginData.id, currAuth.accessToken, AxiosJWT);
-
-    //         setChatResult(arrChat);
-    //     };
-    //     fetchChat();
-    // }, [userLoginData]);
-
     //new
     useMemo(() => {
         const fetchChat = async () => {
-            if (reRender) {
-                const arrChat = await getChatByIdMember(userLoginData?.id, currAuth.accessToken, AxiosJWT);
+            //if (reRender) {
+            const arrChat = await getChatByIdMember(userLoginData?.id, currAuth.accessToken, AxiosJWT);
 
-                if (!!arrChat) {
-                    setChatResult(arrChat);
+            if (!!arrChat) {
+                setChatResult(arrChat);
 
-                    setReRender(false);
-                }
+                setReRender(false);
             }
+            //}
         };
         fetchChat();
-    }, [userLoginData, reRender, groupChatSelect]);
+    }, [userLoginData, groupChatSelect]);
 
     const handdleConnectSocket = (item) => {
         socket.emit('sendMessage', { receiverId: item.id, contentMessage: null });
